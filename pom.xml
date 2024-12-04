@@ -71,6 +71,11 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <version>3.4.0</version>
         </dependency>
+        <dependency>
+            <groupId>io.github.neo0214</groupId>
+            <artifactId>Blue</artifactId>
+            <version>0.0.1</version>
+        </dependency>
     </dependencies>
 
     <build>

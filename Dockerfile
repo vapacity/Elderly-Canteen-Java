@@ -7,7 +7,7 @@ VOLUME /tmp
 ADD target/ElderlyCanteen-0.0.1-SNAPSHOT.jar app.jar
 
 # 容器对外暴露端口 8888
-EXPOSE 8888
+EXPOSE 8080
 
 # 设置容器启动时的命令
 ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/app.jar", "--spring.profiles.active=prd"]

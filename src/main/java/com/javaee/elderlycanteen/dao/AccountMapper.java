@@ -1,7 +1,7 @@
 package com.javaee.elderlycanteen.dao;
 
 import com.javaee.elderlycanteen.entity.Account;
-import io.swagger.v3.oas.models.security.SecurityScheme;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import java.util.List;

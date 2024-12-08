@@ -13,7 +13,7 @@ public interface AccountMapper {
     Account findUserById(int id);
 
     @Select("SELECT * FROM Account")
-    List<Account> findAllUsers();
+    List<Account> findAllAccounts();
 
     @Select("SELECT COUNT(*) FROM Account WHERE accountId = '123'")
     Integer findUserByAccountId(Long accountId);

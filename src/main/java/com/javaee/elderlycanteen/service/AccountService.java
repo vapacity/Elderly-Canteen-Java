@@ -1,6 +1,6 @@
 package com.javaee.elderlycanteen.service;
 
-import com.javaee.elderlycanteen.dao.AccountMapper;
+import com.javaee.elderlycanteen.dao.AccountDao;
 import com.javaee.elderlycanteen.entity.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,22 +12,12 @@ import java.util.List;
 
 public class AccountService {
 
-    private final AccountMapper accountDao;
+    private final AccountDao accountDao;
 
     @Autowired
-    public AccountService(AccountMapper accountDao) {
+    public AccountService(AccountDao accountDao) {
         this.accountDao = accountDao;
     }
 
-    // 在这里添加特定的业务逻辑方法
-    public Integer getAccountNumById(Long id){
-        return this.accountDao.findUserByAccountId(id);
-    }
-    @Transactional
-    public Account getAccountById(int id){
-        return this.accountDao.findUserById(id);
-    }
-    public List<Account> getAllAccounts(){
-        return this.accountDao.findAllAccounts();
-    }
+
 }

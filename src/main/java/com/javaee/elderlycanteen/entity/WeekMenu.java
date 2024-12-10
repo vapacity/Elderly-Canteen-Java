@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -13,7 +14,7 @@ import java.math.BigDecimal;
 @Builder
 public class WeekMenu {
     private String dishId;
-    private java.util.Date week;
+    private Date week;
     private Integer stock;
     private Integer sales;
     private BigDecimal disPrice;

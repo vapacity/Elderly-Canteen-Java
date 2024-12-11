@@ -2,6 +2,7 @@ package com.javaee.elderlycanteen.service;
 
 import com.javaee.elderlycanteen.dao.AccountDao;
 import com.javaee.elderlycanteen.entity.Account;
+import com.javaee.elderlycanteen.dto.LoginRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,10 +20,10 @@ public class AccountService {
         this.accountDao = accountDao;
     }
 
-    public Account login(String accountId, String password) {
-        Account account = accountDao.login(accountId, password);
+    public Account login(LoginRequestDto loginRequestDto) {
+        Account account = accountDao.login(loginRequestDto.getAccountId(), loginRequestDto.getPassword());
         if (account == null) {
-            throw new RuntimeException("登录失败，账户或密码错误！");
+            throw new RuntimeException("登录失败，账户或密码错误!");
         }
         return account;
     }

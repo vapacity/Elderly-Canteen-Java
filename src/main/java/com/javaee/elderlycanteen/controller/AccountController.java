@@ -63,10 +63,17 @@ public class AccountController {
     }
 
     @PostMapping("/test")
-    public ResponseEntity<Map<String, Object>> test(@RequestHeader("token") String token) {
+    public ResponseEntity<Map<String, Object>> test(@RequestHeader(name="Authorization",required = false) String token) {
         Map<String, Object> response = new HashMap<>();
         try {
             // 验证 token
+            token = token.substring(7); // 去掉 "Bearer " 前缀
+            if (token == null || token.isEmpty()) {
+                response.put("state", false);
+                response.put("msg", "Token 为空！");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response); // 返回错误响应
+            }
+            System.out.println(token);
             DecodedJWT decodedJWT = JWTUtils.verify(token);
 
             // 获取 token 中的信息

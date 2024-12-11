@@ -8,19 +8,39 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javaee.elderlycanteen.utils.JWTUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
 public class JWTInterceptors implements HandlerInterceptor {
+    @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
         Map<String,Object> map = new HashMap<>();
         // 获取请求头中令牌
-        String token = request.getHeader("token");
+        String token = request.getHeader("Authorization");
+
+        if (token == null || token.isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Token is missing or invalid!");
+            return false; // 阻止请求继续
+        }
+
+        // 检查 token 是否以 "Bearer " 开头，并去除 "Bearer " 前缀
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // 去掉 "Bearer " 前缀
+        }
+
         try {
             // 验证令牌
             JWTUtils.verify(token);
+            DecodedJWT decodedJWT = JWTUtils.verify(token);
+            String accountId = decodedJWT.getClaim("accountId").asString();
+            String accountName = decodedJWT.getClaim("accountname").asString();
+            request.setAttribute("accountId", accountId);
+            request.setAttribute("accountName", accountName);
+
             return true;  // 放行请求
 
         } catch (SignatureVerificationException e) {

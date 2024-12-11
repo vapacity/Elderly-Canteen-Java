@@ -11,7 +11,14 @@ public class InterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new JWTInterceptors())
-                .addPathPatterns("/**")  // 其他接口token验证
-                .excludePathPatterns("/accounts/login");  // 所有用户都放行
+                .addPathPatterns("/**")  // 拦截所有请求
+                .excludePathPatterns("/accounts/login")  // 排除登录接口
+                .excludePathPatterns("/swagger-ui.html")  // 排除 Swagger UI 首页
+                .excludePathPatterns("/swagger-ui/**")  // 排除 Swagger UI 路径
+                .excludePathPatterns("/swagger-resources/**")  // 排除 Swagger 资源
+                .excludePathPatterns("/v3/api-docs/**")  // 排除 Swagger OpenAPI 3 API 文档
+                .excludePathPatterns("/webjars/**")  // 排除 Swagger JS、CSS 文件
+                .excludePathPatterns("/favicon.ico");  // 排除 favicon 请求
     }
+
 }

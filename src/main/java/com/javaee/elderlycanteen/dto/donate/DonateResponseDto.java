@@ -7,6 +7,6 @@ public class DonateResponseDto {
     @JsonProperty("success")
     public String success;
 
-    @JsonProperty("message")
-    public String message;
+    @JsonProperty("msg")
+    public String msg;
 }

@@ -7,5 +7,11 @@ import java.util.List;
 @Data
 public class AllIngreResponseDto {
     @JsonProperty("ingredients")
-    public List<IngredientDto> ingredients;
+    public List<IngreRequestDto> ingredients;
+
+    @JsonProperty("success")
+    public String success;
+
+    @JsonProperty("msg")
+    public String msg;
 }

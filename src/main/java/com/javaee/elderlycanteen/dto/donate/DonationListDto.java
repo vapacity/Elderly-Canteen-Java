@@ -6,8 +6,8 @@ import java.util.List;
 
 @Data
 public class DonationListDto {
-    @JsonProperty("responce")
-    public List<ResponceData> responce;
+    @JsonProperty("response")
+    public List<ResponceData> response;
 
     @Data
     public static class ResponceData {

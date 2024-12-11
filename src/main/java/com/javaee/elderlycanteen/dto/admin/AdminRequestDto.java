@@ -6,18 +6,18 @@ import java.time.LocalDate;
 
 @Data
 public class AdminRequestDto {
-    @JsonProperty("AccountId")
+    @JsonProperty("accountId")
     private String accountId;
 
-    @JsonProperty("Name")
+    @JsonProperty("name")
     private String name;
 
-    @JsonProperty("PhoneNum")
+    @JsonProperty("phoneNum")
     private String phoneNum;
 
-    @JsonProperty("Position")
+    @JsonProperty("position")
     private String position;
 
-    @JsonProperty("Gender")
+    @JsonProperty("gender")
     private String gender;
 }

@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class DeleteRequestDto {
-    @JsonProperty("CART_ID")
+    @JsonProperty("cartId")
     private String cartId; // 购物车ID
 
-    @JsonProperty("DISH_ID")
+    @JsonProperty("dishId")
     private String dishId; // 菜品ID
 }

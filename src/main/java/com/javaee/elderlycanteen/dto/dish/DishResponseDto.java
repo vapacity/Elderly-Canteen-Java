@@ -5,5 +5,11 @@ import lombok.Data;
 @Data
 public class DishResponseDto {
     @JsonProperty("dish")
-    public DishDto dto;
+    public DishDto dish;
+
+    @JsonProperty("success")
+    public String success;
+
+    @JsonProperty("msg")
+    public String msg;
 }

@@ -10,15 +10,21 @@ public class FinanceTotalsResponseDto {
     @JsonProperty("response")
     private List<FinanceData> response;
 
+    @JsonProperty("success")
+    public String success;
+
+    @JsonProperty("msg")
+    public String msg;
+
     @Data
     public static class FinanceData {
-        @JsonProperty("NetIn")
+        @JsonProperty("netIn")
         public Double netIn;
 
-        @JsonProperty("TotalIn")
+        @JsonProperty("totalIn")
         public Double totalIn;
 
-        @JsonProperty("TotalOut")
+        @JsonProperty("totalOut")
         public Double totalOut;
     }
 }

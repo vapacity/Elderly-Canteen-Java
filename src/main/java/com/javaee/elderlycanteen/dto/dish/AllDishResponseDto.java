@@ -8,5 +8,11 @@ import java.util.List;
 @Data
 public class AllDishResponseDto {
     @JsonProperty("response")
-    public List<DishDto> dish;
+    public List<DishDto> response;
+
+    @JsonProperty("success")
+    public Boolean success;
+
+    @JsonProperty("msg")
+    public String msg;
 }

@@ -5,28 +5,28 @@ import lombok.Data;
 
 @Data
 public class AdminRegisterDto {
-    @JsonProperty("Name")
+    @JsonProperty("name")
     private String name;
 
-    @JsonProperty("PhoneNum")
+    @JsonProperty("phoneNum")
     private String phoneNum;
 
-    @JsonProperty("Position")
+    @JsonProperty("position")
     private String position;
 
-    @JsonProperty("Gender")
+    @JsonProperty("gender")
     private String gender;
 
-    @JsonProperty("IdCard")
+    @JsonProperty("idCard")
     private String idCard;
 
-    @JsonProperty("BirthDate")
+    @JsonProperty("birthDate")
     private String birthDate;
 
-    @JsonProperty("Address")
+    @JsonProperty("address")
     private String address;
 
-    @JsonProperty("Email")
+    @JsonProperty("email")
     private String email;
 
 }

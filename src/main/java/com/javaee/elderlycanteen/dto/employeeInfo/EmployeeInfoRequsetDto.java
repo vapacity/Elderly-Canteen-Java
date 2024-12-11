@@ -4,27 +4,27 @@ import lombok.Data;
 
 @Data
 public class EmployeeInfoRequsetDto {
-    @JsonProperty("EmployeeId")
+    @JsonProperty("employeeId")
     private String employeeId;
 
-    @JsonProperty("EmployeeName")
+    @JsonProperty("employeeName")
     private String employeeName;
 
-    @JsonProperty("PhoneNum")
+    @JsonProperty("phoneNum")
     private String phoneNum;
 
-    @JsonProperty("Address")
+    @JsonProperty("address")
     private String address;
 
-    @JsonProperty("EmployeePosition")
+    @JsonProperty("employeePosition")
     private String employeePosition;
 
-    @JsonProperty("Salary")
+    @JsonProperty("salary")
     private Double salary;
 
-    @JsonProperty("IdCard")
+    @JsonProperty("idCard")
     private String idCard;
 
-    @JsonProperty("IsPaidThisMonth")
+    @JsonProperty("isPaidThisMonth")
     private Boolean isPaidThisMonth;
 }

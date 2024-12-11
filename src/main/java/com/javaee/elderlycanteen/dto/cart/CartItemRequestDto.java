@@ -4,12 +4,12 @@ import lombok.Data;
 
 @Data
 public class CartItemRequestDto {
-    @JsonProperty("CART_ID")
+    @JsonProperty("cartId")
     private String cartId;
 
-    @JsonProperty("DISH_ID")
+    @JsonProperty("dishId")
     private String dishId;
 
-    @JsonProperty("QUANTITY")
+    @JsonProperty("quantity")
     private Integer quantity;
 }

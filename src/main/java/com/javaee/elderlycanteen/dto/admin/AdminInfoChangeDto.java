@@ -5,21 +5,21 @@ import lombok.Data;
 
 @Data
 public class AdminInfoChangeDto {
-    @JsonProperty("PhoneNum")
+    @JsonProperty("phoneNum")
     private String phoneNum;
 
-    @JsonProperty("Gender")
+    @JsonProperty("gender")
     private String gender;
 
-    @JsonProperty("BirthDate")
+    @JsonProperty("birthDate")
     private String birthDate;
 
-    @JsonProperty("AccountName")
+    @JsonProperty("accountName")
     private String accountName;
 
-    @JsonProperty("Email")
+    @JsonProperty("email")
     private String email;
 
-    @JsonProperty("Address")
+    @JsonProperty("address")
     private String address;
 }

@@ -9,33 +9,39 @@ public class FinanceResponseDto {
     @JsonProperty("response")
     public List<FinanceResponseData> response;
 
+    @JsonProperty("success")
+    public String success;
+
+    @JsonProperty("msg")
+    public String msg;
+
     @Data
     public static class FinanceResponseData {
-        @JsonProperty("FinanceId")
+        @JsonProperty("financeId")
         public String financeId;
 
-        @JsonProperty("FinanceType")
+        @JsonProperty("financeType")
         public String financeType;
 
-        @JsonProperty("FinanceDate")
+        @JsonProperty("financeDate")
         public String financeDate;
 
-        @JsonProperty("Price")
+        @JsonProperty("price")
         public String price;
 
-        @JsonProperty("InOrOut")
+        @JsonProperty("inOrOut")
         public String inOrOut;
 
-        @JsonProperty("AccountId")
+        @JsonProperty("accountId")
         public String accountId;
 
-        @JsonProperty("AdministratorId")
+        @JsonProperty("administratorId")
         public String administratorId;
 
-        @JsonProperty("Proof")
-        public byte[] proof;
+        @JsonProperty("proof")
+        public Byte[] proof;
 
-        @JsonProperty("Status")
+        @JsonProperty("status")
         public String status;
 
 

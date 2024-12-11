@@ -7,7 +7,7 @@ public class CartItemResponseDto {
     @JsonProperty("success")
     private Boolean success;
 
-    @JsonProperty("Message")
-    private String message;
+    @JsonProperty("msg")
+    private String msg;
 
 }

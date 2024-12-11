@@ -4,10 +4,17 @@ import lombok.Data;
 
 @Data
 public class IngreResponseDto {
-    @JsonProperty("IngredientId")
+
+    @JsonProperty("success")
+    public String success;
+
+    @JsonProperty("msg")
+    public String msg;
+
+    @JsonProperty("ingredientId")
     private String ingredientId;
 
-    @JsonProperty("IngredientName")
+    @JsonProperty("ingredientName")
     private String ingredientName;
 
 }

@@ -43,6 +43,6 @@ public class AccountDto {
     @JsonProperty("password")
     private String password; // 密码，可选
 
-    @JsonProperty("Idcard")
+    @JsonProperty("idcard")
     private String idCard; // 身份证号，可选
 }

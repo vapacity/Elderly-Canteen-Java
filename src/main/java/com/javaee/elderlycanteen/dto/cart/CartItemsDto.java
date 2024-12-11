@@ -1,9 +1,22 @@
 package com.javaee.elderlycanteen.dto.cart;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class CartItemsDto {
+
+    @JsonProperty("menu")
+    private List<Menu> menu;
+
+    @JsonProperty("msg")
+    private String msg;
+
+    @JsonProperty("success")
+    private Boolean success;
+
     @Data
     public static class Menu{
         @JsonProperty("discountPrice")
@@ -23,7 +36,5 @@ public class CartItemsDto {
 
         @JsonProperty("quantity")
         private Integer quantity;
-
-
     }
 }

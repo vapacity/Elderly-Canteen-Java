@@ -7,14 +7,12 @@ import java.util.List;
 @Data
 public class CateResponseDto {
     @JsonProperty("cates")
-    private List<CateDto> cates;
+    private List<CateRequestDto> cates;
 
-    @Data
-    public static class CateDto {
-        @JsonProperty("cateId")
-        private String cateId;
+    @JsonProperty("success")
+    private Boolean success;
 
-        @JsonProperty("cateName")
-        private String cateName;
-    }
+    @JsonProperty("msg")
+    private String message;
 }
+

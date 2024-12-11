@@ -4,18 +4,18 @@ import lombok.Data;
 
 @Data
 public class EnsureCartRequestDto {
-    @JsonProperty("CART_ID")
+    @JsonProperty("cartId")
     private String cartId;
 
     @JsonProperty("newAddress")
     private String newAddress;
 
-    @JsonProperty("deliver_or_dining")
+    @JsonProperty("deliverOrDining")
     private Boolean deliverOrDining;
 
     @JsonProperty("remark")
     private String remark;
 
-    @JsonProperty("set_default_add")
+    @JsonProperty("setDefaultAdd")
     private Boolean setDefaultAdd;
 }

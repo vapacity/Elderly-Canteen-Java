@@ -29,6 +29,7 @@ public class Account {
     private String idCard;          // 身份证号码
     private String portrait;        // 头像
     private BigDecimal money;       // 账户余额
+    private String gender;
 
 }
 

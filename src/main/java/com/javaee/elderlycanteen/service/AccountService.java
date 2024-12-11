@@ -35,4 +35,8 @@ public class AccountService {
         }
         return account;
     }
+
+    public Integer addAccount(Account account) {
+        return accountDao.insertAccount(account);
+    }
 }

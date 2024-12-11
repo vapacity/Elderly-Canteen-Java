@@ -1,4 +1,5 @@
 package com.javaee.elderlycanteen.dto.account;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -32,6 +33,7 @@ public class AccountDto {
 
     // 非必须字段
     @JsonProperty("birthDate")
+    @JsonFormat(pattern = "yyyy-MM-dd")  // 指定日期格式
     private Date birthDate; // 出生日期，可选
 
     @JsonProperty("address")
@@ -43,6 +45,9 @@ public class AccountDto {
     @JsonProperty("password")
     private String password; // 密码，可选
 
-    @JsonProperty("idcard")
+    @JsonProperty("idCard")
     private String idCard; // 身份证号，可选
+
+    @JsonProperty("verifyCode")
+    private int verifyCode;
 }

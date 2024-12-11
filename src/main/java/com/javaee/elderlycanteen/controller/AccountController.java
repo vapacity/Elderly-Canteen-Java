@@ -1,6 +1,7 @@
 package com.javaee.elderlycanteen.controller;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.javaee.elderlycanteen.dto.account.AccountDto;
 import com.javaee.elderlycanteen.entity.Account;
 import com.javaee.elderlycanteen.service.AccountService;
 import com.javaee.elderlycanteen.dto.LoginRequestDto;
@@ -100,5 +101,25 @@ public class AccountController {
     public ResponseEntity<Account> test2(LoginRequestDto loginRequestDto) {
         Account account = accountService.login(loginRequestDto);
         return ResponseEntity.ok(account);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<Integer> register(@RequestBody AccountDto accountDto) {
+        Account account = new Account();
+        account.setAccountName(accountDto.getAccountName());
+        account.setPassword(accountDto.getPassword());
+        account.setIdentity(accountDto.getIdentity());
+        account.setPhoneNum(accountDto.getPhoneNum());
+        account.setAddress(accountDto.getAddress());
+        account.setPortrait(accountDto.getPortrait());
+        account.setGender(accountDto.getGender());
+        account.setMoney(accountDto.getMoney());
+        account.setVerifyCode(accountDto.getVerifyCode());
+        account.setBirthDate(accountDto.getBirthDate());
+        account.setName(accountDto.getName());
+        account.setIdCard(accountDto.getIdCard());
+
+        Integer accountId = accountService.addAccount(account);
+        return ResponseEntity.ok(accountId);
     }
 }

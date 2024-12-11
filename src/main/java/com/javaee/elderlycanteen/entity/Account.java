@@ -1,5 +1,4 @@
 package com.javaee.elderlycanteen.entity;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -30,5 +29,6 @@ public class Account {
     private String idCard;          // 身份证号码
     private String portrait;        // 头像
     private BigDecimal money;       // 账户余额
+
 }
 

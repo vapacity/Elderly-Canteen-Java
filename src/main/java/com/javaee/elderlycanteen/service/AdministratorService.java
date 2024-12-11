@@ -18,7 +18,8 @@ public class AdministratorService {
     }
 
     public Administrator getAdminById(String accountId) {
-        return administratorDao.GetAdminById(accountId);
+        Administrator administrator = administratorDao.GetAdminById(accountId);
+        return administrator;
     }
 
     public List<Administrator> searchAdmin(String email, String position) {

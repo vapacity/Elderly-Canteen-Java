@@ -5,12 +5,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.*;
+import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Accessors(chain = true)
 public class Account {
 
     private String accountId;
@@ -25,6 +30,5 @@ public class Account {
     private String idCard;          // 身份证号码
     private String portrait;        // 头像
     private BigDecimal money;       // 账户余额
-
 }
 

@@ -19,5 +19,19 @@ public class AccountService {
         this.accountDao = accountDao;
     }
 
+    public Account login(String accountId, String password) {
+        Account account = accountDao.login(accountId, password);
+        if (account == null) {
+            throw new RuntimeException("登录失败，账户或密码错误！");
+        }
+        return account;
+    }
 
+    public Account getAccountById(String accountId) {
+        Account account = accountDao.getAccountById(accountId);
+        if (account == null) {
+            throw new RuntimeException("未找到账户信息！");
+        }
+        return account;
+    }
 }

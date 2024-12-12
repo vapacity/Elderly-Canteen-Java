@@ -12,7 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class Repository {
-    private String ingredientId;
+    private Integer ingredientId;
     private Integer remainAmount;
     private Integer highConsumption;
     private Date expirationTime;

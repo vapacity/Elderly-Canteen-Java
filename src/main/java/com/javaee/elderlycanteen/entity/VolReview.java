@@ -12,8 +12,8 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class VolReview {
-    private String applicationId;
-    private String administratorId;
+    private Integer applicationId;
+    private Integer administratorId;
     private String status;
     private String reason;
     private Date reviewDate;

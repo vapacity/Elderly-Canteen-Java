@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 @Builder
 public class DeliverOrder {
 
-    private String orderId;
+    private Integer orderId;
     private String deliverPhone;
     private String customerPhone;
     private String cusAddress;
     private String deliverStatus;
-    private String cartId;
+    private Integer cartId;
 }

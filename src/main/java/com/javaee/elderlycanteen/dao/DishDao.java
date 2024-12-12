@@ -1,9 +1,7 @@
 package com.javaee.elderlycanteen.dao;
 
 import com.javaee.elderlycanteen.entity.Dish;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -18,9 +16,18 @@ public interface DishDao {
     @Select("Select * from dish where dish_name = #{dishName}")
     public Dish getDishByName(String dishName);
 
-    @Select("Select * from dish where dish_type = #{dishType}")
-    public List<Dish> getDishByType(String dishType);
+    @Select("Select * from dish where cateId = #{cateId}")
+    public Dish getDishByCateId(int cateId);
 
     @Insert("Insert into dish(dish_name, price, cateId,imageUrl) values(#{dishName}, #{price}, #{cateId}), #{imageUrl})")
-    public void insertDish(Dish dish);
+    @Options(useGeneratedKeys = true,keyProperty = "dishId")
+    public Integer insertDish(Dish dish);
+
+    @Update("Update dish set dish_name = #{dishName}, price = #{price}, cateId = #{cateId}, imageUrl = #{imageUrl} where dish_id = #{dishId}")
+    public Integer updateDish(Dish dish);
+
+    @Delete("Delete from dish where dish_id = #{dishId}")
+    public Integer deleteDish(int dishId);
+
+
 }

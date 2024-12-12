@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class OrderReview {
-    private String orderId;
+    private Integer orderId;
     private Double cStars;
     private String cReviewText;
 }

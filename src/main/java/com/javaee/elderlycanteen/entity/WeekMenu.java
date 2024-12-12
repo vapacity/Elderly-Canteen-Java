@@ -13,7 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class WeekMenu {
-    private String dishId;
+    private Integer dishId;
     private Date week;
     private Integer stock;
     private Integer sales;

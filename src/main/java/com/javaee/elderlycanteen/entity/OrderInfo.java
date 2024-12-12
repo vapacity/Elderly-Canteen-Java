@@ -12,10 +12,10 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 public class OrderInfo {
-    private String orderId;
+    private Integer orderId;
     private String deliverOrDining;
-    private String financeId;
-    private String cartId;
+    private Integer financeId;
+    private Integer cartId;
     private String status;
     private BigDecimal bonus;
     private String remark;

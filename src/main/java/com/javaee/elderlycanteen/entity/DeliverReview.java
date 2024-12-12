@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class DeliverReview {
-    private String orderId;
+    private Integer orderId;
     private Double dStars;
     private String dReviewText;
 }

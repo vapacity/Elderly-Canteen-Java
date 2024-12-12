@@ -14,7 +14,7 @@ import java.util.Date;
 public class IngredientLog {
     private Integer logId;
     private String actionType;
-    private String ingredientId;
+    private Integer ingredientId;
     private Integer remainAmountOld;
     private Integer remainAmountNew;
     private Date expirationTimeOld;

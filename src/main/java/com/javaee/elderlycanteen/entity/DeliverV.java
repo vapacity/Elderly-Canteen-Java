@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class DeliverV {
-    private String orderId;
-    private String volunteerId;
+    private Integer orderId;
+    private Integer volunteerId;
 }

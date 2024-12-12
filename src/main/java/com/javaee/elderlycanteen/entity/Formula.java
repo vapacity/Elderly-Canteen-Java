@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Formula {
-    private String dishId;
-    private String ingredientId;
+    private Integer dishId;
+    private Integer ingredientId;
     private Integer amount;
 }

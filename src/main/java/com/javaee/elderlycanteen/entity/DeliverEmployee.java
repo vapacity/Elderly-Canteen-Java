@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class DeliverEmployee {
 
-    private String employeeId;
-    private String volunteerId;
+    private Integer employeeId;
+    private Integer volunteerId;
 }

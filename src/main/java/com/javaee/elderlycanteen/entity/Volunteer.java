@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 public class Volunteer {
-    private String accountId;
+    private Integer accountId;
     private Boolean available;
     private BigDecimal score;
 }

@@ -12,9 +12,9 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 public class Restock {
-    private String financeId;
-    private String ingredientId;
-    private String administratorId;
+    private Integer financeId;
+    private Integer ingredientId;
+    private Integer administratorId;
     private Integer quantity;
     private BigDecimal price;
 }

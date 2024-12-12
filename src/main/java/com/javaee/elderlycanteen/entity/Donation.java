@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Donation {
-    private String donationId;
-    private String accountId;
-    private String financeId;
+    private Integer donationId;
+    private Integer accountId;
+    private Integer financeId;
     private String origin;
 }

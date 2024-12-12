@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class PayWage {
-    private String financeId;
-    private String employeeId;
-    private String administratorId;
+    private Integer financeId;
+    private Integer employeeId;
+    private Integer administratorId;
 }

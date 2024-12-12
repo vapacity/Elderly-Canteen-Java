@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文件上传</title>
+</head>
+<body>
+<h1>上传图片</h1>
+
+<!-- 上传表单 -->
+<form id="uploadForm">
+    <label for="fileInput">选择文件:</label>
+    <input type="file" id="fileInput" name="file" accept="image/*">
+    <button type="submit">上传</button>
+</form>
+
+<div id="message"></div> <!-- 用于显示上传成功或失败的信息 -->
+
+<!-- 用于显示上传的图片 -->
+<div id="imageDisplay" style="margin-top: 20px;">
+    <h2>上传后的图片：</h2>
+    <img id="uploadedImage" src="http://8.154.46.242:9000/mybucket/drawio.png" alt="上传的图片将显示在这里" style="max-width: 300px;">
+</div>
+
+
+<script>
+    // 获取表单和文件输入
+    const form = document.getElementById('uploadForm');
+    const fileInput = document.getElementById('fileInput');
+    const messageDiv = document.getElementById('message');
+    const imageDisplay = document.getElementById('imageDisplay');
+    const uploadedImage = document.getElementById('uploadedImage');
+    uploadedImage.src = `http://8.154.46.242:9000/mybucket/drawio.png`; // 更新图片显示
+    uploadedImage.alt = "上传的图片";
+    imageDisplay.style.display = 'block'; // 显示图片区域
+    // 监听表单提交事件
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); // 阻止表单的默认提交
+
+        // 获取文件
+        const file = fileInput.files[0];
+        if (!file) {
+            messageDiv.innerHTML = "请先选择一个文件";
+            return;
+        }
+
+        // 创建FormData对象
+        const formData = new FormData();
+        formData.append('file', file);
+
+        // 使用 fetch API 提交文件
+        fetch('http://localhost:8080/api/upload', {
+            method: 'POST',
+            body: formData,
+        })
+            .then(response => response.text())  // 获取响应
+            .then(data => {
+                messageDiv.innerHTML = "上传成功：" + data;
+                console.log('上传成功：', data);
+
+            })
+            .catch(error => {
+                messageDiv.innerHTML = "上传失败：" + error.message;
+                console.error('上传失败：', error);
+            });
+    });
+</script>
+</body>
+</html>

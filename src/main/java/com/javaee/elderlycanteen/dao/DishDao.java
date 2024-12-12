@@ -7,26 +7,35 @@ import java.util.List;
 
 @Mapper
 public interface DishDao {
-    @Select("Select * from dish where dish_id = #{dishId}")
+    @Select("Select * from Dish where dishId = #{dishId}")
     public Dish getDishById(int dishId);
 
-    @Select("Select * from dish")
+    @Select("Select * from Dish")
     public List<Dish> getAllDish();
 
-    @Select("Select * from dish where dish_name = #{dishName}")
+    @Select("Select * from Dish where dishName = #{dishName}")
     public Dish getDishByName(String dishName);
 
-    @Select("Select * from dish where cateId = #{cateId}")
+    @Select("Select * from Dish where cateId = #{cateId}")
     public Dish getDishByCateId(int cateId);
 
-    @Insert("Insert into dish(dish_name, price, cateId,imageUrl) values(#{dishName}, #{price}, #{cateId}), #{imageUrl})")
+    @Select("Select * from Dish where cateId = #{cateId} and dishName like #{dishName}")
+    public List<Dish> getDishByCateIdAndName(Integer cateId, String dishName);
+
+    List<Dish> findAllByDishNameAndCategoryName(@Param("dishName") String dishName,
+                                                @Param("categoryName") String categoryName);
+
+
+
+
+    @Insert("Insert into Dish(dishName, price, cateId,imageUrl) values(#{dishName}, #{price}, #{cateId}), #{imageUrl})")
     @Options(useGeneratedKeys = true,keyProperty = "dishId")
     public Integer insertDish(Dish dish);
 
-    @Update("Update dish set dish_name = #{dishName}, price = #{price}, cateId = #{cateId}, imageUrl = #{imageUrl} where dish_id = #{dishId}")
+    @Update("Update Dish set dishName = #{dishName}, price = #{price}, cateId = #{cateId}, imageUrl = #{imageUrl} where dishId = #{dishId}")
     public Integer updateDish(Dish dish);
 
-    @Delete("Delete from dish where dish_id = #{dishId}")
+    @Delete("Delete from Dish where dishId = #{dishId}")
     public Integer deleteDish(int dishId);
 
 

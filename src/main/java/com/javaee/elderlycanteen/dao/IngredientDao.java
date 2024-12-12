@@ -9,23 +9,23 @@ import java.util.List;
 public interface IngredientDao {
 
     // 基于主码id查询
-    @Select("SELECT * FROM ingredient WHERE ingredientId = #{ingredientId}")
+    @Select("SELECT * FROM Ingredient WHERE ingredientId = #{ingredientId}")
     Ingredient getIngredientById(Integer ingredientId);
 
     // 查询所有数据
-    @Select("SELECT * FROM ingredient")
+    @Select("SELECT * FROM Ingredient")
     List<Ingredient> getAllIngredients();
 
     // 插入数据，主码id自增
-    @Insert("INSERT INTO ingredient (ingredientName) VALUES (#{ingredientName})")
+    @Insert("INSERT INTO Ingredient (ingredientName) VALUES (#{ingredientName})")
     @Options(useGeneratedKeys = true, keyProperty = "ingredientId", keyColumn = "ingredientId")
     Integer insertIngredient(Ingredient ingredient);
 
     // 更新数据
-    @Update("UPDATE ingredient SET ingredientName = #{ingredientName} WHERE ingredientId = #{ingredientId}")
+    @Update("UPDATE Ingredient SET ingredientName = #{ingredientName} WHERE ingredientId = #{ingredientId}")
     Integer updateIngredient(Ingredient ingredient);
 
     // 删除数据
-    @Delete("DELETE FROM ingredient WHERE ingredientId = #{ingredientId}")
+    @Delete("DELETE FROM Ingredient WHERE ingredientId = #{ingredientId}")
     Integer deleteIngredient(Integer ingredientId);
 }

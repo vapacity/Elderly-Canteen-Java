@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.javaee.elderlycanteen.entity.TokenInfo;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -45,6 +46,18 @@ public class JWTUtils {
         return JWT.require(Algorithm.HMAC256(SING)).build().verify(token);
     }
 
+    public static TokenInfo getTokenInfo(String token){
+        TokenInfo tokenInfo = new TokenInfo();
+        DecodedJWT verify = JWT.require(Algorithm.HMAC256(SING)).build().verify(token);
+        Integer accountId = verify.getClaim("accountId").asInt();
+        String accountName = verify.getClaim("accountname").asString();
+        String identity = verify.getClaim("identity").asString();
+
+        tokenInfo.setAccountId(accountId);
+        tokenInfo.setAccountName(accountName);
+        tokenInfo.setIdentity(identity);
+        return tokenInfo;
+    }
     /**
      * 获取token信息方法
      */

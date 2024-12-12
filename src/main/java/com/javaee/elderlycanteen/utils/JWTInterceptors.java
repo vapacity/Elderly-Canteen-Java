@@ -36,11 +36,6 @@ public class JWTInterceptors implements HandlerInterceptor {
             // 验证令牌
             JWTUtils.verify(token);
             DecodedJWT decodedJWT = JWTUtils.verify(token);
-            String accountId = decodedJWT.getClaim("accountId").asString();
-            String accountName = decodedJWT.getClaim("accountname").asString();
-            request.setAttribute("accountId", accountId);
-            request.setAttribute("accountName", accountName);
-
             return true;  // 放行请求
 
         } catch (SignatureVerificationException e) {

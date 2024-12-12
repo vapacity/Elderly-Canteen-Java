@@ -1,8 +1,10 @@
 package com.javaee.elderlycanteen.controller;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.javaee.elderlycanteen.annotation.CheckAccountIdentity;
 import com.javaee.elderlycanteen.dto.account.AccountDto;
 import com.javaee.elderlycanteen.entity.Account;
+import com.javaee.elderlycanteen.entity.TokenInfo;
 import com.javaee.elderlycanteen.service.AccountService;
 import com.javaee.elderlycanteen.dto.LoginRequestDto;
 import com.javaee.elderlycanteen.utils.JWTUtils;
@@ -43,7 +45,7 @@ public class AccountController {
 
             // 创建 JWT payload
             Map<String, String> payload = new HashMap<>();
-            payload.put("accountId", account.getAccountId());
+            payload.put("accountId", account.getAccountId().toString());
             payload.put("accountname", account.getAccountName());
             payload.put("identity", account.getIdentity());
 
@@ -64,6 +66,7 @@ public class AccountController {
     }
 
     @PostMapping("/test")
+    @CheckAccountIdentity(identity = "123456789")
     public ResponseEntity<Map<String, Object>> test(@RequestHeader(name="Authorization",required = false) String token) {
         Map<String, Object> response = new HashMap<>();
         try {
@@ -74,20 +77,13 @@ public class AccountController {
                 response.put("msg", "Token 为空！");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response); // 返回错误响应
             }
-            System.out.println(token);
-            DecodedJWT decodedJWT = JWTUtils.verify(token);
-
-            // 获取 token 中的信息
-            String accountId = decodedJWT.getClaim("accountId").asString();
-            String accountName = decodedJWT.getClaim("accountname").asString();
-            String identity = decodedJWT.getClaim("identity").asString();
-
+            TokenInfo tokenInfo = JWTUtils.getTokenInfo(token);
             // 返回验证成功的信息
             response.put("state", true);
             response.put("msg", "请求成功");
-            response.put("accountId", accountId);
-            response.put("accountname", accountName);
-            response.put("identity", identity);
+            response.put("accountId", tokenInfo.getAccountId());
+            response.put("accountname", tokenInfo.getAccountName());
+            response.put("identity", tokenInfo.getIdentity());
             return ResponseEntity.ok(response); // 返回成功响应
         } catch (Exception e) {
             // 捕获各种异常并返回错误信息

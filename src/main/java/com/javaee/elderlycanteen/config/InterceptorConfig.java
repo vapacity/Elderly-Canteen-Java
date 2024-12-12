@@ -12,6 +12,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new JWTInterceptors())
                 .addPathPatterns("/**")  // 拦截所有请求
+                .excludePathPatterns("/**")
                 .excludePathPatterns("/accounts/login")  // 排除登录接口
                 .excludePathPatterns("/swagger-ui.html")  // 排除 Swagger UI 首页
                 .excludePathPatterns("/swagger-ui/**")  // 排除 Swagger UI 路径

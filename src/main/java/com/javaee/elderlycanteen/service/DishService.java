@@ -18,8 +18,4 @@ public class DishService {
     }
 
     // 在这里添加特定的业务逻辑方法
-    public DishDto searchDish(String dishName, String categoryName){
-        categoryDao.getCategoryByName(categoryName);
-        dishDao.getDishByName(dishName);
-    }
 }

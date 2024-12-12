@@ -13,8 +13,8 @@ import java.util.Date;
 @Builder
 public class Cart {
 
-    private String cartId;           // 购物车ID
-    private String accountId;        // 账户ID
+    private Integer cartId;           // 购物车ID
+    private Integer accountId;        // 账户ID
     private Date createdTime;        // 创建时间
     private Date updatedTime;        // 更新时间
 

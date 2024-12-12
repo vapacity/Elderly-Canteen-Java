@@ -15,7 +15,7 @@ public class RepositoryLog {
     private Integer logId;
     private String actionType;
     private String entityType;
-    private String entityId;
+    private Integer entityId;
     private String oldValue;
     private String newValue;
     private Date changedAt;

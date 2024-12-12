@@ -12,8 +12,8 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class VolApplication {
-    private String applicationId;
-    private String accountId;
+    private Integer applicationId;
+    private Integer accountId;
     private String selfStatement;
     private Date applicationDate;
 }

@@ -12,13 +12,13 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 public class Finance {
-    private String financeId;
+    private Integer financeId;
     private String financeType;
     private java.util.Date financeDate;
     private BigDecimal price;
     private String inOrOut;
-    private String accountId;
-    private String administratorId;
+    private Integer accountId;
+    private Integer administratorId;
     private byte[] proof;
     private String status;
 }

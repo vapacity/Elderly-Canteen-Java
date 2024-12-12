@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 public class Senior {
-    private String accountId;
+    private Integer accountId;
     private String familyNum;
     private BigDecimal subsidy;
 }

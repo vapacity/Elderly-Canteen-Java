@@ -13,8 +13,8 @@ import java.util.Date;
 @Builder
 public class CartItem {
 
-    private String cartId;           // 购物车ID
-    private String dishId;           // 菜品ID
+    private Integer cartId;           // 购物车ID
+    private Integer dishId;           // 菜品ID
     private Date week;               // 周
     private Integer quantity;        // 数量
 

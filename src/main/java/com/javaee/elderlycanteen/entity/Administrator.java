@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class Administrator {
 
-    private String accountId;        // 账户ID
+    private Integer accountId;        // 账户ID
     private String email;            // 邮箱
     private String position;         // 职位
 

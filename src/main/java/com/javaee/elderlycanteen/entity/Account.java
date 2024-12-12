@@ -17,7 +17,7 @@ import java.util.Date;
 @Accessors(chain = true)
 public class Account {
 
-    private String accountId;
+    private Integer accountId;
     private String accountName;     // 账户名
     private String password;        // 密码
     private String phoneNum;        // 手机号

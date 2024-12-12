@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 public class Employee {
-    private String employeeId;
+    private Integer employeeId;
     private String employeeName;
     private String phoneNum;
     private String address;

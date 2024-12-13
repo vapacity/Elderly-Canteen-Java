@@ -27,10 +27,7 @@ public class MinioController {
         System.out.println("File name: " + file.getOriginalFilename());
         System.out.println("File size: " + file.getSize());
         try {
-
-            System.out.println("start");
             minioService.uploadFile(fileName, file);
-            System.out.println("end");
             return "File uploaded successfully: " ;
         } catch (Exception e) {
             e.printStackTrace();

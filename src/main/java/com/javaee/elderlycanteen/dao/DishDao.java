@@ -41,7 +41,7 @@ public interface DishDao {
 
 
 
-    @Insert("Insert into Dish(dishName, price, cateId,imageUrl) values(#{dishName}, #{price}, #{cateId}), #{imageUrl})")
+    @Insert("Insert into Dish(dishName, price, cateId,imageUrl) values(#{dishName}, #{price}, #{cateId}, #{imageUrl})")
     @Options(useGeneratedKeys = true,keyProperty = "dishId")
     public Integer insertDish(Dish dish);
 

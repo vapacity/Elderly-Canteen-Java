@@ -42,11 +42,11 @@ public interface CategoryDao {
     List<Category> findAllByOrderIdAsc();
 
     //查询所有类目并按name升序排列
-    @Select("SELECT * FROM Category ORDER BY name ASC")
+    @Select("SELECT * FROM Category ORDER BY cateName ASC")
     List<Category> findAllByNameAsc();
 
     //查询所有类目并按name降序排列
-    @Select("SELECT * FROM Category ORDER BY name DESC")
+    @Select("SELECT * FROM Category ORDER BY cateName DESC")
     List<Category> findAllByNameDesc();
 
     //查询类目数量

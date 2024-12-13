@@ -20,7 +20,7 @@ public interface AccountDao {
     Account login(@Param("accountId") String accountId, @Param("password") String password);
 
     @Select("SELECT * FROM Account WHERE accountId = #{accountId}")
-    Account getAccountById(@Param("accountId") String accountId);
+    Account getAccountById(@Param("accountId") Integer accountId);
 
     @Select("SELECT * FROM Account")
     List<Account> findAllUsers();
@@ -41,4 +41,10 @@ public interface AccountDao {
     @Select("SELECT * FROM Account WHERE role = #{role}")
     @Options()
     List<Account> findUserByRole(String role);
+
+    @Update("UPDATE Account SET money=#{money} WHERE accountId=#{accountId}")
+    Integer updateAccountMoney(Integer accountId, Double money);
+
+    @Update("UPDATE Account SET address=#{address} WHERE accountId=#{accountId}")
+    Integer updateAccountAddress(Integer accountId, String address);
 }

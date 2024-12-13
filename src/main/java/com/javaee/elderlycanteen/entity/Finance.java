@@ -15,7 +15,7 @@ public class Finance {
     private Integer financeId;
     private String financeType;
     private java.util.Date financeDate;
-    private BigDecimal price;
+    private Double price;
     private String inOrOut;
     private Integer accountId;
     private Integer administratorId;

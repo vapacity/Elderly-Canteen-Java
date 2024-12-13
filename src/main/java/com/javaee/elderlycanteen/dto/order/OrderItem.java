@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 @Data
 public class OrderItem {
 
-    private String orderId;
+    private Integer orderId;
     
     private String cusAddress;
 
@@ -20,7 +21,7 @@ public class OrderItem {
     private String deliverStatus;
 
     @JsonProperty("money")
-    private BigDecimal money;
+    private Double money;
 
     @JsonProperty("orderDishes")
     private List<OrderDish> orderDishes;
@@ -35,5 +36,5 @@ public class OrderItem {
     private Double subsidy;
 
     @JsonProperty("updatedTime")
-    private String updatedTime;
+    private Date updatedTime;
 }

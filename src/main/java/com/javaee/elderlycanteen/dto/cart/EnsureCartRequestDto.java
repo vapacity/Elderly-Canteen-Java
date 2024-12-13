@@ -2,10 +2,12 @@ package com.javaee.elderlycanteen.dto.cart;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.util.Optional;
+
 @Data
 public class EnsureCartRequestDto {
     @JsonProperty("cartId")
-    private String cartId;
+    private Integer cartId;
 
     @JsonProperty("newAddress")
     private String newAddress;

@@ -8,7 +8,7 @@ import java.util.List;
 @Mapper
 public interface DishDao {
     @Select("Select * from Dish where dishId = #{dishId}")
-    public Dish getDishById(int dishId);
+    public Dish getDishById(Integer dishId);
 
     @Select("Select * from Dish")
     public List<Dish> getAllDish();
@@ -17,7 +17,7 @@ public interface DishDao {
     public Dish getDishByName(String dishName);
 
     @Select("Select * from Dish where cateId = #{cateId}")
-    public Dish getDishByCateId(int cateId);
+    public Dish getDishByCateId(Integer cateId);
 
     @Select("Select * from Dish where cateId = #{cateId} and dishName like #{dishName}")
     public List<Dish> getDishByCateIdAndName(Integer cateId, String dishName);
@@ -36,7 +36,7 @@ public interface DishDao {
     public Integer updateDish(Dish dish);
 
     @Delete("Delete from Dish where dishId = #{dishId}")
-    public Integer deleteDish(int dishId);
+    public Integer deleteDish(Integer dishId);
 
 
 }

@@ -5,10 +5,10 @@ import lombok.Data;
 @Data
 public class CartItemRequestDto {
     @JsonProperty("cartId")
-    private String cartId;
+    private Integer cartId;
 
     @JsonProperty("dishId")
-    private String dishId;
+    private Integer dishId;
 
     @JsonProperty("quantity")
     private Integer quantity;

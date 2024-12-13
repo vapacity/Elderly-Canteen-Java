@@ -3,6 +3,7 @@ package com.javaee.elderlycanteen.service;
 import com.javaee.elderlycanteen.dao.AccountDao;
 import com.javaee.elderlycanteen.entity.Account;
 import com.javaee.elderlycanteen.dto.LoginRequestDto;
+import com.javaee.elderlycanteen.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +29,7 @@ public class AccountService {
         return account;
     }
 
-    public Account getAccountById(String accountId) {
+    public Account getAccountById(Integer accountId) {
         Account account = accountDao.getAccountById(accountId);
         if (account == null) {
             throw new RuntimeException("未找到账户信息！");
@@ -38,5 +39,13 @@ public class AccountService {
 
     public Integer addAccount(Account account) {
         return accountDao.insertAccount(account);
+    }
+
+    public Integer updateAccountMoney(Integer accountId, Double money) {
+        Integer ret = accountDao.updateAccountMoney(accountId, money);
+        if (ret != 1) {
+            throw new ServiceException("update Account money failed!");
+        }
+        return ret;
     }
 }

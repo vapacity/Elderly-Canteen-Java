@@ -18,8 +18,8 @@ public class RepositoryController {
     }
 
     // 在这里添加特定的API端点
-//    @GetMapping("/search")
-//    public AllRepoResponseDto getAllIngredients(@RequestParam(value = "name", required = false) String name) {
-//        return repositoryService.searchAllRepos(name);
-//    }
+    @GetMapping("/search")
+    public AllRepoResponseDto getAllIngredients(@RequestParam(value = "name", required = false) String name) {
+        return repositoryService.searchAllRepos(name);
+    }
 }

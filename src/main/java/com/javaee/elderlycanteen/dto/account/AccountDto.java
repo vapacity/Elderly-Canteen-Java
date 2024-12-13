@@ -11,7 +11,7 @@ import java.util.Date;
 public class AccountDto {
     // 必须字段
     @JsonProperty("accountId")
-    private String accountId; // 账号ID，必须
+    private Integer accountId; // 账号ID，必须
 
     @JsonProperty("accountName")
     private String accountName; // 账号名称，必须
@@ -29,7 +29,7 @@ public class AccountDto {
     private String gender; // 性别，必须
 
     @JsonProperty("money")
-    private BigDecimal money; // 金额
+    private Double money; // 金额
 
     // 非必须字段
     @JsonProperty("birthDate")

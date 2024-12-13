@@ -14,5 +14,5 @@ import java.math.BigDecimal;
 public class Senior {
     private Integer accountId;
     private String familyNum;
-    private BigDecimal subsidy;
+    private Double subsidy;
 }

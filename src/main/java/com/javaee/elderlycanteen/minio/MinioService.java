@@ -1,5 +1,6 @@
 package com.javaee.elderlycanteen.minio;
 
+import com.javaee.elderlycanteen.dao.AccountDao;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,10 @@ public class MinioService {
     @Value("${minio.bucketName}")
     private String bucketName;
 
+    private final AccountDao accountDao;
+    public MinioService(AccountDao accountDao){
+        this.accountDao = accountDao;
+    }
 
     private MinioClient getMinioClient() {
         return MinioClient.builder()
@@ -44,5 +49,14 @@ public class MinioService {
                             .build()
             );
         }
+    }
+
+    public void updatePortrait(String fileName,Integer accountId){
+        if(fileName != null&& !fileName.isEmpty()){
+            String newUrl = endpoint+"/"+bucketName+"/"+fileName;
+            accountDao.updatePortrait(newUrl,accountId);
+        }
+
+
     }
 }

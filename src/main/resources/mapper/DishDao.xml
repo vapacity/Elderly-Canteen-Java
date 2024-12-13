@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.javaee.elderlycanteen.dao.DishDao">
+    <!-- 映射DishDto对象 -->
+    <resultMap id="DishResultMap" type="com.javaee.elderlycanteen.dto.dish.DishDto">
+        <!-- 映射主键和普通属性 -->
+        <id property="dishId" column="dishId"/>
+        <result property="dishName" column="dishName"/>
+
+        <!-- 映射配方信息 (一对多关系) -->
+        <collection property="formula" ofType="com.javaee.elderlycanteen.dto.dish.FormulaDto">
+            <result property="amount" column="amount"/>
+            <result property="ingredientId" column="ingredientId"/>
+            <result property="ingredientName" column="ingredientName"/>
+        </collection>
+    </resultMap>
+
+    <!-- 查询Dish及其配方 -->
+    <select id="getDishDetailsById" resultMap="DishResultMap">
+        SELECT
+            d.dishId,
+            d.dishName,
+            f.amount,
+            f.ingredientId,
+            i.ingredientName
+        FROM Dish d
+                 JOIN Category c ON d.cateId = c.cateId
+                 JOIN Formula f ON d.dishId = f.dishId
+                 JOIN Ingredient i ON f.ingredientId = i.ingredientId
+        WHERE d.dishId = #{dishId}
+    </select>
+</mapper>

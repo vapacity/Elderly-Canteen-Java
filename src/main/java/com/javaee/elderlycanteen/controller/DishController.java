@@ -7,6 +7,7 @@ import com.javaee.elderlycanteen.dto.dish.DishResponseDto;
 import com.javaee.elderlycanteen.exception.ServiceException;
 import com.javaee.elderlycanteen.minio.MinioService;
 import com.javaee.elderlycanteen.service.DishService;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,22 +51,35 @@ public class DishController {
     }
     @PostMapping("/uploadDishImage")
     public ResponseDto<String> uploadDishImage(
+            @Parameter(description = "上传的文件", required = true)
             @RequestParam("file") MultipartFile file,
-            @RequestParam("dishId") Integer dishId) throws Exception {
 
-        if (file.isEmpty()) {
-            throw new ServiceException("No file uploaded.");
+            @Parameter(description = "菜品的ID", required = true)
+            @RequestParam("dishId") Integer dishId) throws Exception {
+        // 判断文件是否为空
+        try{
+            if (file.isEmpty()) {
+                throw new ServiceException("No file uploaded.");
+            }
+
+            String fileName = file.getOriginalFilename();
+            String fileUrl = minioService.uploadFile(fileName, file);
+            dishService.updateDishImage(dishId, fileUrl);
+
+            ResponseDto<String> responseDto = new ResponseDto<>();
+            responseDto.setData(fileUrl);
+            responseDto.setSuccess(true);
+            responseDto.setMessage("Image uploaded successfully");
+            return responseDto;
+        }
+        catch(ServiceException e){
+            System.out.println(e.getMessage());
+            ResponseDto<String> responseDto = new ResponseDto<>();
+            responseDto.setSuccess(false);
+            responseDto.setMessage(e.getMessage());
+            return responseDto;
         }
 
-        String fileName = file.getOriginalFilename();
-        String fileUrl = minioService.uploadFile(fileName, file);
-        dishService.updateDishImage(dishId, fileUrl);
-
-        ResponseDto<String> responseDto = new ResponseDto<>();
-        responseDto.setData(fileUrl);
-        responseDto.setSuccess(true);
-        responseDto.setMessage("Image uploaded successfully");
-        return responseDto;
     }
 
 }

@@ -3,6 +3,7 @@ package com.javaee.elderlycanteen.dao;
 import com.javaee.elderlycanteen.entity.Repository;
 import org.apache.ibatis.annotations.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -39,4 +40,7 @@ public interface RepositoryDao {
     // 根据主键删除对象
     @Delete("DELETE FROM Repository WHERE ingredientId = #{id}")
     Integer deleteById(Integer id);
+
+    @Select("Select * from Repository Where ingredientId = #{ingredientId} and expirationTime = #{oldExpiry}")
+    Repository selectByIngredientIdAndExpiry(Integer ingredientId, Date oldExpiry);
 }

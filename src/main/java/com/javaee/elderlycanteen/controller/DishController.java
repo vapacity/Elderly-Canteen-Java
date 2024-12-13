@@ -45,8 +45,8 @@ public class DishController {
     }
 
     @DeleteMapping("/deleteDish/{dishId}")
-    public void deleteDish(@PathVariable("dishId") int dishId) {
-        dishService.deleteDish(dishId);
+    public DishResponseDto deleteDish(@PathVariable("dishId") int dishId) {
+        return dishService.deleteDish(dishId);
     }
     @PostMapping("/uploadDishImage")
     public ResponseDto<String> uploadDishImage(

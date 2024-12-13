@@ -10,7 +10,7 @@ public class AllIngreResponseDto {
     public List<IngreRequestDto> ingredients;
 
     @JsonProperty("success")
-    public String success;
+    public Boolean success;
 
     @JsonProperty("msg")
     public String msg;

@@ -6,13 +6,13 @@ import lombok.Data;
 public class IngreResponseDto {
 
     @JsonProperty("success")
-    public String success;
+    public Boolean success;
 
     @JsonProperty("msg")
     public String msg;
 
     @JsonProperty("ingredientId")
-    private String ingredientId;
+    private Integer ingredientId;
 
     @JsonProperty("ingredientName")
     private String ingredientName;

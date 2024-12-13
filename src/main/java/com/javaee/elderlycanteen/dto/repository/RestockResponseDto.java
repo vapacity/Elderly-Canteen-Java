@@ -2,12 +2,16 @@ package com.javaee.elderlycanteen.dto.repository;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class RestockResponseDto {
 
     @JsonProperty("data")
@@ -20,10 +24,12 @@ public class RestockResponseDto {
     private Boolean success;
 
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class RestockData {
 
         @JsonProperty("administratorId")
-        private String administratorId;
+        private Integer administratorId;
 
         @JsonProperty("amount")
         private Integer amount;
@@ -32,13 +38,13 @@ public class RestockResponseDto {
         private Date expiry;
 
         @JsonProperty("financeId")
-        private String financeId;
+        private Integer financeId;
 
         @JsonProperty("grade")
         private Integer grade;
 
         @JsonProperty("ingredientId")
-        private String ingredientId;
+        private Integer ingredientId;
 
         @JsonProperty("ingredientName")
         private String ingredientName;

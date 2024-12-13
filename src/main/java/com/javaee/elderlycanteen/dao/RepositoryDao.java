@@ -24,17 +24,16 @@ public interface RepositoryDao {
     List<Repository> selectAll();
 
     // 插入对象，主键自增
-    @Insert("INSERT INTO Repository(remainAmount, highConsumption, expirationTime) " +
-            "VALUES(#{repository.getRemainAmount()}, #{repository.getHighConsumption()}, #{repository.getExpirationTime()})")
-    @Options(useGeneratedKeys = true, keyProperty = "id")
+    @Insert("INSERT INTO Repository(ingredientId, remainAmount, highConsumption, expirationTime) " +
+            "VALUES(#{ingredientId},#{remainAmount}, #{highConsumption}, #{expirationTime})")
     Integer insert(Repository repository);
 
     // 更新对象
     @Update("UPDATE Repository SET " +
-            "remainAmount = #{repository.getRemainAmount()}, " +
-            "highConsumption = #{repository.getHighConsumption()}, " +
-            "expirationTime = #{repository.getExpirationTime()} " +
-            "WHERE ingredientId = #{repository.getIngredientId()}")
+            "remainAmount = #{remainAmount}, " +
+            "highConsumption = #{highConsumption}, " +
+            "expirationTime = #{expirationTime} " +
+            "WHERE ingredientId = #{ingredientId}")
     Integer update(Repository repository);
 
     // 根据主键删除对象
@@ -43,4 +42,10 @@ public interface RepositoryDao {
 
     @Select("Select * from Repository Where ingredientId = #{ingredientId} and expirationTime = #{oldExpiry}")
     Repository selectByIngredientIdAndExpiry(Integer ingredientId, Date oldExpiry);
+
+    @Delete("DELETE FROM Repository WHERE ingredientId = #{ingredientId} and expirationTime = #{oldExpiry}")
+    Integer deleteByIngredientIdAndExpiry(Integer ingredientId, Date oldExpiry);
+
+    @Update("UPDATE Repository SET remainAmount = #{amount} WHERE ingredientId = #{ingredientId} and expirationTime = #{expiry}")
+    void updateRemainAmount(Integer ingredientId, Date expiry, Integer amount);
 }

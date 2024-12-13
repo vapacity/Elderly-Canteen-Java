@@ -103,8 +103,10 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>
+                        <include>static/**</include>
                         <include>**/*.xml</include>
                         <include>**/*.properties</include>
+                        <include>**/*.html</include>
                 </includes>
             </resource>
         </resources>

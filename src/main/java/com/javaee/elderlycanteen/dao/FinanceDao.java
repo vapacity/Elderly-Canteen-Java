@@ -9,26 +9,29 @@ import java.util.List;
 public interface FinanceDao {
 
     // 查询基于主码id（financeId）的记录
-    @Select("SELECT * FROM finance WHERE financeId = #{financeId}")
+    @Select("SELECT * FROM Finance WHERE financeId = #{financeId}")
     Finance getFinanceById(int financeId);
 
     // 查询所有的记录
-    @Select("SELECT * FROM finance")
+    @Select("SELECT * FROM Finance")
     List<Finance> getAllFinances();
 
     // 插入一条记录，主码id自增
-    @Insert("INSERT INTO finance(financeType, financeDate, price, inOrOut, accountId, administratorId, proof, status) " +
+    @Insert("INSERT INTO Finance(financeType, financeDate, price, inOrOut, accountId, administratorId, proof, status) " +
             "VALUES (#{financeType}, #{financeDate}, #{price}, #{inOrOut}, #{accountId}, #{administratorId}, #{proof}, #{status})")
     @Options(useGeneratedKeys = true, keyProperty = "financeId")
     Integer insertFinance(Finance finance);
 
     // 更新记录
-    @Update("UPDATE finance SET financeType = #{financeType}, financeDate = #{financeDate}, price = #{price}, " +
+    @Update("UPDATE Finance SET financeType = #{financeType}, financeDate = #{financeDate}, price = #{price}, " +
             "inOrOut = #{inOrOut}, accountId = #{accountId}, administratorId = #{administratorId}, proof = #{proof}, " +
             "status = #{status} WHERE financeId = #{financeId}")
     Integer updateFinance(Finance finance);
 
     // 删除记录
-    @Delete("DELETE FROM finance WHERE financeId = #{financeId}")
+    @Delete("DELETE FROM Finance WHERE financeId = #{financeId}")
     Integer deleteFinance(int financeId);
+
+    @Select("SELECT * FROM Finance ORDER BY financeId DESC LIMIT 1")
+    Finance getLatestFinance();
 }

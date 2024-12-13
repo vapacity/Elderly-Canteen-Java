@@ -14,10 +14,11 @@ public class RestockRequestDto {
     private Integer amount;
 
     @JsonProperty("expiry")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "CST")
     private Date expiry;
 
     @JsonProperty("ingredientId")
-    private String ingredientId;
+    private Integer ingredientId;
 
     @JsonProperty("price")
     private Double price;

@@ -68,6 +68,8 @@ public class CategoryService {
             cateDtos.add(cateDto);
         }
         cateResponseDto.setCates(cateDtos);
+        cateResponseDto.setSuccess(true);
+        cateResponseDto.setMessage("Categories found successfully");
         return cateResponseDto;
     }
 

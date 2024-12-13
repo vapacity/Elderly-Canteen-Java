@@ -35,6 +35,7 @@ public class DishService {
         AllDishResponseDto allDishResponseDto = new AllDishResponseDto();
         List<DishDto> dishDtoList = new ArrayList<DishDto>();
         List<Dish> dishes = new ArrayList<Dish>();
+
         if (name == null && category == null) {
             dishes = dishDao.getAllDish();
         } else {
@@ -88,12 +89,6 @@ public class DishService {
         Integer dishCateId = dishRequestDto.getCateId();
         Double price = dishRequestDto.getPrice();
         Integer dishId = dishRequestDto.getDishId(); // 假设DishRequestDto中包含dishId字段，用于指定更新的菜品
-
-        // 检查菜品是否存在
-        Dish existingDish = dishDao.getDishById(dishId);
-        if (existingDish == null) {
-            throw new NotFoundException("Dish not found");
-        }
 
         // 检查category是否存在
         if (categoryDao.findById(dishCateId) == null) {

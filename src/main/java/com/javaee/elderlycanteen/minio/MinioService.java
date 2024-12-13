@@ -31,9 +31,8 @@ public class MinioService {
                 .build();
     }
 
-    public void uploadFile(String fileName, MultipartFile file) throws Exception {
+    public String uploadFile(String fileName, MultipartFile file) throws Exception {
         MinioClient minioClient = getMinioClient();
-        System.out.println("123");
         try (InputStream inputStream = file.getInputStream()) {
             minioClient.putObject(
                     PutObjectArgs.builder()
@@ -43,6 +42,12 @@ public class MinioService {
                             .contentType(file.getContentType())
                             .build()
             );
+            String fileUrl = getFileUrl(fileName);
+            return fileUrl;
         }
     }
+    private String getFileUrl(String fileName) {
+        return "https://" + endpoint + "/" + bucketName + "/" + fileName;
+    }
+
 }

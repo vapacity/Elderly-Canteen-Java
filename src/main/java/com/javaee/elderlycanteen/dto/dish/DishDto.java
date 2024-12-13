@@ -7,7 +7,7 @@ import java.util.List;
 @Data
 public class DishDto {
     @JsonProperty("dishId")
-    private String dishId;
+    private Integer dishId;
 
     @JsonProperty("dishName")
     private String dishName;

@@ -143,7 +143,7 @@ public class AccountService {
         // 更新手机号
         if (personInfo.getPhoneNum() != null && !personInfo.getPhoneNum().isEmpty()) {
             // 检查手机号是否已存在
-            Account existingAccount = accountDao.findByPhoneNum(personInfo.getPhoneNum(), accountId);
+            Account existingAccount = accountDao.findByPhoneNum(personInfo.getPhoneNum());
             if (existingAccount != null && !existingAccount.getAccountId().equals(accountId)) {
                 result.setAlterSuccess(false);
                 result.setMsg("手机号已被占用");
@@ -166,7 +166,7 @@ public class AccountService {
         }
 
         if (personInfo.getBirthDate() != null) {
-            account.setBirthDate(currentDate.getCurrentDate());
+            account.setBirthDate(personInfo.getBirthDate());
         }
 
         if (personInfo.getAddress() != null && !personInfo.getAddress().isEmpty()) {
@@ -253,7 +253,7 @@ public class AccountService {
         }
         PhoneResponseDto result = new PhoneResponseDto();
         // 检查数据库中是否已存在相同的手机号
-        Account existingAccount = accountDao.findByPhoneNum(phoneNum,accountId);
+        Account existingAccount = accountDao.findByPhoneNum(phoneNum);
         if (existingAccount != null && !existingAccount.getAccountId().equals(accountId)) {
             result.setSuccess(false);
             result.setMsg("手机号已被占用");
@@ -288,7 +288,7 @@ public class AccountService {
         System.out.println(idCard);
         String birthDateStr = idCard.substring(6,14);
         try{
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             return dateFormat.parse(birthDateStr);
         }catch (ParseException e) {
             throw new IllegalArgumentException("身份证号中出生日期无效");
@@ -311,9 +311,7 @@ public class AccountService {
     }
 
 
-    public DateUtils getCurrentDate() {
-        return currentDate;
-    }
+
     public Integer updateAccountMoney(Integer accountId, Double money) {
         Integer ret = accountDao.updateAccountMoney(accountId, money);
         if (ret != 1) {

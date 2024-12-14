@@ -33,6 +33,12 @@ public interface FinanceDao {
     @Delete("DELETE FROM Finance WHERE financeId = #{financeId}")
     Integer deleteFinance(int financeId);
 
+
+    //查询是否存在管理员
+    @Select("SELECT COUNT(*) FROM Finance WHERE administratorId = #{administratorId}")
+    boolean existsByAdministratorId(Integer administratorId);
+
+
     @Select("SELECT * FROM Finance ORDER BY financeId DESC LIMIT 1")
     Finance getLatestFinance();
 

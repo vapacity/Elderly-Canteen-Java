@@ -1,12 +1,9 @@
 package com.javaee.elderlycanteen.dao;
 
+import com.javaee.elderlycanteen.dto.admin.AdminSearchDto;
 import com.javaee.elderlycanteen.entity.Administrator;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Update;
-import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.*;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,7 +13,7 @@ public interface AdministratorDao {
     //GET
     //根据accountId查询管理员信息
     @Select("SELECT * FROM Administrator WHERE accountId = #{accountId}")
-    Administrator GetAdminById(@Param("accountId") String accountId);
+    Administrator getAdminById(@Param("accountId") Integer accountId);
 
     //根据email和position搜索管理员
     @Select("SELECT * FROM Administrator WHERE email = #{email} OR position = #{position}")
@@ -36,4 +33,40 @@ public interface AdministratorDao {
     //根据accountId删除管理员记录
     @Delete("DELETE FROM Administrator WHERE accountId = #{accountId}")
     Integer DeleteAdmin(@Param("accountId") String accountId);
+
+    //添加管理员
+    @Insert("INSERT INTO Administrator (email, position) VALUES (#{email}, #{position})")
+    @Options(useGeneratedKeys=true, keyProperty="accountId")
+    Integer addAdmin(Administrator admin);
+
+    //删除管理员
+    @Delete("DELETE FROM Administrator WHERE accountId = #{accountId}")
+    Integer deleteAdmin(Integer accountId);
+
+
+
+    /**
+     * 根据名字和职位查询管理员列表
+     * @param name 管理员名字
+     * @param position 管理员职位
+     * @return 返回管理员及其关联账户的信息列表
+     */
+    @Select("""
+        SELECT 
+            a.accountId AS accountId,
+            a.position AS position,
+            ac.name AS name,
+            ac.phoneNum AS phoneNum,
+            ac.gender AS gender
+        FROM Administrator a
+        JOIN Account ac ON a.accountId = ac.accountId
+        WHERE 
+            (#{name} IS NULL OR ac.name LIKE CONCAT('%', #{name}, '%'))
+            AND 
+            (#{position} IS NULL OR a.position LIKE CONCAT('%', #{position}, '%'))
+    """)
+    AdminSearchDto findAdminsByNameAndPosition(
+            @Param("name") String name,
+            @Param("position") String position
+    );
 }

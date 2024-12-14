@@ -49,7 +49,6 @@ public class JWTUtils {
     public static TokenInfo getTokenInfo(String token){
         TokenInfo tokenInfo = new TokenInfo();
         DecodedJWT verify = JWT.require(Algorithm.HMAC256(SING)).build().verify(token);
-
         String accountIdString = verify.getClaim("accountId").asString();
         Integer accountId = Integer.parseInt(accountIdString);
         String accountName = verify.getClaim("accountname").asString();

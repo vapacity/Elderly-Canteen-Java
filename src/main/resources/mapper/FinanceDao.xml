@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.javaee.elderlycanteen.dao.FinanceDao">
+    <!-- 查询所有财务信息 -->
+    <select id="getAllFinanceInfo" resultType="com.javaee.elderlycanteen.entity.Finance">
+        SELECT * FROM Finance
+        WHERE 1 = 1
+        <if test="financeType != null and financeType != ''">
+            AND financeType = #{financeType}
+        </if>
+        <if test="inOrOut != null and inOrOut != ''">
+            AND inOrOut = #{inOrOut}
+        </if>
+        <if test="financeDate != null and financeDate != ''">
+            AND DATE(financeDate) = #{financeDate}
+        </if>
+        <if test="financeId != null and financeId != ''">
+            AND financeId = #{financeId}
+        </if>
+        <if test="accountId != null and accountId != ''">
+            AND accountId = #{accountId}
+        </if>
+        <if test="status != null and status != ''">
+            AND status = #{status}
+        </if>
+        ORDER BY financeDate DESC
+    </select>
+
+</mapper>

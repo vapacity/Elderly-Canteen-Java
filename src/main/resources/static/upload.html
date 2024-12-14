@@ -48,13 +48,15 @@
         // 创建FormData对象
         const formData = new FormData();
         formData.append('file', file);
+        formData.append('dishId', 2)
 
         // 使用 fetch API 提交文件
-        fetch('http://localhost:8080/api/upload', {
+        fetch('http://localhost:8080/api/dish/uploadDishImage', {
             method: 'POST',
             body: formData,
         })
-            .then(response => response.text())  // 获取响应
+            .then(
+                response => response.text())  // 获取响应
             .then(data => {
                 messageDiv.innerHTML = "上传成功：" + data;
                 console.log('上传成功：', data);

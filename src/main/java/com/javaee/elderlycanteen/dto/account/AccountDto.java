@@ -29,7 +29,7 @@ public class AccountDto {
     private String gender; // 性别，必须
 
     @JsonProperty("money")
-    private BigDecimal money; // 金额
+    private Double money; // 金额
 
     // 非必须字段
     @JsonProperty("birthDate")

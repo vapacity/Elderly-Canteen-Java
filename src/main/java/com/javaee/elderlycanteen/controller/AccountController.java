@@ -97,6 +97,7 @@ public class AccountController {
     @PostMapping("/register")
     public ResponseEntity<Integer> register(@RequestBody AccountDto accountDto) {
         Account account = new Account();
+
         account.setAccountName(accountDto.getAccountName());
         account.setPassword(accountDto.getPassword());
         account.setIdentity(accountDto.getIdentity());

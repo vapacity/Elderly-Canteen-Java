@@ -1,42 +1,52 @@
 package com.javaee.elderlycanteen.dto.finance;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.javaee.elderlycanteen.config.DateDeserializer;
+import com.javaee.elderlycanteen.config.DateSerializer;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
 public class FinanceResponseDto {
     @JsonProperty("response")
     public List<FinanceResponseData> response;
 
     @JsonProperty("success")
-    public String success;
+    public Boolean success;
 
     @JsonProperty("msg")
     public String msg;
 
     @Data
+    @AllArgsConstructor
     public static class FinanceResponseData {
         @JsonProperty("financeId")
-        public String financeId;
+        public Integer financeId;
 
         @JsonProperty("financeType")
         public String financeType;
 
         @JsonProperty("financeDate")
-        public String financeDate;
+        @JsonSerialize(using = DateSerializer.class)
+        @JsonDeserialize(using = DateDeserializer.class)
+        public Date financeDate;
 
         @JsonProperty("price")
-        public String price;
+        public Double price;
 
         @JsonProperty("inOrOut")
         public String inOrOut;
 
         @JsonProperty("accountId")
-        public String accountId;
+        public Integer accountId;
 
         @JsonProperty("administratorId")
-        public String administratorId;
+        public Integer administratorId;
 
         @JsonProperty("proof")
         public Byte[] proof;

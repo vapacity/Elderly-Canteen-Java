@@ -4,6 +4,7 @@ import com.javaee.elderlycanteen.dao.AccountDao;
 import com.javaee.elderlycanteen.dao.FinanceDao;
 import com.javaee.elderlycanteen.dao.SeniorDao;
 import com.javaee.elderlycanteen.dto.finance.DeductBalanceResponseDto;
+import com.javaee.elderlycanteen.dto.finance.FinanceResponseDto;
 import com.javaee.elderlycanteen.entity.Account;
 import com.javaee.elderlycanteen.entity.Finance;
 import com.javaee.elderlycanteen.entity.Senior;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.javaee.elderlycanteen.utils.DateUtils.getCurrentDate;
 
@@ -93,5 +96,33 @@ public class FinanceService {
         responseDto.financeId=finance.getFinanceId();
 
         return responseDto;
+    }
+
+    public FinanceResponseDto getAllFinanceInfo(String financeType, String inOrOut, String financeDate,
+                                                String financeId, String accountId, String status) {
+        // 调用 MyBatis 查询
+        List<Finance> finances = financeDao.getAllFinanceInfo(financeType, inOrOut, financeDate, financeId, accountId, status);
+
+        // 如果没有找到数据
+        if (finances.isEmpty()) {
+            return new FinanceResponseDto(null, false,"未找到符合条件的财务信息" );
+        }
+
+        // 转换成响应数据格式
+        List<FinanceResponseDto.FinanceResponseData> financeResponseDataList = finances.stream()
+                .map(finance -> new FinanceResponseDto.FinanceResponseData(
+                        finance.getFinanceId(),
+                        finance.getFinanceType(),
+                        finance.getFinanceDate(),
+                        finance.getPrice(),
+                        finance.getInOrOut(),
+                        finance.getAccountId(),
+                        finance.getAdministratorId(),
+                        null,
+                        finance.getStatus()))
+                .collect(Collectors.toList());
+
+        // 返回结果
+        return new FinanceResponseDto(financeResponseDataList,true, "财务信息检索成功");
     }
 }

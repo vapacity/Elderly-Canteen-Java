@@ -62,7 +62,7 @@ public class MinioService {
     }
 
     private String getFileUrl(String fileName) {
-        return "https://" + endpoint + "/" + bucketName + "/" + fileName;
+        return endpoint + "/" + bucketName + "/" + fileName;
     }
 
 

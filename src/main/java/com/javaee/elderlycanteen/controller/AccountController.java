@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.ArrayList;
-import com.javaee.elderlycanteen.dto.login.LoginRequestDto;
+import com.javaee.elderlycanteen.dto.login.LoginRequestIdDto;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,7 +42,7 @@ public class AccountController {
      * @return 包含 JWT token 的响应
      */
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequestDto loginRequestDto) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequestIdDto loginRequestDto) {
         Map<String, Object> response = new HashMap<>();
         try {
             // 验证用户身份

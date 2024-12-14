@@ -6,19 +6,17 @@ import com.javaee.elderlycanteen.dao.SeniorDao;
 import com.javaee.elderlycanteen.dto.account.AccountDto;
 import com.javaee.elderlycanteen.dto.authentication.AuthenticationRequestDto;
 import com.javaee.elderlycanteen.dto.authentication.AuthenticationResponseDto;
+import com.javaee.elderlycanteen.dto.login.LoginRequestIdDto;
 import com.javaee.elderlycanteen.dto.personInfo.PersonInfoRequestDto;
 import com.javaee.elderlycanteen.dto.personInfo.PersonInfoResponseDto;
 import com.javaee.elderlycanteen.dto.personInfo.PhoneResponseDto;
 import com.javaee.elderlycanteen.dto.volServe.AccessOrderResponseDto;
 import com.javaee.elderlycanteen.entity.Account;
-import com.javaee.elderlycanteen.dto.LoginRequestDto;
+import com.javaee.elderlycanteen.dto.login.LoginRequestDto;
 import com.javaee.elderlycanteen.entity.Senior;
 import com.javaee.elderlycanteen.exception.NotFoundException;
 import com.javaee.elderlycanteen.utils.DateUtils;
 
-import com.javaee.elderlycanteen.dto.login.LoginRequestDto;
-import com.javaee.elderlycanteen.entity.Account;
-import com.javaee.elderlycanteen.dto.LoginRequestDto;
 import com.javaee.elderlycanteen.exception.ServiceException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +52,7 @@ public class AccountService {
     private String bucketName;
 
 
-    public Account login(LoginRequestDto loginRequestDto) {
+    public Account login(LoginRequestIdDto loginRequestDto) {
         Account account = accountDao.login(loginRequestDto.getAccountId(), loginRequestDto.getPassword());
         if (account == null) {
             throw new RuntimeException("登录失败，账户或密码错误!");
@@ -315,7 +313,7 @@ public class AccountService {
 
     public DateUtils getCurrentDate() {
         return currentDate;
-
+    }
     public Integer updateAccountMoney(Integer accountId, Double money) {
         Integer ret = accountDao.updateAccountMoney(accountId, money);
         if (ret != 1) {

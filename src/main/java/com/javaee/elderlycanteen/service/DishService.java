@@ -7,6 +7,7 @@ import com.javaee.elderlycanteen.dao.IngredientDao;
 import com.javaee.elderlycanteen.dto.dish.*;
 import com.javaee.elderlycanteen.entity.Dish;
 import com.javaee.elderlycanteen.entity.Formula;
+import com.javaee.elderlycanteen.exception.InvalidInputException;
 import com.javaee.elderlycanteen.exception.NotFoundException;
 import com.javaee.elderlycanteen.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,11 @@ public class DishService {
     }
 
     public DishResponseDto addDish(DishRequestDto dishRequestDto) {
+
+        // 检查dish是否存在
+        if (dishDao.getDishByName(dishRequestDto.getName())!= null) {
+            throw new InvalidInputException("Dish already exists");
+        }
 
         if(!checkVadality(dishRequestDto))
             throw new ServiceException("Vadality check failed");
@@ -121,6 +127,10 @@ public class DishService {
 
         // 检查菜品是否存在
         Dish existingDish = dishDao.getDishById(dishId);
+
+        if (existingDish == null) {
+            throw new NotFoundException("Dish not found");
+        }
 
         // 更新菜品信息
         existingDish.setDishName(dishName);

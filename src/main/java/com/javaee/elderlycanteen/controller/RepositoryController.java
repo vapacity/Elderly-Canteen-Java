@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/repo")
+@RequestMapping("api/repo")
 public class RepositoryController {
 
     private final RepositoryService repositoryService;

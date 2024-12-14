@@ -17,10 +17,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.javaee.elderlycanteen.enumeration.FinanceInOrOutEnum.IN;
+import static com.javaee.elderlycanteen.enumeration.FinanceInOrOutEnum.OUT;
+import static com.javaee.elderlycanteen.enumeration.FinanceStatusEnum.APPROVED;
+import static com.javaee.elderlycanteen.enumeration.FinanceStatusEnum.PENDING;
 import static com.javaee.elderlycanteen.utils.DateUtils.getCurrentDate;
 
 @Service
@@ -35,7 +40,7 @@ public class FinanceService {
 
 
     @Autowired
-    public FinanceService(AccountDao accountDao, FinanceDao financeDao,SeniorDao seniorDao,AccountService accountService,SeniorService seniorService) {
+    public FinanceService(AccountDao accountDao, FinanceDao financeDao, SeniorDao seniorDao, AccountService accountService, SeniorService seniorService) {
         this.accountDao = accountDao;
         this.financeDao = financeDao;
         this.seniorDao = seniorDao;
@@ -44,39 +49,39 @@ public class FinanceService {
         this.seniorService = seniorService;
     }
 
-    public DeductBalanceResponseDto DeductBalance(Integer accountId,Double totalPrice) throws ParseException {
+    public DeductBalanceResponseDto DeductBalance(Integer accountId, Double totalPrice) throws ParseException {
         // 获取用户信息
         Account account = this.accountDao.getAccountById(accountId);
-        if(account == null){
+        if (account == null) {
             throw new ServiceException("No matched account found");
         }
 
         Double bonus = 0.0;
 
-        if(account.getIdentity()== "senior"){
+        if (account.getIdentity() == "senior") {
             // 获取老人信息
-            Senior senior =this.seniorDao.selectByAccountId(accountId);
-            if(senior == null){
+            Senior senior = this.seniorDao.selectByAccountId(accountId);
+            if (senior == null) {
                 throw new ServiceException("No matched Senior found");
             }
 
             // 计算补贴
-            bonus = account.getMoney()*0.2;
-            if(bonus > senior.getSubsidy()) bonus = 0.0;
+            bonus = account.getMoney() * 0.2;
+            if (bonus > senior.getSubsidy()) bonus = 0.0;
             totalPrice = totalPrice - bonus;
-            this.seniorService.updateSeniorSubsidy(accountId,senior.getSubsidy()-bonus);
+            this.seniorService.updateSeniorSubsidy(accountId, senior.getSubsidy() - bonus);
         }
 
         // 检查余额是否足够
-        if(account.getMoney()<totalPrice){
+        if (account.getMoney() < totalPrice) {
             DeductBalanceResponseDto responseDto = new DeductBalanceResponseDto();
-            responseDto.msg="insufficient balance!";
-            responseDto.success=false;
+            responseDto.msg = "insufficient balance!";
+            responseDto.success = false;
             return responseDto;
         }
 
         // 扣除余额
-        this.accountService.updateAccountMoney(accountId,account.getMoney()-totalPrice);
+        this.accountService.updateAccountMoney(accountId, account.getMoney() - totalPrice);
 
         //记录财务信息到Finance表中
         Finance finance = new Finance();
@@ -93,10 +98,10 @@ public class FinanceService {
         this.financeDao.insertFinance(finance);
 
         DeductBalanceResponseDto responseDto = new DeductBalanceResponseDto();
-        responseDto.msg="success";
-        responseDto.success=true;
-        responseDto.bonus= bonus.describeConstable();
-        responseDto.financeId=finance.getFinanceId();
+        responseDto.msg = "success";
+        responseDto.success = true;
+        responseDto.bonus = bonus.describeConstable();
+        responseDto.financeId = finance.getFinanceId();
 
         return responseDto;
     }
@@ -108,7 +113,7 @@ public class FinanceService {
 
         // 如果没有找到数据
         if (finances.isEmpty()) {
-            return new FinanceResponseDto(null, false,"未找到符合条件的财务信息" );
+            return new FinanceResponseDto(null, false, "未找到符合条件的财务信息");
         }
 
         // 转换成响应数据格式
@@ -126,13 +131,16 @@ public class FinanceService {
                 .collect(Collectors.toList());
 
         // 返回结果
-        return new FinanceResponseDto(financeResponseDataList,true, "财务信息检索成功");
+        return new FinanceResponseDto(financeResponseDataList, true, "财务信息检索成功");
     }
+
 
     public FinanceResponseDto auditFinance(Integer id, String status) {
         // 根据 id 查询 Finance 信息
         Finance finance = financeDao.getFinanceById(id);
-        if(finance == null){
+
+        if (finance == null) {
+
             throw new NotFoundException("No matched finance found");
         }
         // 更新 Finance 状态
@@ -141,14 +149,43 @@ public class FinanceService {
 
         // 返回结果
         FinanceResponseDto responseDto = new FinanceResponseDto();
-        responseDto.msg="status 更新为{status}";
-        responseDto.success=true;
+        responseDto.msg = "status 更新为{status}";
+        responseDto.success = true;
+
+
         return responseDto;
     }
 
     public FinanceTotalsResponseDto getTotal() {
         // 查询所有 Finance 信息
-//        List<Finance> finances = financeDao.getAllFinanceInfo(null, null);
-        return null;
+        List<Finance> finances = financeDao.getAllFinances();
+        if (finances.isEmpty()) {
+            throw new NotFoundException("No matched finance found");
+        }
+        List<Finance> approvedFinances = new ArrayList<Finance>();
+        for (Finance finance : finances) {
+            if (finance.getStatus().equals(APPROVED.getDescription())) {
+                approvedFinances.add(finance);
+            }
+        }
+        if (approvedFinances.isEmpty()) {
+            throw new NotFoundException("No matched finance found");
+        }
+        // 计算总收入
+        Double totalIncome = 0.0;
+        Double totalExpense = 0.0;
+
+        for (Finance finance : approvedFinances) {
+            if (finance.getInOrOut().equals(IN.getValue())) {
+                totalIncome += finance.getPrice();
+            }
+            if (finance.getInOrOut().equals(OUT.getValue())) {
+                totalExpense += finance.getPrice();
+            }
+
+        }
+        FinanceTotalsResponseDto.FinanceData newData = new FinanceTotalsResponseDto.FinanceData(totalIncome - totalExpense, totalIncome, totalExpense);
+        return new FinanceTotalsResponseDto(newData, true, "成功获取总收入");
     }
+
 }

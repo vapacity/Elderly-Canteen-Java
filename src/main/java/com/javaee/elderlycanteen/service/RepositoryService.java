@@ -24,6 +24,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.javaee.elderlycanteen.enumeration.FinanceInOrOutEnum.IN;
+import static com.javaee.elderlycanteen.enumeration.FinanceInOrOutEnum.OUT;
+import static com.javaee.elderlycanteen.enumeration.FinanceStatusEnum.PENDING;
+
 
 @Service
 public class RepositoryService {
@@ -141,7 +145,7 @@ public class RepositoryService {
         }
 
         // 插入finance
-        Finance finance = new Finance(0, "Restock", now, price, "0", accountId, accountId, null, "待处理");
+        Finance finance = new Finance(0, "Restock", now, price, OUT.getValue(), accountId, accountId, null, PENDING.getDescription());
         financeDao.insertFinance(finance);
         Finance latestFinance = financeDao.getLatestFinance();
 

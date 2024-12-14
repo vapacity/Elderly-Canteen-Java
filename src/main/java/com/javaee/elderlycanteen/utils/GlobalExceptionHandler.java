@@ -1,6 +1,9 @@
-package com.javaee.elderlycanteen.exception;
+package com.javaee.elderlycanteen.utils;
 
 import com.javaee.elderlycanteen.dto.ResponseDto;
+import com.javaee.elderlycanteen.exception.InvalidInputException;
+import com.javaee.elderlycanteen.exception.NotFoundException;
+import com.javaee.elderlycanteen.exception.ServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

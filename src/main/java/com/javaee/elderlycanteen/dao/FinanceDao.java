@@ -35,4 +35,11 @@ public interface FinanceDao {
 
     @Select("SELECT * FROM Finance ORDER BY financeId DESC LIMIT 1")
     Finance getLatestFinance();
+
+    List<Finance> getAllFinanceInfo(@Param("financeType") String financeType,
+                                    @Param("inOrOut") String inOrOut,
+                                    @Param("financeDate") String financeDate,
+                                    @Param("financeId") String financeId,
+                                    @Param("accountId") String accountId,
+                                    @Param("status") String status);
 }

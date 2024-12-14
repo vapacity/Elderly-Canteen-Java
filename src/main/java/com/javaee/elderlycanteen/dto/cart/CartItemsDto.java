@@ -1,11 +1,15 @@
 package com.javaee.elderlycanteen.dto.cart;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CartItemsDto {
 
     @JsonProperty("menu")
@@ -18,6 +22,8 @@ public class CartItemsDto {
     private Boolean success;
 
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Menu{
         @JsonProperty("discountPrice")
         private Double discountPrice;

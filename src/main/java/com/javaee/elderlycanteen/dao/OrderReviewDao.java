@@ -9,24 +9,23 @@ import java.util.List;
 public interface OrderReviewDao {
 
     // 基于主码id查询
-    @Select("SELECT * FROM order_review WHERE orderId = #{orderId}")
+    @Select("SELECT * FROM OrderReview WHERE orderId = #{orderId}")
     OrderReview getOrderReviewById(Integer orderId);
 
     // 查询所有数据
-    @Select("SELECT * FROM order_review")
+    @Select("SELECT * FROM OrderReview")
     List<OrderReview> getAllOrderReviews();
 
     // 插入数据，主码id自增
-    @Insert("INSERT INTO order_review (orderId, cStars, cReviewText) " +
+    @Insert("INSERT INTO OrderReview (orderId, cStars, cReviewText) " +
             "VALUES (#{orderId}, #{cStars}, #{cReviewText})")
-    @Options(useGeneratedKeys = true, keyProperty = "orderId", keyColumn = "orderId")
     Integer insertOrderReview(OrderReview orderReview);
 
     // 更新数据
-    @Update("UPDATE order_review SET cStars = #{cStars}, cReviewText = #{cReviewText} WHERE orderId = #{orderId}")
+    @Update("UPDATE OrderReview SET cStars = #{cStars}, cReviewText = #{cReviewText} WHERE orderId = #{orderId}")
     Integer updateOrderReview(OrderReview orderReview);
 
     // 删除数据
-    @Delete("DELETE FROM order_review WHERE orderId = #{orderId}")
+    @Delete("DELETE FROM OrderReview WHERE orderId = #{orderId}")
     Integer deleteOrderReview(Integer orderId);
 }

@@ -32,4 +32,7 @@ public interface FinanceDao {
     // 删除记录
     @Delete("DELETE FROM Finance WHERE financeId = #{financeId}")
     Integer deleteFinance(int financeId);
+
+    @Select("SELECT * FROM Finance WHERE accountId = #{accountId} AND financeType = #{financeType}")
+    List<Finance> getFinanceByAccountIdAndFinanceType(Integer accountId, String financeType);
 }

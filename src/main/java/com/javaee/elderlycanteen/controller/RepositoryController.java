@@ -52,5 +52,9 @@ public class RepositoryController {
         return repositoryService.restock(dto,accountId);
     }
 
-    // apis
+    @GetMapping("/search/restock")
+    public AllRestockResponseDto getRepo(){
+        return repositoryService.getAllRestocks();
+    }
+
 }

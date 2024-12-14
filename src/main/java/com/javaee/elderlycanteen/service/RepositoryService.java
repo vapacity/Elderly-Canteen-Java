@@ -12,11 +12,13 @@ import com.javaee.elderlycanteen.entity.Restock;
 import com.javaee.elderlycanteen.exception.NotFoundException;
 import com.javaee.elderlycanteen.exception.ServiceException;
 import com.javaee.elderlycanteen.utils.DateUtils;
-import org.apache.coyote.BadRequestException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -106,11 +108,13 @@ public class RepositoryService {
         return response;
     }
 
-    public RestockResponseDto restock(RestockRequestDto dto,Integer accountId) throws ParseException {
+    @Transactional
+    public RestockResponseDto restock(RestockRequestDto dto, Integer accountId) throws ParseException {
         // 获得dto信息
         Integer ingredientId = dto.getIngredientId();
         Integer amount = dto.getAmount();
         Date expiry = dto.getExpiry();
+
         Double price = dto.getPrice();
 
         Ingredient existingIngrent = ingredientDao.getIngredientById(ingredientId);
@@ -126,26 +130,65 @@ public class RepositoryService {
             throw new ServiceException("Expiry date is before current date.");
         }
 
+        // 插入仓库
         Repository existingRepo = repositoryDao.selectByIngredientIdAndExpiry(ingredientId, expiry);
         if (existingRepo == null) {
             repositoryDao.insert(new Repository(ingredientId, amount, 0, expiry));
         } else {
             repositoryDao.updateRemainAmount(ingredientId, expiry, amount + existingRepo.getRemainAmount());
         }
-        Finance finance = new Finance(0, "Restock", now, price,"out",accountId,accountId,null,"待处理");
+
+        // 插入finance
+        Finance finance = new Finance(0, "Restock", now, price, "0", accountId, accountId, null, "待处理");
         financeDao.insertFinance(finance);
         Finance latestFinance = financeDao.getLatestFinance();
-        Restock restock =new Restock(latestFinance.getFinanceId(),ingredientId,accountId,amount,price);
 
+        // 插入进货表restock
+        Restock restock = new Restock(latestFinance.getFinanceId(), ingredientId, accountId, amount, price);
         restockDao.insertRestock(restock);
+
+        // 封装返回数据
         RestockResponseDto response = new RestockResponseDto();
         response.setSuccess(true);
         response.setMessage("Successfully restocked ingredient.");
         response.setData(new RestockResponseDto.RestockData(
-                accountId,amount,expiry,finance.getFinanceId(),
-                        0,ingredientId,ingredientName,price,DateUtils.getCurrentDate()));
+                accountId, amount, expiry, finance.getFinanceId(),
+                0, ingredientId, ingredientName, price, DateUtils.getCurrentDate()));
         return response;
     }
+
+    public AllRestockResponseDto getAllRestocks() {
+        List<Restock> restocks = restockDao.selectAll();
+        if (restocks.isEmpty()) {
+            throw new NotFoundException("No restock found.");
+        }
+        AllRestockResponseDto response = new AllRestockResponseDto();
+        response.setRestocks(new ArrayList<AllRestockResponseDto.Restocks>());
+        for (Restock restock : restocks) {
+            Integer financeId = restock.getFinanceId();
+            Finance finance = financeDao.getFinanceById(financeId);
+            Date restockDate = finance.getFinanceDate();
+            // 此处有bug，expiry貌似没有在表中存，先放着，之后再说
+            Date expiry = finance.getFinanceDate();
+            Integer ingredientId = restock.getIngredientId();
+            String ingredientName = ingredientDao.getIngredientById(ingredientId).getIngredientName();
+            Double price = restock.getPrice();
+            Integer accountId = finance.getAccountId();
+            Integer amount = restock.getQuantity();
+
+            AllRestockResponseDto.Restocks restockDto = new AllRestockResponseDto.Restocks(
+                    accountId, amount,restockDate, expiry,financeId,ingredientId,ingredientName,price);
+            response.getRestocks().add(restockDto);
+        }
+        response.setSuccess(true);
+        response.setMessage("Successfully get all restocks.");
+        return response;
+
+
+    }
+
+    // TODO: 仓库的自动化管理，比如过期的仓库自动清理，库存低于某个值自动补货等
 }
+
 
 

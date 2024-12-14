@@ -8,7 +8,7 @@ public class FormulaDto {
     private Integer amount;
 
     @JsonProperty("ingredientId")
-    private String ingredientId;
+    private Integer ingredientId;
 
     @JsonProperty("ingredientName")
     private String ingredientName;

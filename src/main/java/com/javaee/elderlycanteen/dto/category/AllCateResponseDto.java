@@ -7,7 +7,7 @@ import java.util.List;
 @Data
 public class AllCateResponseDto {
     @JsonProperty("cates")
-    private List<CateRequestDto> cates;
+    private List<CateDto> cates;
 
     @JsonProperty("success")
     private Boolean success;

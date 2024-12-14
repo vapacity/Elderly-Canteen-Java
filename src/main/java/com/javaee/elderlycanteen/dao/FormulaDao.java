@@ -28,6 +28,9 @@ public interface FormulaDao {
     Integer updateFormula(Formula formula);
 
     // 删除记录
-    @Delete("DELETE FROM formula WHERE dishId = #{dishId} AND ingredientId = #{ingredientId}")
+    @Delete("DELETE FROM Formula WHERE dishId = #{dishId} AND ingredientId = #{ingredientId}")
     Integer deleteFormula(int dishId, int ingredientId);
+
+    @Delete("Delete from Formula where dishId = #{dishId}")
+    Integer deleteFormulaByDishId(int dishId);
 }

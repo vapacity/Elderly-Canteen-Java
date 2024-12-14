@@ -12,6 +12,8 @@ public interface IngredientDao {
     @Select("SELECT * FROM Ingredient WHERE ingredientId = #{ingredientId}")
     Ingredient getIngredientById(Integer ingredientId);
 
+    @Select("SELECT * FROM Ingredient WHERE ingredientName = #{ingredientName}")
+    List<Ingredient> getIngredientByName(String ingredientName);
     // 查询所有数据
     @Select("SELECT * FROM Ingredient")
     List<Ingredient> getAllIngredients();

@@ -15,8 +15,11 @@ import java.util.List;
 
 @Mapper
 public interface AccountDao {
-    @Select("SELECT * FROM Account WHERE accountId = #{accountId} AND password = #{password}")
-    Account login(@Param("accountId") String accountId, @Param("password") String password);
+    @Select("SELECT * FROM Account WHERE phoneNum = #{phoneNum} AND password = #{password}")
+    Account login(@Param("phoneNum") String phoneNum, @Param("password") String password);
+
+    @Select("SELECT * FROM Account WHERE name = #{name}  ")
+    Account getAccountByName(@Param("name") String name);
 
     @Select("SELECT * FROM Account WHERE accountId = #{accountId}")
     Account getAccountById(@Param("accountId") Integer accountId);
@@ -56,8 +59,8 @@ public interface AccountDao {
     boolean existsByIdCard(@Param("idCard") String idCard);
 
     // 查询是否有相同的手机号，但排除当前账户
-    @Select("SELECT * FROM Account WHERE phoneNum = #{phoneNum} AND accountId != #{accountId}")
-    Account findByPhoneNum(@Param("phoneNum") String phoneNum, @Param("accountId") Integer accountId);
+    @Select("SELECT * FROM Account WHERE phoneNum = #{phoneNum} ")
+    Account findByPhoneNum(@Param("phoneNum") String phoneNum);
 
     @Delete("DELETE  FROM Account WHERE accountId = #{accountId} ")
     Integer deleteUserFromAccount(@Param("accountId") Integer accountId);
@@ -76,4 +79,8 @@ public interface AccountDao {
     @Update("UPDATE Account SET address=#{address} WHERE accountId=#{accountId}")
     Integer updateAccountAddress(Integer accountId, String address);
 
+    //添加用户
+    @Insert("INSERT INTO Account (password, accountName, phoneNum, identity, portrait, gender, money, verifyCode, name, idCard, birthDate, address) VALUES (#{password}, #{accountName}, #{phoneNum}, #{identity}, #{portrait}, #{gender}, #{money}, #{verifyCode}, #{name}, #{idCard}, #{birthDate}, #{address})")
+    @Options(useGeneratedKeys=true, keyProperty="accountId")
+    Integer addAccount(Account account);
 }

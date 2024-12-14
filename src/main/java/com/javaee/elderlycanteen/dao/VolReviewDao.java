@@ -12,6 +12,10 @@ public interface VolReviewDao {
     @Select("SELECT * FROM VolReview WHERE applicationId = #{applicationId}")
     VolReview selectByApplicationId(Integer applicationId);
 
+    //根据AdministratorId查询单个对象
+    @Select("SELECT * FROM VolReview WHERE administratorId = #{administratorId}")
+    VolReview getVolReviewById(Integer administratorId);
+
     // 查询所有审核对象
     @Select("SELECT * FROM vol_review")
     List<VolReview> selectAll();

@@ -1,10 +1,15 @@
 package com.javaee.elderlycanteen.dto.admin;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class AdminResponseDto {
     @JsonProperty("success")
     private Boolean success;
@@ -13,7 +18,7 @@ public class AdminResponseDto {
     private String message;
 
     @JsonProperty("response")
-    private List<AdminResponseData> response;
+    private AdminResponseData response;
 
     @Data
     public static class AdminResponseData {
@@ -24,7 +29,7 @@ public class AdminResponseDto {
         private String idCard;
 
         @JsonProperty("birthDate")
-        private String birthDate;
+        private Date birthDate;
 
         @JsonProperty("address")
         private String address;

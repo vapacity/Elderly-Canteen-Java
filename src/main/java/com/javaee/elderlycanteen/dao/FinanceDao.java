@@ -35,4 +35,21 @@ public interface FinanceDao {
 
     @Select("SELECT * FROM Finance WHERE accountId = #{accountId} AND financeType = #{financeType}")
     List<Finance> getFinanceByAccountIdAndFinanceType(Integer accountId, String financeType);
+
+
+    //查询是否存在管理员
+    @Select("SELECT COUNT(*) FROM Finance WHERE administratorId = #{administratorId}")
+    boolean existsByAdministratorId(Integer administratorId);
+
+
+    @Select("SELECT * FROM Finance ORDER BY financeId DESC LIMIT 1")
+    Finance getLatestFinance();
+
+    List<Finance> getAllFinanceInfo(@Param("financeType") String financeType,
+                                    @Param("inOrOut") String inOrOut,
+                                    @Param("financeDate") String financeDate,
+                                    @Param("financeId") String financeId,
+                                    @Param("accountId") String accountId,
+                                    @Param("status") String status);
+
 }

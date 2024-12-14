@@ -61,7 +61,7 @@ public class DishController {
             if (file.isEmpty()) {
                 throw new ServiceException("No file uploaded.");
             }
-
+            // 获取文件名
             String fileName = file.getOriginalFilename();
             String fileUrl = minioService.uploadFile(fileName, file);
             dishService.updateDishImage(dishId, fileUrl);

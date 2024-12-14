@@ -65,4 +65,15 @@ public interface AccountDao {
     //更改头像
     @Update("UPDATE Account SET portrait = #{portrait} WHERE accountId = #{accountId}")
     Integer updatePortrait(@Param("portrait") String portrait,@Param("accountId") Integer accountId);
+
+    @Select("SELECT * FROM Account WHERE role = #{role}")
+    @Options()
+    List<Account> findUserByRole(String role);
+
+    @Update("UPDATE Account SET money=#{money} WHERE accountId=#{accountId}")
+    Integer updateAccountMoney(Integer accountId, Double money);
+
+    @Update("UPDATE Account SET address=#{address} WHERE accountId=#{accountId}")
+    Integer updateAccountAddress(Integer accountId, String address);
+
 }

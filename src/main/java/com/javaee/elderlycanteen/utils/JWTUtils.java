@@ -49,9 +49,11 @@ public class JWTUtils {
     public static TokenInfo getTokenInfo(String token){
         TokenInfo tokenInfo = new TokenInfo();
         DecodedJWT verify = JWT.require(Algorithm.HMAC256(SING)).build().verify(token);
-        String accountIdString = verify.getClaim("accountId").asString() ;
-        Integer accountId = Integer.valueOf(accountIdString);  // 使用 valueOf 方法
-        String accountName = verify.getClaim("accountName").asString();
+
+        String accountIdString = verify.getClaim("accountId").asString();
+        Integer accountId = Integer.parseInt(accountIdString);
+        String accountName = verify.getClaim("accountname").asString();
+
         String identity = verify.getClaim("identity").asString();
         tokenInfo.setAccountId(accountId);
         tokenInfo.setAccountName(accountName);

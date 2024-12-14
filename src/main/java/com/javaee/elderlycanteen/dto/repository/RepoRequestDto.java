@@ -14,10 +14,10 @@ public class RepoRequestDto {
     private Integer amount;
 
     @JsonProperty("grade")
-    private Byte grade;
+    private Integer grade;
 
     @JsonProperty("ingredientId")
-    private String ingredientId;
+    private Integer ingredientId;
 
     @JsonProperty("ingredientName")
     private String ingredientName;

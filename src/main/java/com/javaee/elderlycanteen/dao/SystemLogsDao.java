@@ -3,27 +3,28 @@ package com.javaee.elderlycanteen.dao;
 import com.javaee.elderlycanteen.entity.SystemLogs;
 import org.apache.ibatis.annotations.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Mapper
 public interface SystemLogsDao {
 
     // 根据 logId 查询单个对象
-    @Select("SELECT * FROM system_logs WHERE logId = #{logId}")
+    @Select("SELECT * FROM SystemLogs WHERE logId = #{logId}")
     SystemLogs selectByLogId(Integer logId);
 
     // 查询所有对象
-    @Select("SELECT * FROM system_logs")
+    @Select("SELECT * FROM SystemLogs")
     List<SystemLogs> selectAll();
 
     // 插入对象
-    @Insert("INSERT INTO system_logs(logLevel, message, createdAt) " +
+    @Insert("INSERT INTO SystemLogs(logLevel, message, createdAt) " +
             "VALUES(#{logLevel}, #{message}, #{createdAt})")
     @Options(useGeneratedKeys = true, keyProperty = "logId")
-    Integer insert(SystemLogs systemLogs);
+    Integer insert(String logLevel, String message, Date createdAt);
 
     // 更新对象
-    @Update("UPDATE system_logs SET " +
+    @Update("UPDATE SystemLogs SET " +
             "logLevel = #{logLevel}, " +
             "message = #{message}, " +
             "createdAt = #{createdAt} " +
@@ -31,7 +32,7 @@ public interface SystemLogsDao {
     Integer update(SystemLogs systemLogs);
 
     // 根据 logId 删除对象
-    @Delete("DELETE FROM system_logs WHERE logId = #{logId}")
+    @Delete("DELETE FROM SystemLogs WHERE logId = #{logId}")
     Integer deleteByLogId(Integer logId);
 
 }

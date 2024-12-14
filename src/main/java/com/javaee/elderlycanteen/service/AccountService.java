@@ -1,6 +1,7 @@
 package com.javaee.elderlycanteen.service;
 
 import com.javaee.elderlycanteen.dao.AccountDao;
+
 import com.javaee.elderlycanteen.dao.SeniorDao;
 import com.javaee.elderlycanteen.dto.account.AccountDto;
 import com.javaee.elderlycanteen.dto.authentication.AuthenticationRequestDto;
@@ -14,16 +15,24 @@ import com.javaee.elderlycanteen.dto.LoginRequestDto;
 import com.javaee.elderlycanteen.entity.Senior;
 import com.javaee.elderlycanteen.exception.NotFoundException;
 import com.javaee.elderlycanteen.utils.DateUtils;
+
+import com.javaee.elderlycanteen.dto.login.LoginRequestDto;
+import com.javaee.elderlycanteen.entity.Account;
+import com.javaee.elderlycanteen.dto.LoginRequestDto;
+import com.javaee.elderlycanteen.exception.ServiceException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
 
 @Service
 
@@ -53,6 +62,7 @@ public class AccountService {
         return account;
     }
 
+
     public Account getAccountById(Integer accountId) {
         Account account = accountDao.getAccountById(accountId);
         if (account == null) {
@@ -64,6 +74,7 @@ public class AccountService {
     public Integer addAccount(Account account) {
         return accountDao.insertAccount(account);
     }
+
 
     public Integer deleteAccount(Integer accountId) {
         return accountDao.deleteUserById(accountId);
@@ -304,5 +315,13 @@ public class AccountService {
 
     public DateUtils getCurrentDate() {
         return currentDate;
+
+    public Integer updateAccountMoney(Integer accountId, Double money) {
+        Integer ret = accountDao.updateAccountMoney(accountId, money);
+        if (ret != 1) {
+            throw new ServiceException("update Account money failed!");
+        }
+        return ret;
+
     }
 }

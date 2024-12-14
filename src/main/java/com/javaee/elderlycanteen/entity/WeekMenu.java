@@ -17,6 +17,6 @@ public class WeekMenu {
     private Date week;
     private Integer stock;
     private Integer sales;
-    private BigDecimal disPrice;
+    private Double disPrice;
     private String day;
 }

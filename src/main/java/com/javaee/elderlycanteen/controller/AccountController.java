@@ -1,6 +1,5 @@
 package com.javaee.elderlycanteen.controller;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.javaee.elderlycanteen.annotation.CheckAccountIdentity;
 import com.javaee.elderlycanteen.dto.OTP.GetOTPResponseDto;
 import com.javaee.elderlycanteen.dto.account.AccountDto;
@@ -11,19 +10,17 @@ import com.javaee.elderlycanteen.entity.Account;
 import com.javaee.elderlycanteen.entity.TokenInfo;
 import com.javaee.elderlycanteen.exception.NotFoundException;
 import com.javaee.elderlycanteen.service.AccountService;
-import com.javaee.elderlycanteen.dto.LoginRequestDto;
 import com.javaee.elderlycanteen.utils.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.ArrayList;
+import com.javaee.elderlycanteen.dto.login.LoginRequestDto;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -36,6 +33,7 @@ public class AccountController {
     public AccountController(AccountService accountService) {
         this.accountService = accountService;
     }
+
 
     /**
      * 用户登录接口
@@ -76,6 +74,7 @@ public class AccountController {
     @PostMapping("/register")
     public ResponseEntity<Integer> register(@RequestBody AccountDto accountDto) {
         Account account = new Account();
+
         account.setAccountName(accountDto.getAccountName());
         account.setPassword(accountDto.getPassword());
         account.setIdentity(accountDto.getIdentity());

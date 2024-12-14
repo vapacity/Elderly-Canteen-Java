@@ -7,7 +7,7 @@ import java.util.List;
 @Data
 public class DishRequestDto {
     @JsonProperty("cateId")
-    private String cateId;
+    private Integer cateId;
 
     @JsonProperty("formula")
     private List<FormulaDto> formula;
@@ -19,7 +19,7 @@ public class DishRequestDto {
     private Double price;
 
     @JsonProperty("dishId")
-    private String dishId;
+    private Integer dishId;
 
 
 }

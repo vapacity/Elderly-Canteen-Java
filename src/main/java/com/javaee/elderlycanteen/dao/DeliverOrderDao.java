@@ -19,7 +19,7 @@ public interface DeliverOrderDao {
     @Select("SELECT * FROM DeliverOrder WHERE orderId = #{orderId}")
     DeliverOrder getDeliverOrderById(@Param("orderId") String orderId);
 
-    @Insert("INSERT INTO DeliverOrder(orderId, orderDate, deliverAddress, totalPrice, orderStatus, deliveryTime) VALUES (#{orderId}, #{orderDate}, #{deliverAddress}, #{totalPrice}, #{orderStatus}, #{deliveryTime})")
+    @Insert("INSERT INTO DeliverOrder(orderId, deliverPhone, customerPhone, cusAddress, deliverStatus, cartId) VALUES (#{orderId}, #{deliverPhone}, #{customerPhone}, #{cusAddress}, #{deliverStatus}, #{cartId})")
     @Options(useGeneratedKeys = true, keyProperty = "orderId")
     Integer insertDeliverOrder(DeliverOrder deliverOrder);
 

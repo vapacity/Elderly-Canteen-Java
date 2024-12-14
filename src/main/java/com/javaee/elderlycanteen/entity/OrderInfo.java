@@ -17,6 +17,6 @@ public class OrderInfo {
     private Integer financeId;
     private Integer cartId;
     private String status;
-    private BigDecimal bonus;
+    private Double bonus;
     private String remark;
 }

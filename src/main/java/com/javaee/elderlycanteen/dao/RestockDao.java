@@ -12,6 +12,10 @@ public interface RestockDao {
     @Select("SELECT * FROM Restock WHERE financeId = #{financeId}")
     Restock selectByFinanceId(Integer financeId);
 
+    //查询是否存在管理员参与过进货
+    @Select("SELECT COUNT(*) FROM Restock WHERE administratorId = #{administratorId}")
+    Restock getRestockById(Integer administratorId);
+
     // 查询所有对象
     @Select("SELECT * FROM Restock")
     List<Restock> selectAll();
@@ -34,4 +38,6 @@ public interface RestockDao {
     // 根据 financeId 删除对象
     @Delete("DELETE FROM Restock WHERE financeId = #{financeId}")
     Integer deleteByFinanceId(Integer financeId);
+
+
 }

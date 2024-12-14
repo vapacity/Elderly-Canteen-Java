@@ -32,4 +32,9 @@ public interface FinanceDao {
     // 删除记录
     @Delete("DELETE FROM Finance WHERE financeId = #{financeId}")
     Integer deleteFinance(int financeId);
+
+    //查询是否存在管理员
+    @Select("SELECT COUNT(*) FROM Finance WHERE administratorId = #{administratorId}")
+    boolean existsByAdministratorId(Integer administratorId);
+
 }

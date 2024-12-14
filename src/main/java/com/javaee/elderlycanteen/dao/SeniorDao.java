@@ -18,18 +18,22 @@ public interface SeniorDao {
 
     // 插入对象
     @Insert("INSERT INTO Senior(familyNum, subsidy) " +
-            "VALUES(#{senior.getFamilyNum()}, #{senior.getSubsidy()})")
+            "VALUES(#{familyNum}, #{subsidy})")
     @Options(useGeneratedKeys = true, keyProperty = "accountId")
     Integer insert(Senior senior);
 
     // 更新对象
     @Update("UPDATE Senior SET " +
-            "familyNum = #{senior.getFamilyNum()}, " +
-            "subsidy = #{senior.getSubsidy()} " +
-            "WHERE accountId = #{senior.getAccountId()}")
+            "familyNum = #{familyNum}, " +
+            "subsidy = #{subsidy} " +
+            "WHERE accountId = #{accountId}")
     Integer update(Senior senior);
 
     // 根据 accountId 删除对象
     @Delete("DELETE FROM Senior WHERE accountId = #{accountId}")
     Integer deleteByAccountId(Integer accountId);
+
+    // 减少subsidy
+    @Update("UPDATE Senior SET subsidy = #{subsidy} WHERE accountId = #{accountId}")
+    Integer updateSeniorSubsidy(Integer accountId, Double subsidy);
 }

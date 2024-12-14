@@ -1,6 +1,7 @@
 package com.javaee.elderlycanteen.service;
 
 import com.javaee.elderlycanteen.dao.SeniorDao;
+import com.javaee.elderlycanteen.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,5 +15,11 @@ public class SeniorService {
         this.seniorDao = seniorDao;
     }
 
-    // 在这里添加特定的业务逻辑方法
+    public Integer updateSeniorSubsidy(Integer accountId,Double subsidy){
+        Integer ret = updateSeniorSubsidy(accountId,subsidy);
+        if (ret!=1){
+            throw new ServiceException("update senior subsidy failed!");
+        }
+        return ret;
+    }
 }

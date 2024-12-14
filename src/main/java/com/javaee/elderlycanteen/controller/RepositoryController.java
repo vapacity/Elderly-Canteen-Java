@@ -13,7 +13,7 @@ import java.text.ParseException;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/repo")
+@RequestMapping("api/repo")
 public class RepositoryController {
 
     private final RepositoryService repositoryService;

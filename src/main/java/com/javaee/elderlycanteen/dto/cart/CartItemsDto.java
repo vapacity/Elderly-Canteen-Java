@@ -23,7 +23,7 @@ public class CartItemsDto {
         private Double discountPrice;
 
         @JsonProperty("dishId")
-        private String dishId;
+        private Integer dishId;
 
         @JsonProperty("dishName")
         private String dishName;

@@ -52,8 +52,8 @@ public class JWTUtils {
         String accountIdString = verify.getClaim("accountId").asString();
         Integer accountId = Integer.parseInt(accountIdString);
         String accountName = verify.getClaim("accountname").asString();
-        String identity = verify.getClaim("identity").asString();
 
+        String identity = verify.getClaim("identity").asString();
         tokenInfo.setAccountId(accountId);
         tokenInfo.setAccountName(accountName);
         tokenInfo.setIdentity(identity);

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Data
 public class PersonInfoResponseDto {
@@ -25,7 +26,7 @@ public class PersonInfoResponseDto {
 
         // Required fields
         @JsonProperty("accountId")
-        private String accountId;      // Account ID, required field
+        private Integer accountId;      // Account ID, required field
 
         @JsonProperty("accountName")
         private String accountName;    // Account name, required field
@@ -44,7 +45,7 @@ public class PersonInfoResponseDto {
 
         // Optional fields
         @JsonProperty("birthDate")
-        private String birthDate;      // Optional field (nullable)
+        private Date birthDate;      // Optional field (nullable)
 
         @JsonProperty("address")
         private String address;        // Optional field (nullable)

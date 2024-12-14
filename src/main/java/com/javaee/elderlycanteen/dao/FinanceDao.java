@@ -2,6 +2,7 @@ package com.javaee.elderlycanteen.dao;
 
 import com.javaee.elderlycanteen.entity.Finance;
 import org.apache.ibatis.annotations.*;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface FinanceDao {
     @Insert("INSERT INTO Finance(financeType, financeDate, price, inOrOut, accountId, administratorId, proof, status) " +
             "VALUES (#{financeType}, #{financeDate}, #{price}, #{inOrOut}, #{accountId}, #{administratorId}, #{proof}, #{status})")
     @Options(useGeneratedKeys = true, keyProperty = "financeId")
-    Integer insertFinance(Finance finance);
+    Integer insertFinance(@RequestBody Finance finance);
 
     // 更新记录
     @Update("UPDATE Finance SET financeType = #{financeType}, financeDate = #{financeDate}, price = #{price}, " +

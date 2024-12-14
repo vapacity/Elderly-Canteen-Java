@@ -1,6 +1,7 @@
 package com.javaee.elderlycanteen.controller;
 
 import com.javaee.elderlycanteen.dto.finance.FinanceResponseDto;
+import com.javaee.elderlycanteen.dto.finance.FinanceTotalsResponseDto;
 import com.javaee.elderlycanteen.service.FinanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,5 +31,13 @@ public class FinanceController {
         FinanceResponseDto result = financeService.getAllFinanceInfo(financeType, inOrOut, financeDate, financeId, accountId, status);
         return ResponseEntity.ok(result);
     }
+    @PostMapping("financial-records/{id}/status")
+    public ResponseEntity<FinanceResponseDto> auditFinance(@PathVariable Integer id,String status) {
+        return ResponseEntity.ok(financeService.auditFinance(id,status));
+    }
 
+    @GetMapping("/getTotal")
+    public ResponseEntity<FinanceTotalsResponseDto> getTotal() {
+        return ResponseEntity.ok(financeService.getTotal());
+    }
 }

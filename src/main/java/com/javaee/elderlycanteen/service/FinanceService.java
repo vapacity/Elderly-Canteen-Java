@@ -5,12 +5,15 @@ import com.javaee.elderlycanteen.dao.FinanceDao;
 import com.javaee.elderlycanteen.dao.SeniorDao;
 import com.javaee.elderlycanteen.dto.finance.DeductBalanceResponseDto;
 import com.javaee.elderlycanteen.dto.finance.FinanceResponseDto;
+import com.javaee.elderlycanteen.dto.finance.FinanceTotalsResponseDto;
 import com.javaee.elderlycanteen.entity.Account;
 import com.javaee.elderlycanteen.entity.Finance;
 import com.javaee.elderlycanteen.entity.Senior;
+import com.javaee.elderlycanteen.exception.NotFoundException;
 import com.javaee.elderlycanteen.exception.ServiceException;
 import com.javaee.elderlycanteen.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -124,5 +127,28 @@ public class FinanceService {
 
         // 返回结果
         return new FinanceResponseDto(financeResponseDataList,true, "财务信息检索成功");
+    }
+
+    public FinanceResponseDto auditFinance(Integer id, String status) {
+        // 根据 id 查询 Finance 信息
+        Finance finance = financeDao.getFinanceById(id);
+        if(finance == null){
+            throw new NotFoundException("No matched finance found");
+        }
+        // 更新 Finance 状态
+        finance.setStatus(status);
+        financeDao.updateFinance(finance);
+
+        // 返回结果
+        FinanceResponseDto responseDto = new FinanceResponseDto();
+        responseDto.msg="status 更新为{status}";
+        responseDto.success=true;
+        return responseDto;
+    }
+
+    public FinanceTotalsResponseDto getTotal() {
+        // 查询所有 Finance 信息
+//        List<Finance> finances = financeDao.getAllFinanceInfo(null, null);
+        return null;
     }
 }

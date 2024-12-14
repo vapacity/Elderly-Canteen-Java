@@ -15,8 +15,8 @@ import java.util.List;
 
 @Mapper
 public interface AccountDao {
-    @Select("SELECT * FROM Account WHERE accountId = #{accountId} AND password = #{password}")
-    Account login(@Param("accountId") String accountId, @Param("password") String password);
+    @Select("SELECT * FROM Account WHERE phoneNum = #{phoneNum} AND password = #{password}")
+    Account login(@Param("phoneNum") String phoneNum, @Param("password") String password);
 
     @Select("SELECT * FROM Account WHERE accountId = #{accountId}")
     Account getAccountById(@Param("accountId") Integer accountId);

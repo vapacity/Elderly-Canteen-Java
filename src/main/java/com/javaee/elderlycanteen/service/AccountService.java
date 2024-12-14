@@ -52,8 +52,8 @@ public class AccountService {
     private String bucketName;
 
 
-    public Account login(LoginRequestIdDto loginRequestDto) {
-        Account account = accountDao.login(loginRequestDto.getAccountId(), loginRequestDto.getPassword());
+    public Account login(LoginRequestDto loginRequestDto) {
+        Account account = accountDao.login(loginRequestDto.getPhoneNum(), loginRequestDto.getPassword());
         if (account == null) {
             throw new RuntimeException("登录失败，账户或密码错误!");
         }

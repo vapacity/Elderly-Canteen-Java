@@ -32,4 +32,7 @@ public interface FinanceDao {
     // 删除记录
     @Delete("DELETE FROM Finance WHERE financeId = #{financeId}")
     Integer deleteFinance(int financeId);
+
+    @Select("SELECT * FROM Finance ORDER BY financeId DESC LIMIT 1")
+    Finance getLatestFinance();
 }

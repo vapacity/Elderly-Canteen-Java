@@ -4,11 +4,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import java.util.Calendar;
+
 import java.util.Date;
 
 public class DateUtils {
-
-
     public static Date getCurrentDate() throws ParseException {
         Date now = new Date();
         //格式化日期
@@ -19,6 +18,7 @@ public class DateUtils {
         Date date = dateFormat.parse(formattedDate);
         return date;
     }
+
 
     public static String getDayOfWeek(Date date) {
         // 设置星期的起始日为星期日

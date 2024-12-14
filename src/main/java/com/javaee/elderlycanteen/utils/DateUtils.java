@@ -2,10 +2,12 @@ package com.javaee.elderlycanteen.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
 import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtils {
+
 
     public static Date getCurrentDate() throws ParseException {
         Date now = new Date();
@@ -27,4 +29,5 @@ public class DateUtils {
         String[] daysOfWeek = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
         return daysOfWeek[dayOfWeek - 1];
     }
+
 }

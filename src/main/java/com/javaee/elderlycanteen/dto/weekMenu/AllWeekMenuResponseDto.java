@@ -2,42 +2,28 @@ package com.javaee.elderlycanteen.dto.weekMenu;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class AllWeekMenuResponseDto {
-    @JsonProperty("Mon")
-    private List<WeekDish> mon;
-
-    @JsonProperty("Tue")
-    private List<WeekDish> tue;
-
-    @JsonProperty("Wed")
-    private List<WeekDish> wed;
-
-    @JsonProperty("Thu")
-    private List<WeekDish> thu;
-
-    @JsonProperty("Fri")
-    private List<WeekDish> fri;
-
-    @JsonProperty("Sat")
-    private List<WeekDish> sat;
-
-    @JsonProperty("Sun")
-    private List<WeekDish> sun;
-
+    private List<List<WeekDish>> weekMenuList;
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class WeekDish {
         @JsonProperty("category")
         private String category;
 
         @JsonProperty("id")
-        private String id;
+        private Integer id;
 
         @JsonProperty("name")
         private String name;

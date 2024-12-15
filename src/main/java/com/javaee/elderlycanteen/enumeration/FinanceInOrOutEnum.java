@@ -1,5 +1,8 @@
 package com.javaee.elderlycanteen.enumeration;
 
+import lombok.Getter;
+
+@Getter
 public enum FinanceInOrOutEnum {
     IN("1"),
     OUT("0");
@@ -7,10 +10,6 @@ public enum FinanceInOrOutEnum {
 
     FinanceInOrOutEnum(String value) {
         this.value = value;
-    }
-
-    public String getValue() {
-        return value;
     }
 
     public static FinanceInOrOutEnum fromValue(String value) {

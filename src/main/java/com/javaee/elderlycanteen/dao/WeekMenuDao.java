@@ -1,6 +1,5 @@
 package com.javaee.elderlycanteen.dao;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.apache.ibatis.annotations.*;
 import com.javaee.elderlycanteen.entity.WeekMenu;
 import org.apache.ibatis.annotations.Mapper;
@@ -20,9 +19,8 @@ public interface WeekMenuDao {
     List<WeekMenu> selectAll();
 
     // 插入菜单对象
-    @Insert("INSERT INTO WeekMenu(week, stock, sales, disPrice, day) " +
-            "VALUES(#{weekMenu.getWeek()}, #{weekMenu.getStock()}, #{weekMenu.getSales()}, #{weekMenu.getDisPrice()}, #{weekMenu.getDay()})")
-    @Options(useGeneratedKeys = true, keyProperty = "dishId")
+    @Insert("INSERT INTO WeekMenu(dishId,week, stock, sales, disPrice, day) " +
+            "VALUES(#{dishId},#{week}, #{stock}, #{sales}, #{disPrice}, #{day})")
     Integer insert(WeekMenu weekMenu);
 
     // 更新菜单对象
@@ -42,13 +40,14 @@ public interface WeekMenuDao {
     // 检查菜品是否在今日菜单中
     @Select("SELECT * FROM WeekMenu WHERE week = #{week} AND dishId = #{dishId}")
     WeekMenu findWeekMenuByWeekAndDishId(@Param("week") Date week, @Param("dishId") Integer dishId);
-
+    @Delete("DELETE FROM WeekMenu WHERE week = #{week} AND dishId = #{dishId}")
+    void deleteWeekMenuByWeekAndDishId(@Param("week") Date week, @Param("dishId") Integer dishId);
     // 检查库存是否足够
     @Select("SELECT stock FROM WeekMenu WHERE dishId = #{dishId} AND week = #{week}")
     Integer findStockByDishIdAndWeek(@Param("dishId") Integer dishId, @Param("week") Date week);
 
     @Select("SELECT * FROM WeekMenu WHERE week = #{week} AND day = #{day}")
-    List<WeekMenu> findWeekMenuByWeek(@Param("week") Date week, @Param("day") String day);
+    List<WeekMenu> findWeekMenuByWeek(@Param("week") Date week,@Param("day") String day);
 
     @Update("UPDATE WeekMenu SET stock=#{stock} WHERE dishId = #{dishId} AND week = #{week}")
     Integer updateWeekMenuStock(@Param("stock") Integer stock, @Param("dishId") Integer dishId, @Param("week") Date week);

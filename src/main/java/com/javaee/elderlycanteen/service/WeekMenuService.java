@@ -85,8 +85,7 @@ public class WeekMenuService {
 
     public MenuResponseDto getTodayMenu() throws ParseException {
         Date date = getCurrentDate();
-        String day = getDayOfWeek(date);
-        List<WeekMenu> weekMenus = this.weekMenuDao.findWeekMenuByWeek(date,day);
+        List<WeekMenu> weekMenus = this.weekMenuDao.findWeekMenuByWeek(date,getDayOfWeek(date));
         List<Menu> menus = new ArrayList<>();
         for(WeekMenu weekMenu : weekMenus){
             Dish dish = this.dishDao.getDishById(weekMenu.getDishId());
@@ -106,7 +105,7 @@ public class WeekMenuService {
         }
         MenuResponseDto responseDto = new MenuResponseDto();
         responseDto.setMenu(menus);
-        if(!menus.isEmpty()){
+        if(menus.size() > 0){
             responseDto.setMessage("today's menu");
             responseDto.setSuccess(true);
         }else{
@@ -115,4 +114,5 @@ public class WeekMenuService {
         }
         return responseDto;
     }
+
 }

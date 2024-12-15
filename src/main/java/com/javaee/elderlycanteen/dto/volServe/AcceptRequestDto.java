@@ -7,6 +7,6 @@ import lombok.Data;
 public class AcceptRequestDto {
 
     @JsonProperty("orderId")
-    private String orderId;
+    private Integer orderId;
 
 }

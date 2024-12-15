@@ -177,6 +177,7 @@ public class CartItemService {
         // 验证CartId是否存在
         Cart cart = this.cartDao.getCartByCartIdAndAccountId(cartId,accountId);
         if(cart == null) {
+            System.out.println(cartId+" "+accountId);
             throw new ServiceException("Cart not found!");
         }
 

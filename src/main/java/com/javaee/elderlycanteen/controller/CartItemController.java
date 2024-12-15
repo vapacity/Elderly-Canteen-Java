@@ -103,7 +103,7 @@ public class CartItemController {
                 throw new InvalidInputException("account is unauthorized!");
             }
 
-            CartItemsDto cartItemsDto = this.cartItemService.getCartItems(accountId,cartId);
+            CartItemsDto cartItemsDto = this.cartItemService.getCartItems(cartId,accountId);
             return cartItemsDto;
 
         } catch (Exception e) {

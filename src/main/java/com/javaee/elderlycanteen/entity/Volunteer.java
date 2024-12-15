@@ -13,6 +13,6 @@ import java.math.BigDecimal;
 @Builder
 public class Volunteer {
     private Integer accountId;
-    private Boolean available;
-    private BigDecimal score;
+    private char available;
+    private Double score;
 }

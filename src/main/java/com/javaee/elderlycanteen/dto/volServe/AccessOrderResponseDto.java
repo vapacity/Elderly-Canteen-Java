@@ -1,12 +1,21 @@
 package com.javaee.elderlycanteen.dto.volServe;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.checkerframework.checker.units.qual.A;
 
-import java.math.BigDecimal;
+import com.javaee.elderlycanteen.dto.order.OrderDish;
+
+import java.util.Date;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class AccessOrderResponseDto {
 
     @JsonProperty("msg")
@@ -19,10 +28,13 @@ public class AccessOrderResponseDto {
     private Boolean success;
 
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
     public static class Response {
 
         @JsonProperty("orderId")
-        private String orderId;
+        private Integer orderId;
 
         @JsonProperty("cusAddress")
         private String cusAddress;
@@ -46,26 +58,10 @@ public class AccessOrderResponseDto {
         private Double subsidy;
 
         @JsonProperty("updatedTime")
-        private String updatedTime;  // You can use String or LocalDateTime based on the format
+        private Date updatedTime;  // You can use String or LocalDateTime based on the format
 
         @JsonProperty("orderDishes")
         private List<OrderDish> orderDishes;
-
-        @Data
-        public static class OrderDish {
-
-            @JsonProperty("dishName")
-            private String dishName;
-
-            @JsonProperty("picture")
-            private String picture;
-
-            @JsonProperty("price")
-            private Double price;
-
-            @JsonProperty("quantity")
-            private Integer quantity;
-        }
     }
 }
 

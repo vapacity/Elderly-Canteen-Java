@@ -4,11 +4,8 @@ import com.javaee.elderlycanteen.dao.*;
 import com.javaee.elderlycanteen.dto.order.*;
 import com.javaee.elderlycanteen.dto.register.Menu;
 import com.javaee.elderlycanteen.dto.register.MenuResponseDto;
-import com.javaee.elderlycanteen.dto.volServe.AccessOrderResponseDto;
 import com.javaee.elderlycanteen.entity.*;
 import com.javaee.elderlycanteen.exception.ServiceException;
-import com.javaee.elderlycanteen.utils.DateUtils;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,8 +14,14 @@ import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.javaee.elderlycanteen.enumeration.AccountIdentityEnum.SENIOR;
+import static com.javaee.elderlycanteen.enumeration.DeliverOrDiningEnum.DELIVER;
+import static com.javaee.elderlycanteen.enumeration.DeliverOrDiningEnum.DINING;
+import static com.javaee.elderlycanteen.enumeration.DeliverOrderStatusEnum.*;
+import static com.javaee.elderlycanteen.enumeration.DeliverOrderStatusEnum.PENDING;
+import static com.javaee.elderlycanteen.enumeration.FinanceTypeEnum.ORDER;
+import static com.javaee.elderlycanteen.enumeration.OrderStatusEnum.*;
 import static com.javaee.elderlycanteen.utils.DateUtils.getCurrentDate;
-import static com.javaee.elderlycanteen.utils.DateUtils.getDayOfWeek;
 
 @Transactional
 @Service
@@ -93,7 +96,6 @@ public class OrderInfoService {
             Menu menuItem = todayMenuItems.get(cartItem.getDishId());
             if (menuItem != null) {
                 // 使用折扣价（如果有），否则使用正常价格
-//                Double itemPrice = menuItem.getDiscountPrice() > 0 ? menuItem.getDiscountPrice() : menuItem.getDishPrice();
                 Double itemPrice = Optional.ofNullable(menuItem.getDiscountPrice())
                         .filter(price -> price > 0)
                         .orElse(menuItem.getDishPrice());
@@ -114,44 +116,46 @@ public class OrderInfoService {
                                     Optional<String> remark) throws ParseException {
         // 初始化变量，用于计算总价
         Double totalPrice=0.0;
-        List<OrderDish> orderDishes = new ArrayList<OrderDish>();
+        List<OrderDish> orderDishes = new ArrayList<>();
         totalPrice = this.calculateTotalPrice(cartItems);
 
         // 检查地址是否为空
         Account account = this.accountDao.getAccountById(accountId);
         if(account.getAddress().isEmpty() && newAddress.isEmpty()) {
-            OrderInfoDto orderInfoDto = new OrderInfoDto();
-            orderInfoDto.setMsg("account address is empty");
-            orderInfoDto.setSuccess(Boolean.FALSE);
+            return new OrderInfoDto(
+                    Boolean.FALSE,
+                    "account address is empty",
+                    null
+            );
         }
         // 设置新地址
         String address = (newAddress != null) ? String.valueOf(newAddress) : account.getAddress();
 
         Double bonus=0.0;
-        if(account.getIdentity()=="senior") bonus = totalPrice*0.2;
+        if(account.getIdentity()==SENIOR.getDescription()) bonus = totalPrice*0.2;
 
         // 生成订单记录
-        OrderInfo orderInfo = new OrderInfo();
-
-        orderInfo.setDeliverOrDining(deliverOrDining?"D":"I");
-        orderInfo.setCartId(cartId);
-        orderInfo.setStatus("to be confirmed");
-        orderInfo.setBonus(bonus);
-        orderInfo.setRemark(remark.orElse("null"));
-        orderInfo.setFinanceId(financeId);
+        OrderInfo orderInfo = OrderInfo.builder()
+                .deliverOrDining(deliverOrDining?DELIVER.getDescription(): DINING.getDescription())
+                .cartId(cartId)
+                .status(TOBECONFIRMED.getDescription())
+                .bonus(bonus)
+                .remark(remark.orElse("no remark"))
+                .financeId(financeId)
+                .build();
         // 插入数据
         this.insertOrderInfo(orderInfo);
 
         // 生成配送订单
         if(deliverOrDining){
-            DeliverOrder deliverOrder = new DeliverOrder();
-
-            deliverOrder.setOrderId(orderInfo.getOrderId());
-            deliverOrder.setCartId(cartId);
-            deliverOrder.setDeliverPhone("pending");
-            deliverOrder.setCustomerPhone(account.getPhoneNum());
-            deliverOrder.setCusAddress(address);
-            deliverOrder.setDeliverStatus("Pending");
+            DeliverOrder deliverOrder = DeliverOrder.builder()
+                    .orderId(orderInfo.getOrderId())
+                    .cartId(cartId)
+                    .deliverPhone("Pending")
+                    .customerPhone(account.getPhoneNum())
+                    .cusAddress(address)
+                    .deliverStatus(PENDING.getDescription())
+                    .build();
 
             // 添加数据
             Integer ret = this.deliverOrderDao.insertDeliverOrder(deliverOrder);
@@ -161,31 +165,30 @@ public class OrderInfoService {
         }
 
         // 创建并返回OrderInfoDto
-        OrderInfoDto orderInfoDto = new OrderInfoDto();
-        OrderItem orderItem = new OrderItem();
+        OrderItem orderItem = OrderItem.builder()
+                .orderId(orderInfo.getOrderId())
+                .cusAddress(address)
+                .money(totalPrice-bonus)
+                .deliverOrDining(deliverOrDining)
+                .deliverStatus(deliverOrDining? PENDING.getDescription() : DINING.getDescription())
+                .orderDishes(orderDishes)
+                .remark(orderInfo.getRemark())
+                .status(orderInfo.getStatus())
+                .subsidy(bonus)
+                .updatedTime(getCurrentDate())
+                .build();
 
-        orderInfoDto.setMsg("order created successfully");
-        orderInfoDto.setSuccess(Boolean.TRUE);
-
-        orderItem.setOrderId(orderInfo.getOrderId());
-        orderItem.setCusAddress(address);
-        orderItem.setDeliverOrDining(deliverOrDining);
-        orderItem.setDeliverStatus(deliverOrDining?"pending orders":"eat in the hall");
-        orderItem.setMoney(totalPrice-bonus);
-        orderItem.setOrderDishes(orderDishes);
-        orderItem.setRemark(orderInfo.getRemark());
-        orderItem.setStatus(orderInfo.getStatus());
-        orderItem.setSubsidy(bonus);
-        orderItem.setUpdatedTime(getCurrentDate());
-
-        orderInfoDto.setResponse(orderItem);
-
+        OrderInfoDto orderInfoDto = new OrderInfoDto(
+                Boolean.TRUE,
+                "order created successfully",
+                orderItem
+        );
         return orderInfoDto;
     }
 
     public GetOrderResponseDto getHistoryOrderInfo(Integer accountId) {
         // 查找所有与此用户相关的finance记录
-        List<Finance> finances = this.financeDao.getFinanceByAccountIdAndFinanceType(accountId,"Order");
+        List<Finance> finances = this.financeDao.getFinanceByAccountIdAndFinanceType(accountId,ORDER.getDescription());
         if (finances.isEmpty()) {
             return new GetOrderResponseDto(Boolean.TRUE,"No history orders!",new OrderItem[0]);
         }
@@ -208,29 +211,29 @@ public class OrderInfoService {
                 if (dish == null) continue;
                 WeekMenu weekMenu = this.weekMenuDao.findWeekMenuByWeekAndDishId(cartItem.getWeek(), cartItem.getDishId());
                 if (weekMenu == null) continue;
-                orderDishes.add(new OrderDish(
-                        dish.getDishName(),
-                        dish.getImageUrl(),
-                        weekMenu.getDisPrice()==0?dish.getPrice():weekMenu.getDisPrice(),
-                        cartItem.getQuantity()
-                        ));
+                orderDishes.add(OrderDish.builder()
+                                .dishName(dish.getDishName())
+                                .picture(dish.getImageUrl())
+                                .price(weekMenu.getDisPrice() == null || weekMenu.getDisPrice()==0?dish.getPrice():weekMenu.getDisPrice())
+                                .quantity(cartItem.getQuantity())
+                        .build());
             }
 
             DeliverOrder deliverOrder = this.deliverOrderDao.getDeliverOrderByOrderId(orderInfo.getOrderId());
 
             // 构建OrderItem
-            OrderItem orderItem = new OrderItem();
-
-            orderItem.setOrderId(orderInfo.getOrderId());
-            orderItem.setCusAddress(deliverOrder==null?"Dining":deliverOrder.getCusAddress());
-            orderItem.setDeliverOrDining(Objects.equals(orderInfo.getDeliverOrDining(), "D"));
-            orderItem.setDeliverStatus(deliverOrder==null?"Dining":deliverOrder.getDeliverStatus());
-            orderItem.setMoney(finance.getPrice());
-            orderItem.setOrderDishes(orderDishes);
-            orderItem.setRemark(orderInfo.getRemark()==null?"no remark":orderInfo.getRemark());
-            orderItem.setStatus(orderInfo.getStatus());
-            orderItem.setSubsidy(orderInfo.getBonus());
-            orderItem.setUpdatedTime(finance.getFinanceDate());
+            OrderItem orderItem = OrderItem.builder()
+                    .orderId(orderInfo.getOrderId())
+                    .cusAddress(deliverOrder==null? DINING.getDescription():deliverOrder.getCusAddress())
+                    .deliverStatus(deliverOrder==null? DINING.getDescription():deliverOrder.getDeliverStatus())
+                    .deliverOrDining(Objects.equals(orderInfo.getDeliverOrDining(), DELIVER.getDescription()))
+                    .orderDishes(orderDishes)
+                    .remark(orderInfo.getRemark()==null?"no remark":orderInfo.getRemark())
+                    .money(finance.getPrice())
+                    .status(orderInfo.getStatus())
+                    .subsidy(orderInfo.getBonus())
+                    .updatedTime(finance.getFinanceDate())
+                    .build();
 
             orderItems.add(orderItem);
         }
@@ -246,18 +249,18 @@ public class OrderInfoService {
             return new NormalResponseDto(Boolean.FALSE,"OrderId does not have an associated order!");
         }
         // 更新订单状态
-        this.orderInfoDao.updateOrderStatus(orderId,"confirmed");
+        this.orderInfoDao.updateOrderStatus(orderId, CONFIRMED.getDescription());
 
         // 自动增加评价
         OrderReview orderReview = new OrderReview(orderId,5.0,"no review");
         this.orderReviewDao.insertOrderReview(orderReview);
 
-        if(orderInfo.getDeliverOrDining()=="D"){
+        if(orderInfo.getDeliverOrDining()== DELIVERED.getDescription()){
             DeliverOrder deliverOrder = this.deliverOrderDao.getDeliverOrderByOrderId(orderId);
             if(deliverOrder==null){
                 return new NormalResponseDto(Boolean.FALSE,"OrderId does not have an associated deliverOrder!");
             }
-            this.deliverOrderDao.updateDeliverOrderStatus(orderId,"delivered");
+            this.deliverOrderDao.updateDeliverDeliverStatus(orderId,DELIVERED.getDescription());
             DeliverReview deliverReview = new DeliverReview(orderId,5.0,"no review");
             this.deliverReviewDao.insertDeliverReview(deliverReview);
         }
@@ -306,14 +309,14 @@ public class OrderInfoService {
                     Dto.getCStars(),
                     Dto.getCReviewText()
             ));
-            this.orderInfoDao.updateOrderStatus(Dto.getOrderId(), "reviewed");
+            this.orderInfoDao.updateOrderStatus(Dto.getOrderId(), REVIEWED.getDescription());
 
             return new NormalResponseDto(Boolean.TRUE,"review successfully!");
         } else{
             existReview.setCReviewText(Dto.getCReviewText());
             existReview.setCStars(Dto.getCStars());
             this.orderReviewDao.updateOrderReview(existReview);
-            this.orderInfoDao.updateOrderStatus(Dto.getOrderId(), "reviewed");
+            this.orderInfoDao.updateOrderStatus(Dto.getOrderId(), REVIEWED.getDescription());
             return new NormalResponseDto(Boolean.TRUE,"review successfully!");
         }
     }
@@ -357,12 +360,12 @@ public class OrderInfoService {
                     Dto.getCStars(),
                     Dto.getCReviewText()
             ));
-            this.orderInfoDao.updateOrderStatus(Dto.getOrderId(), "reviewed");
+            this.orderInfoDao.updateOrderStatus(Dto.getOrderId(), REVIEWED.getDescription());
         } else{
             existReview.setCReviewText(Dto.getCReviewText());
             existReview.setCStars(Dto.getCStars());
             this.orderReviewDao.updateOrderReview(existReview);
-            this.orderInfoDao.updateOrderStatus(Dto.getOrderId(), "reviewed");
+            this.orderInfoDao.updateOrderStatus(Dto.getOrderId(), REVIEWED.getDescription());
         }
 
         DeliverReview existDeliverReview = this.deliverReviewDao.getDeliverReviewByOrderId(Dto.getOrderId());
@@ -373,12 +376,12 @@ public class OrderInfoService {
                     Dto.getDStars(),
                     Dto.getDReviewText()
             ));
-            this.deliverOrderDao.updateDeliverOrderStatus(Dto.getOrderId(), "reviewed");
+            this.deliverOrderDao.updateDeliverDeliverStatus(Dto.getOrderId(), REVIEWED.getDescription());
         }else{
             existDeliverReview.setDReviewText(Dto.getDReviewText());
             existDeliverReview.setDStars(Dto.getDStars());
             this.deliverReviewDao.updateDeliverReview(existDeliverReview);
-            this.deliverOrderDao.updateDeliverOrderStatus(Dto.getOrderId(), "reviewed");
+            this.deliverOrderDao.updateDeliverDeliverStatus(Dto.getOrderId(), REVIEWED.getDescription());
         }
         return new NormalResponseDto(Boolean.TRUE,"deliver review successfully!");
     }
@@ -463,9 +466,9 @@ public class OrderInfoService {
         // 构建OrderItem并返回
         OrderItem orderItem = new OrderItem(
                 orderInfo.getOrderId(),
-                deliverOrder!=null?deliverOrder.getCusAddress():"dining",
-                orderInfo.getDeliverOrDining()=="D",
-                deliverOrder!=null?deliverOrder.getDeliverStatus():"dining",
+                deliverOrder!=null?deliverOrder.getCusAddress(): DINING.getDescription(),
+                orderInfo.getDeliverOrDining()== DELIVERED.getDescription(),
+                deliverOrder!=null?deliverOrder.getDeliverStatus(): DINING.getDescription(),
                 finance.getPrice(),
                 orderDishes,
                 orderInfo.getRemark().isEmpty()?"no remarks":orderInfo.getRemark(),

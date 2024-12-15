@@ -177,7 +177,7 @@ public class AccountService {
         if (personInfo.getName() != null && !personInfo.getName().isEmpty()) {
             account.setName(personInfo.getName());
         }
-        accountDao.updatePersonInfo(account.getPortrait(),account.getGender(),account.getAccountName(),account.getPhoneNum(),account.getAddress(),account.getBirthDate(),account.getName());
+        accountDao.updatePersonInfo(account.getPortrait(),account.getGender(),account.getAccountName(),account.getPhoneNum(),account.getAddress(),account.getBirthDate(),account.getName(),account.getAccountId());
         result.setAlterSuccess(true);
         result.setMsg("成功修改个人信息");
         return result;

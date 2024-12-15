@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/actionLogs")
+@RequestMapping("api/actionLogs")
 public class ActionLogController {
 
     private final ActionLogService actionLogService;

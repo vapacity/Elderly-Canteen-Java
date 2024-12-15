@@ -17,7 +17,7 @@ import java.text.ParseException;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/weekMenus")
+@RequestMapping("api/weekMenus")
 public class WeekMenuController {
 
     private final WeekMenuService weekMenuService;

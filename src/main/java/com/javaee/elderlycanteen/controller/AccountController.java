@@ -10,6 +10,7 @@ import com.javaee.elderlycanteen.dto.personInfo.*;
 import com.javaee.elderlycanteen.entity.Account;
 import com.javaee.elderlycanteen.entity.TokenInfo;
 import com.javaee.elderlycanteen.exception.NotFoundException;
+import com.javaee.elderlycanteen.minio.MinioService;
 import com.javaee.elderlycanteen.service.AccountService;
 import com.javaee.elderlycanteen.utils.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +30,12 @@ import java.util.Map;
 public class AccountController {
 
     private final AccountService accountService;
+    private final MinioService minioService;
 
     @Autowired
-    public AccountController(AccountService accountService) {
+    public AccountController(AccountService accountService,MinioService minioService) {
         this.accountService = accountService;
+        this.minioService = minioService;
     }
 
 
@@ -110,7 +113,7 @@ public class AccountController {
     @PostMapping("/alterPersonInfo")
     public PersonInfoResponseDto alterPersonInfo(@RequestHeader(name="Authorization", required = false) String token,
                                                  @RequestParam(value="avatar", required = false)MultipartFile avatar,
-                                                 PersonInfoRequestDto personInfo ) throws ParseException {
+                                                 PersonInfoRequestDto personInfo ) throws Exception {
         // 获取accountId
         if( token == null ){
             throw new NotFoundException("token is null");
@@ -118,8 +121,10 @@ public class AccountController {
         token = token.substring(7);
         TokenInfo tokenInfo = JWTUtils.getTokenInfo(token);
         Integer accountId = tokenInfo.getAccountId();
-
-        return accountService.alterPersonInfo(personInfo , accountId, avatar);
+        //把图片转换成url路径并上传到桶
+        String fileName = avatar.getOriginalFilename();
+        minioService.uploadFile(fileName,avatar);
+        return accountService.alterPersonInfo(personInfo , accountId, fileName);
     }
 
     @GetMapping("/getAllAccount")

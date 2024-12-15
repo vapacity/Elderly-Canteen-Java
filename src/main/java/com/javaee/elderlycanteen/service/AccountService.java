@@ -129,7 +129,7 @@ public class AccountService {
     }
 
     //修改个人信息
-    public PersonInfoResponseDto alterPersonInfo (PersonInfoRequestDto personInfo, Integer accountId , MultipartFile avatar) throws ParseException {
+    public PersonInfoResponseDto alterPersonInfo (PersonInfoRequestDto personInfo, Integer accountId , String fileName) throws ParseException {
         Account account = accountDao.getAccountById(accountId);
         PersonInfoResponseDto result = new PersonInfoResponseDto();
         if(account == null) {
@@ -153,8 +153,7 @@ public class AccountService {
         }
 
         // 更新头像
-        if (avatar != null) {
-            String fileName = avatar.getOriginalFilename();
+        if (fileName != null) {
             String imageUrl = endpoint +"/"+bucketName+"/"+fileName;
             account.setPortrait(imageUrl);
         }

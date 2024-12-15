@@ -1,9 +1,12 @@
 package com.javaee.elderlycanteen.service;
 
+import com.javaee.elderlycanteen.dao.CategoryDao;
 import com.javaee.elderlycanteen.dao.DishDao;
 import com.javaee.elderlycanteen.dao.WeekMenuDao;
 import com.javaee.elderlycanteen.dto.register.Menu;
 import com.javaee.elderlycanteen.dto.register.MenuResponseDto;
+import com.javaee.elderlycanteen.dto.weekMenu.WMRequestDto;
+import com.javaee.elderlycanteen.dto.weekMenu.WMResponseDto;
 import com.javaee.elderlycanteen.entity.CartItem;
 import com.javaee.elderlycanteen.entity.Dish;
 import com.javaee.elderlycanteen.entity.WeekMenu;
@@ -29,13 +32,14 @@ public class WeekMenuService {
     private final DishDao dishDao;
     private final WeekMenuDao weekMenuDao;
     private final SystemLogsService systemLogsService;
-
+    private final CategoryDao cateDao;
 
     @Autowired
-    public WeekMenuService(DishDao dishDao ,WeekMenuDao weekMenuDao,SystemLogsService systemLogsService) {
+    public WeekMenuService(DishDao dishDao ,WeekMenuDao weekMenuDao,SystemLogsService systemLogsService,CategoryDao cateDao) {
         this.weekMenuDao = weekMenuDao;
         this.dishDao = dishDao;
         this.systemLogsService = systemLogsService;
+        this.cateDao = cateDao;
     }
 
     public Integer updateWeekMenuStock(Integer stock,Integer dishId,Date week) {
@@ -115,4 +119,37 @@ public class WeekMenuService {
         }
         return responseDto;
     }
+
+    public WMResponseDto addWeekMenu(WMRequestDto weekMenu) {
+        Date date = weekMenu.getDate();
+        Integer requestDishId = weekMenu.getDishId();
+        // 验证日期是否合法
+        if (!checkDateValidity(date)) {
+            throw new ServiceException("date should be equal or later than today's date!");
+        }
+        // 验证是否已经存在该日期的菜单
+        if (this.weekMenuDao.findWeekMenuByWeekAndDishId(date, requestDishId)!= null) {
+            throw new ServiceException("week menu already exists!");
+        }
+        // 验证菜品是否存在
+        Dish dish = this.dishDao.getDishById(requestDishId);
+        if (dish == null) {
+            throw new ServiceException("dish not exists!");
+        }
+        Integer cateId = dish.getCateId();
+        cateDao.getCategoryById(cateId);
+        WeekMenu weekMenuEntity = new WeekMenu(requestDishId,date,50,0,dish.getPrice(),DateUtils.getDayOfWeek(date));
+        weekMenuDao.insert(weekMenuEntity);
+        return new WMResponseDto(new WMResponseDto.DishInfo(), "add week menu success!");
+    }
+
+    private Boolean checkDateValidity(Date date) {
+        // 获取当前日期
+        Date currentDate = new Date();
+
+        // 比较传入的日期与当前日期
+        // 如果传入的日期大于或等于当前日期，返回 true
+        return !date.before(currentDate);
+    }
+
 }

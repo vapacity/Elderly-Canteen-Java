@@ -97,7 +97,7 @@ public class WeekMenuService {
                 Menu menu = new Menu();
 
                 menu.setDishId(dish.getDishId());
-                menu.setCategory(dish.getDishId());
+                menu.setCategory(dish.getCateId());
                 menu.setDishName(dish.getDishName());
                 menu.setDishPrice(dish.getPrice());
                 menu.setImageUrl(dish.getImageUrl());

@@ -1,7 +1,6 @@
 package com.javaee.elderlycanteen.dao;
 
 import com.javaee.elderlycanteen.entity.DeliverOrder;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -31,5 +30,11 @@ public interface DeliverOrderDao {
     DeliverOrder getDeliverOrderByOrderId(@Param("orderId") Integer orderId);
 
     @Update("UPDATE DeliverOrder SET deliverStatus = #{deliverStatus} WHERE orderId = #{orderId}")
-    Integer updateDeliverOrderStatus(@Param("orderId")Integer orderId, @Param("deliverStatus") String deliverStatus);
+    Integer updateDeliverDeliverStatus(@Param("orderId")Integer orderId, @Param("deliverStatus") String deliverStatus);
+
+    @Select("SELECT * FROM DeliverOrder WHERE deliverStatus=#{deliverStatus}")
+    List<DeliverOrder> getDeliverOrderByDeliverStatus(@Param("deliverStatus") String deliverStatus);
+
+    @Update("UPDATE DeliverOrder SET deliverPhone = #{deliverPhone} WHERE orderId = #{orderId}")
+    Integer updateDeliverDeliverPhone(@Param("orderId")Integer orderId, @Param("deliverPhone") String deliverPhone);
 }

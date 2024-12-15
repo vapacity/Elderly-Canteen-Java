@@ -21,8 +21,7 @@ public interface DeliverVDao {
     @Select("SELECT * FROM DeliverV WHERE orderId = #{orderId}")
     DeliverV getDeliverVByOrderId(@Param("orderId") Integer orderId);
 
-    @Insert("INSERT INTO DeliverV (deliverId, deliverAddress, deliverTime, deliverStatus, deliverFee, deliverTotal, deliverUserId) VALUES (#{deliverId}, #{deliverAddress}, #{deliverTime}, #{deliverStatus}, #{deliverFee}, #{deliverTotal}, #{deliverUserId})")
-    @Options(useGeneratedKeys = true, keyProperty = "deliverId")
+    @Insert("INSERT INTO DeliverV (orderId,volunteerId) VALUES (#{orderId}, #{volunteerId})")
     Integer insertDeliverV(DeliverV deliverV);
 
     @Update("UPDATE DeliverV SET deliverAddress = #{deliverAddress}, deliverTime = #{deliverTime}, deliverStatus = #{deliverStatus}, deliverFee = #{deliverFee}, deliverTotal = #{deliverTotal}, deliverUserId = #{deliverUserId} WHERE deliverId = #{deliverId}")

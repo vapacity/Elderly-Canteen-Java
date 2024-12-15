@@ -1,12 +1,14 @@
 package com.javaee.elderlycanteen.enumeration;
 
-public enum FinanceTypeEnum {
-    ORDER("Order");
+public enum DeliverOrderStatusEnum {
+    PENDING("Pending"),   // 待审核
+    DELIVERED("Delivered"),  // 已通过
+    RECEIVED("Received"); // 已拒绝
 
     private String description;  // 英文描述
 
     // 构造方法
-    FinanceTypeEnum(String description) {
+    DeliverOrderStatusEnum(String description) {
         this.description = description;
     }
 
@@ -16,8 +18,8 @@ public enum FinanceTypeEnum {
     }
 
     // 通过英文描述获取对应的 enum 值
-    public static FinanceTypeEnum fromDescriptionEn(String description) {
-        for (FinanceTypeEnum status : FinanceTypeEnum.values()) {
+    public static DeliverOrderStatusEnum fromDescriptionEn(String description) {
+        for (DeliverOrderStatusEnum status : DeliverOrderStatusEnum.values()) {
             if (status.getDescription().equalsIgnoreCase(description)) {
                 return status;
             }

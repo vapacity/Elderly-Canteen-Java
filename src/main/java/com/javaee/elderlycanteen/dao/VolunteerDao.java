@@ -10,7 +10,7 @@ public interface VolunteerDao {
 
     // 根据 accountId 查询单个志愿者对象
     @Select("SELECT * FROM Volunteer WHERE accountId = #{accountId}")
-    Volunteer selectByAccountId(Integer accountId);
+    Volunteer getByAccountId(Integer accountId);
 
     // 查询所有志愿者对象
     @Select("SELECT * FROM Volunteer")
@@ -32,5 +32,8 @@ public interface VolunteerDao {
     // 根据 accountId 删除志愿者对象
     @Delete("DELETE FROM Volunteer WHERE accountId = #{accountId}")
     Integer deleteByAccountId(Integer accountId);
+
+    @Update("UPDATE Volunteer SET available = #{available} WHERE accountId = #{accountId}")
+    Integer updateVolunterrAvailable(Integer accountId, char available);
 
 }

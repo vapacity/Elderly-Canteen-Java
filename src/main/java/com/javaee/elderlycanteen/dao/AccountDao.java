@@ -52,7 +52,7 @@ public interface AccountDao {
 
     //修改个人信息
     @Update("UPDATE Account SET portrait = #{portrait},gender = #{gender} , accountName = #{accountName},phoneNum = #{phoneNum},address = #{address},birthDate = #{birthDate}, name = #{name} WHERE accountId = #{accountId} ")
-    Integer updatePersonInfo(@Param("portrait") String portrait,@Param("gender") String gender,@Param("accountName") String accountName , @Param("phoneNum") String phoneNum , @Param("address") String address ,@Param("birthDate") Date birthDate ,@Param("name") String name);
+    Integer updatePersonInfo(@Param("portrait") String portrait,@Param("gender") String gender,@Param("accountName") String accountName , @Param("phoneNum") String phoneNum , @Param("address") String address ,@Param("birthDate") Date birthDate ,@Param("name") String name,@Param("accountId") Integer accountId);
 
     //查询是否存在这个身份证号
     @Select("SELECT COUNT(*) > 0 FROM Account WHERE idCard = #{idCard}")

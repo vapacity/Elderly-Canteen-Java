@@ -76,8 +76,7 @@ public class OrderInfoService {
     public List<OrderInfo> getOrderInfoByCartId(Integer cartId){
         List<OrderInfo> orderInfos = this.orderInfoDao.getOrderInfoByCartId(cartId);
         if(!orderInfos.isEmpty()) {
-            System.out.println(orderInfos);
-            throw new ServiceException("Order info exist!");
+            return null;
         }
         return orderInfos;
     }

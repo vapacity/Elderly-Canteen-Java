@@ -35,8 +35,7 @@ public interface AdministratorDao {
     Integer DeleteAdmin(@Param("accountId") String accountId);
 
     //添加管理员
-    @Insert("INSERT INTO Administrator (email, position) VALUES (#{email}, #{position})")
-    @Options(useGeneratedKeys=true, keyProperty="accountId")
+    @Insert("INSERT INTO Administrator (accountId, email ,position) VALUES (#{accountId}, #{email},#{position})")
     Integer addAdmin(Administrator admin);
 
     //删除管理员

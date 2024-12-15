@@ -34,7 +34,7 @@ public class AdministratorController {
     }
 
     @PostMapping("/add")
-    public AdminResponseDto addAdmin(AdminRegisterDto admin) throws ParseException {
+    public AdminResponseDto addAdmin(@RequestBody AdminRegisterDto admin) throws ParseException {
         return administratorService.addAdmin(admin);
     }
 

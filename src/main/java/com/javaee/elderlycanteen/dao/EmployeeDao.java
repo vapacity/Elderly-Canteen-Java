@@ -8,11 +8,11 @@ import java.util.List;
 public interface EmployeeDao {
 
     // 根据主键查询单个员工
-    @Select("SELECT * FROM employee WHERE employee_id = #{employeeId}")
-    Employee getEmployeeById(@Param("employeeId") int employeeId);
+    @Select("SELECT * FROM employee WHERE employeeId = #{employeeId}")
+    Employee getEmployeeById(@Param("employeeId") Integer employeeId);
 
     // 查询所有员工
-    @Select("SELECT * FROM employee")
+    @Select("SELECT * FROM Employee")
     List<Employee> getAllEmployees();
 
     // 插入一个新的员工

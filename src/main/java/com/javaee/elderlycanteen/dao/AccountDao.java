@@ -19,7 +19,7 @@ public interface AccountDao {
     Account login(@Param("phoneNum") String phoneNum, @Param("password") String password);
 
     @Select("SELECT * FROM Account WHERE name = #{name}  ")
-    Account getAccountByName(@Param("name") String name);
+    List<Account> getAccountByName(@Param("name") String name);
 
     @Select("SELECT * FROM Account WHERE accountId = #{accountId}")
     Account getAccountById(@Param("accountId") Integer accountId);

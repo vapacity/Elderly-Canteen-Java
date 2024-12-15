@@ -44,7 +44,7 @@ public class AdministratorController {
     }
 
     @GetMapping("/search")
-    public AdminSearchDto searchAdmin(String name , String position){
+    public AdminSearchDto searchAdmin(@RequestParam(name="name",required = false) String name , @RequestParam(name="position",required = false)String position){
         return administratorService.searchAdmin(name, position);
     }
 

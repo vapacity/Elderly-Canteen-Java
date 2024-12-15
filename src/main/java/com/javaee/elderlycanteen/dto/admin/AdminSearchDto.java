@@ -4,25 +4,39 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class AdminSearchDto {
 
-        @JsonProperty("name")
-        private String name;
+        @JsonProperty("success")
+        private boolean success;
 
-        @JsonProperty("accountId")
-        private Integer accountId;
+        @JsonProperty("message")
+        private String message;
 
-        @JsonProperty("phoneNum")
-        private String phoneNum;
+        @JsonProperty("response")
+        private List<AdminSearchData> response;
 
-        @JsonProperty("position")
-        private String position;
+        @Data
+        @AllArgsConstructor
+        @NoArgsConstructor
+        public static class AdminSearchData{
+                @JsonProperty("name")
+                private String name;
 
-        @JsonProperty("gender")
-        private String gender;
+                @JsonProperty("accountId")
+                private Integer accountId;
 
+                @JsonProperty("phoneNum")
+                private String phoneNum;
 
+                @JsonProperty("position")
+                private String position;
+
+                @JsonProperty("gender")
+                private String gender;
+        }
 }

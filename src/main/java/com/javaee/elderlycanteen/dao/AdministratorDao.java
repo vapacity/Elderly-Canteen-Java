@@ -68,4 +68,32 @@ public interface AdministratorDao {
             @Param("name") String name,
             @Param("position") String position
     );
+
+    /**
+     * 根据名字和职位查询管理员列表
+     * @param name 管理员名字
+     * @return 返回管理员及其关联账户的信息列表
+     */
+    @Select("""
+        SELECT 
+            a.accountId AS accountId,
+            ac.name AS name,
+            ac.phoneNum AS phoneNum,
+            ac.gender AS gender
+        FROM Administrator a
+        JOIN Account ac ON a.accountId = ac.accountId
+        WHERE 
+            (#{name} IS NULL OR ac.name LIKE CONCAT('%', #{name}, '%'))
+            
+    """)
+    List<AdminSearchDto.AdminSearchData> findAdminsByName(@Param("name") String name);
+
+
+    //根据职位查找管理员
+    @Select("SELECT * FROM Administrator WHERE position = #{position}")
+    List<AdminSearchDto.AdminSearchData> getAdminByPosition(@Param("position") String position);
+
+    //查找所有管理员
+    @Select("SELECT * FROM Administrator")
+    List<AdminSearchDto.AdminSearchData> findAllAdmins();
 }

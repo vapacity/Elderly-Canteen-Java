@@ -1,12 +1,12 @@
 package com.javaee.elderlycanteen.enumeration;
 
-public enum FinanceTypeEnum {
-    ORDER("Order");
+public enum AccountIdentityEnum {
+    SENIOR("Senior");
 
     private String description;  // 英文描述
 
     // 构造方法
-    FinanceTypeEnum(String description) {
+    AccountIdentityEnum(String description) {
         this.description = description;
     }
 
@@ -16,8 +16,8 @@ public enum FinanceTypeEnum {
     }
 
     // 通过英文描述获取对应的 enum 值
-    public static FinanceTypeEnum fromDescriptionEn(String description) {
-        for (FinanceTypeEnum status : FinanceTypeEnum.values()) {
+    public static AccountIdentityEnum fromDescriptionEn(String description) {
+        for (AccountIdentityEnum status : AccountIdentityEnum.values()) {
             if (status.getDescription().equalsIgnoreCase(description)) {
                 return status;
             }

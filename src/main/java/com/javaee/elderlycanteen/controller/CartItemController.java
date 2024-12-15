@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/cartItems")
+@RequestMapping("api/cartItems")
 public class CartItemController {
 
     private final CartItemService cartItemService;
@@ -103,7 +103,7 @@ public class CartItemController {
                 throw new InvalidInputException("account is unauthorized!");
             }
 
-            CartItemsDto cartItemsDto = this.cartItemService.getCartItems(accountId,cartId);
+            CartItemsDto cartItemsDto = this.cartItemService.getCartItems(cartId,accountId);
             return cartItemsDto;
 
         } catch (Exception e) {

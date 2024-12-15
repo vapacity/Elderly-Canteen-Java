@@ -30,9 +30,9 @@ public class AdminRegisterDto {
     @JsonProperty("idCard")
     private String idCard;
 
+    @JsonProperty("birthDate")
     @JsonSerialize(using = DateSerializer.class)
     @JsonDeserialize(using = DateDeserializer.class)
-    @JsonProperty("birthDate")
     private Date birthDate;
 
     @JsonProperty("address")

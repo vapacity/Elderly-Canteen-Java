@@ -100,7 +100,7 @@ public class CartItemService {
 
     public CartItemResponseDto updateCartItem(CartItemRequestDto Dto) throws ParseException {
         // 验证购物车是否存在
-        Cart cart = this.cartDao.checkCartExists(Dto.getCartId());
+        Cart cart = this.cartDao.getCartByCartId(Dto.getCartId());
         if(cart == null) {
             throw new InvalidInputException("Cart not exist!");
         }
@@ -126,11 +126,7 @@ public class CartItemService {
         // 添加或更新购物车项
         CartItem cartItemEntity = this.cartItemDao.getCartItemByCartIdAndDishId(Dto.getCartId(),Dto.getDishId());
         if(cartItemEntity == null) {
-            CartItem newCartItem = new CartItem();
-            newCartItem.setCartId(Dto.getCartId());
-            newCartItem.setDishId(Dto.getDishId());
-            newCartItem.setQuantity(Dto.getQuantity());
-            newCartItem.setWeek(date);
+            CartItem newCartItem = new CartItem(Dto.getCartId(),Dto.getDishId(),date,Dto.getQuantity());
             this.addCartItem(newCartItem);
             System.out.println("insert cartItem success!");
         }else{
@@ -143,9 +139,7 @@ public class CartItemService {
         System.out.println("update Cart UpdatedTime!");
 
         // 返回更新成功信息
-        CartItemResponseDto responseDto = new CartItemResponseDto();
-        responseDto.setMsg("update successfully!");
-        responseDto.setSuccess(Boolean.TRUE);
+        CartItemResponseDto responseDto = new CartItemResponseDto(Boolean.TRUE,"update successfully!");
         return responseDto;
     }
 
@@ -175,9 +169,7 @@ public class CartItemService {
         System.out.println("update Cart UpdatedTime!");
 
         // 返回更新成功信息
-        CartItemResponseDto responseDto = new CartItemResponseDto();
-        responseDto.setMsg("delete successfully!");
-        responseDto.setSuccess(Boolean.TRUE);
+        CartItemResponseDto responseDto = new CartItemResponseDto(Boolean.TRUE,"delete successfully!");
         return responseDto;
     }
 
@@ -185,6 +177,7 @@ public class CartItemService {
         // 验证CartId是否存在
         Cart cart = this.cartDao.getCartByCartIdAndAccountId(cartId,accountId);
         if(cart == null) {
+            System.out.println(cartId+" "+accountId);
             throw new ServiceException("Cart not found!");
         }
 
@@ -193,13 +186,7 @@ public class CartItemService {
 
         List<CartItem> cartItems = this.cartItemDao.getCartItemByCartId(cartId);
         if(cartItems == null){
-            CartItemsDto cartItemsDto = new CartItemsDto();
-            List<CartItemsDto.Menu> menus = new ArrayList<>();
-
-            cartItemsDto.setSuccess(Boolean.FALSE);
-            cartItemsDto.setMsg("Cart is null!");
-            cartItemsDto.setMenu(menus);
-
+            CartItemsDto cartItemsDto = new CartItemsDto(new ArrayList<>(),"Cart is null!",Boolean.FALSE);
             return cartItemsDto;
         }
 
@@ -231,11 +218,7 @@ public class CartItemService {
         }
 
         // 返回购物车项目信息
-        CartItemsDto cartItemsDto = new CartItemsDto();
-
-        cartItemsDto.setSuccess(Boolean.TRUE);
-        cartItemsDto.setMsg("get CartItems successfully!");
-        cartItemsDto.setMenu(menus);
+        CartItemsDto cartItemsDto = new CartItemsDto(menus,"get CartItems successfully!",Boolean.TRUE);
 
         return cartItemsDto;
     }

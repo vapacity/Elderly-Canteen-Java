@@ -16,9 +16,6 @@ public interface DeliverOrderDao {
     @Select("SELECT * FROM DeliverOrder")
     List<DeliverOrder> getAllDeliverOrder();
 
-    @Select("SELECT * FROM DeliverOrder WHERE orderId = #{orderId}")
-    DeliverOrder getDeliverOrderById(@Param("orderId") String orderId);
-
     @Insert("INSERT INTO DeliverOrder(orderId, deliverPhone, customerPhone, cusAddress, deliverStatus, cartId) VALUES (#{orderId}, #{deliverPhone}, #{customerPhone}, #{cusAddress}, #{deliverStatus}, #{cartId})")
     @Options(useGeneratedKeys = true, keyProperty = "orderId")
     Integer insertDeliverOrder(DeliverOrder deliverOrder);
@@ -29,6 +26,15 @@ public interface DeliverOrderDao {
     @Delete("DELETE FROM DeliverOrder WHERE orderId = #{orderId}")
     Integer deleteDeliverOrder(@Param("orderId") String orderId);
 
-    // Add your own methods here.
+    @Select("SELECT * FROM DeliverOrder WHERE orderId = #{orderId}")
+    DeliverOrder getDeliverOrderByOrderId(@Param("orderId") Integer orderId);
 
+    @Update("UPDATE DeliverOrder SET deliverStatus = #{deliverStatus} WHERE orderId = #{orderId}")
+    Integer updateDeliverDeliverStatus(@Param("orderId")Integer orderId, @Param("deliverStatus") String deliverStatus);
+
+    @Select("SELECT * FROM DeliverOrder WHERE deliverStatus=#{deliverStatus}")
+    List<DeliverOrder> getDeliverOrderByDeliverStatus(@Param("deliverStatus") String deliverStatus);
+
+    @Update("UPDATE DeliverOrder SET deliverPhone = #{deliverPhone} WHERE orderId = #{orderId}")
+    Integer updateDeliverDeliverPhone(@Param("orderId")Integer orderId, @Param("deliverPhone") String deliverPhone);
 }

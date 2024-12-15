@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/finances")
+@RequestMapping("api/finances")
 public class FinanceController {
 
     private final FinanceService financeService;

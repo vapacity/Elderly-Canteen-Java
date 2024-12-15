@@ -22,11 +22,7 @@ public interface CartDao {
     Integer insert(Cart cart);
 
     @Delete("DELETE FROM Cart WHERE cartId = #{cartId}")
-    Integer deleteById(@Param("cartId") Integer cartId);
-
-    // 检查购物车是否存在
-    @Select("SELECT * FROM Cart WHERE cartId = #{cartId}")
-    Cart checkCartExists(@Param("cartId") Integer cartId);
+    Integer deleteCartByCartId(@Param("cartId") Integer cartId);
 
     //验证cartId是否存在且属于accountId
     @Select("SELECT * FROM Cart WHERE cartId = #{cartId} AND accountId = #{accountId}")
@@ -35,5 +31,17 @@ public interface CartDao {
     // 更新购物车更新时间
     @Update("UPDATE Cart SET updatedTime = #{updatedTime} WHERE cartId = #{cartId}")
     Integer updateCartUpdatedTime(@Param("cartId") Integer cartId, @Param("updatedTime") Date updatedTime);
+
+    @Select("SELECT * FROM Cart WHERE cartId = #{cartId}")
+    Cart getCartByCartId(@Param("cartId") Integer cartId);
+
+    @Select("SELECT * FROM Cart WHERE createdTime != #{createdTime}")
+    List<Cart> getUnassociatedCarts(@Param("createdTime") Date createdTime);
+
+    @Select("SELECT * FROM Cart WHERE accountId = #{accountId} AND createdTime = #{createdTime}")
+    List<Cart> getCartsByAccountIdAndCreatedTime(@Param("accountId") Integer accountId, @Param("createdTime") Date createdTime);
+
+    @Select("SELECT * FROM Cart WHERE accountId = #{accountId}")
+    List<Cart> getCartsByAccountId(@Param("accountId") Integer accountId);
 
 }

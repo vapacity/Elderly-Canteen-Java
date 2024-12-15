@@ -35,7 +35,7 @@ public interface AccountDao {
     int deleteUserById(int id);
 
     // 修改认证信息
-   @Update("UPDATE Account SET identity = #{ indentity } , name = #{name}, birthDate = #{birthDate} ,idCard = #{idCard} WHERE accountId = #{accountId}")
+    @Update("UPDATE Account SET identity = #{ indentity } , name = #{name}, birthDate = #{birthDate} ,idCard = #{idCard} WHERE accountId = #{accountId}")
     Integer updatePersonIdentity(@Param("indentity") String identity , @Param("name") String name, @Param("birthDate") Date birthDate , @Param("idCard") String idCard, @Param("accountId") Integer accountId);
 
     //修改密码

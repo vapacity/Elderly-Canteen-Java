@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/accounts")
+@RequestMapping("accounts")
 public class AccountController {
 
     private final AccountService accountService;
@@ -114,6 +114,7 @@ public class AccountController {
     public PersonInfoResponseDto alterPersonInfo(@RequestHeader(name="Authorization", required = false) String token,
                                                  @RequestParam(value="avatar", required = false)MultipartFile avatar,
                                                  PersonInfoRequestDto personInfo ) throws Exception {
+
         // 获取accountId
         if( token == null ){
             throw new NotFoundException("token is null");

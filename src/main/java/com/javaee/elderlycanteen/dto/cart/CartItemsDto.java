@@ -22,6 +22,8 @@ public class CartItemsDto {
     private Boolean success;
 
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Menu{
         @JsonProperty("discountPrice")
         private Double discountPrice;

@@ -31,9 +31,8 @@ public interface RepositoryDao {
     // 更新对象
     @Update("UPDATE Repository SET " +
             "remainAmount = #{remainAmount}, " +
-            "highConsumption = #{highConsumption}, " +
-            "expirationTime = #{expirationTime} " +
-            "WHERE ingredientId = #{ingredientId}")
+            "highConsumption = #{highConsumption} " +
+            "WHERE ingredientId = #{ingredientId} and expirationTime = #{expirationTime}")
     Integer update(Repository repository);
 
     // 根据主键删除对象
@@ -48,4 +47,10 @@ public interface RepositoryDao {
 
     @Update("UPDATE Repository SET remainAmount = #{amount} WHERE ingredientId = #{ingredientId} and expirationTime = #{expiry}")
     void updateRemainAmount(Integer ingredientId, Date expiry, Integer amount);
+
+    @Select("SELECT COUNT(*) FROM Repository WHERE ingredientId = #{ingredientId}")
+    Integer getRemainAmountByIngredientId(Integer ingredientId);
+
+    @Select("Select * From Repository Where ingredientId = #{ingredientId} ORDER BY expirationTime ASC")
+    List<Repository> selectByIdOrderByExpiry(Integer ingredientId);
 }

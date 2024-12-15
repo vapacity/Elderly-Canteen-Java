@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class ReviewSubmissionDto {
     @JsonProperty("orderId")
-    private String orderId;
+    private Integer orderId;
 
     @JsonProperty("cStars")
     private Double cStars;

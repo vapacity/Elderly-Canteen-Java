@@ -8,7 +8,10 @@
         <!-- 映射主键和普通属性 -->
         <id property="dishId" column="dishId"/>
         <result property="dishName" column="dishName"/>
-
+        <result property="price" column="price"/>
+        <result property="cateId" column="cateId"/>
+        <result property="cateName" column="cateName"/>
+        <result property="imageUrl" column="imageUrl"/>
         <!-- 映射配方信息 (一对多关系) -->
         <collection property="formula" ofType="com.javaee.elderlycanteen.dto.dish.FormulaDto">
             <result property="amount" column="amount"/>
@@ -24,7 +27,11 @@
             d.dishName,
             f.amount,
             f.ingredientId,
-            i.ingredientName
+            i.ingredientName,
+            d.price,
+            c.cateId,
+            c.cateName,
+            d.imageUrl
         FROM Dish d
                  JOIN Category c ON d.cateId = c.cateId
                  JOIN Formula f ON d.dishId = f.dishId

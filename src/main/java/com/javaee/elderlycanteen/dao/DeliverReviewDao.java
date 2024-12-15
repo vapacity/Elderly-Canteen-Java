@@ -17,14 +17,13 @@ public interface DeliverReviewDao {
     @Select("SELECT * FROM DeliverReview")
     List<DeliverReview> getAllDeliverReviews();
 
-    @Select("SELECT * FROM DeliverReview WHERE deliverOrderId = #{deliverOrderId}")
-    DeliverReview getDeliverReviewByDeliverOrderId(@Param("deliverOrderId") String deliverOrderId);
+    @Select("SELECT * FROM DeliverReview WHERE orderId = #{orderId}")
+    DeliverReview getDeliverReviewByOrderId(@Param("orderId") Integer orderId);
 
-    @Insert("INSERT INTO DeliverReview (deliverOrderId, reviewContent, reviewScore) VALUES (#{deliverOrderId}, #{reviewContent}, #{reviewScore})")
-    @Options(useGeneratedKeys = true, keyProperty = "id")
+    @Insert("INSERT INTO DeliverReview (orderId, dStars, dReviewText) VALUES (#{orderId}, #{dStars}, #{dReviewText})")
     Integer insertDeliverReview(DeliverReview deliverReview);
 
-    @Update("UPDATE DeliverReview SET reviewContent = #{reviewContent}, reviewScore = #{reviewScore} WHERE deliverOrderId = #{deliverOrderId}")
+    @Update("UPDATE DeliverReview SET dSatrs = #{dSatrs}, dReviewText = #{dReviewText} WHERE orderId = #{orderId}")
     Integer updateDeliverReview(DeliverReview deliverReview);
 
     @Delete("DELETE FROM DeliverReview WHERE deliverOrderId = #{deliverOrderId}")

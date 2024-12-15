@@ -85,10 +85,6 @@ public class AccountService {
         if(account == null) {
             throw new NotFoundException("account not found");
         }
-        Senior senior = seniorDao.selectByAccountId(accountId);
-        if(senior == null) {
-            throw new NotFoundException("senior not found");
-        }
 //        System.out.println(account.getAccountName()+"/"+account.getIdCard()+"/"+account.getGender());
         PersonInfoResponseDto result = new PersonInfoResponseDto();
 
@@ -104,6 +100,11 @@ public class AccountService {
         result.getResponse().setMoney(account.getMoney());
         result.getResponse().setPhoneNum(account.getPhoneNum());
         result.getResponse().setIdentity(account.getIdentity());
+
+        Senior senior = seniorDao.selectByAccountId(accountId);
+        if(senior == null) {
+            return result;
+        }
         result.getResponse().setSubsidy(senior.getSubsidy());
         return result;
     }

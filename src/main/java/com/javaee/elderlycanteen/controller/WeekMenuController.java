@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.javaee.elderlycanteen.config.DateDeserializer;
 import com.javaee.elderlycanteen.config.DateSerializer;
+
 import com.javaee.elderlycanteen.dto.weekMenu.*;
 import com.javaee.elderlycanteen.service.WeekMenuService;
 import org.checkerframework.common.util.report.qual.ReportUnqualified;
@@ -53,4 +54,5 @@ public class WeekMenuController {
                                                                      @DateTimeFormat(pattern="yyyy-MM-dd")  Date date) {
         return ResponseEntity.ok(weekMenuService.getAllDiscount(date));
     }
+
 }

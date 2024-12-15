@@ -49,6 +49,7 @@ public class DishController {
     public DishResponseDto deleteDish(@PathVariable("dishId") int dishId) {
         return dishService.deleteDish(dishId);
     }
+
     @PostMapping("/uploadDishImage")
     public ResponseDto<String> uploadDishImage(
             @Parameter(description = "上传的文件", required = true)

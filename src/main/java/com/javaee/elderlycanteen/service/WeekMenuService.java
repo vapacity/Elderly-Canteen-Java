@@ -88,8 +88,8 @@ public class WeekMenuService {
 
     public MenuResponseDto getTodayMenu() throws ParseException {
         Date date = getCurrentDate();
-        String day = getDayOfWeek(date);
-        List<WeekMenu> weekMenus = this.weekMenuDao.findWeekMenuByWeek(date, day);
+
+        List<WeekMenu> weekMenus = this.weekMenuDao.findWeekMenuByWeek(date,getDayOfWeek(date));
         List<Menu> menus = new ArrayList<>();
         for (WeekMenu weekMenu : weekMenus) {
             Dish dish = this.dishDao.getDishById(weekMenu.getDishId());
@@ -118,6 +118,7 @@ public class WeekMenuService {
         }
         return responseDto;
     }
+
 
     public WMResponseDto addWeekMenu(WMRequestDto weekMenu) {
         Date date = weekMenu.getDate();
@@ -319,4 +320,5 @@ public class WeekMenuService {
         calendar.add(Calendar.DAY_OF_YEAR, -diffToMonday);  // 将日期调整到周一
         return calendar;
     }
+
 }

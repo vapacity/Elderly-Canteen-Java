@@ -24,6 +24,6 @@ public class SystemLogsService {
     }
 
     public void addSystemLog(String logLevel, String message) throws ParseException {
-        this.systemLogsDao.insert(logLevel, message, getCurrentDate());
+        this.systemLogsDao.insert(new SystemLogs(0,logLevel, message, getCurrentDate()));
     }
 }

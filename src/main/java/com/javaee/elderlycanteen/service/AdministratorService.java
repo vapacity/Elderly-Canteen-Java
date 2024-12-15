@@ -179,11 +179,26 @@ public class AdministratorService {
     }
 
     public AdminSearchDto searchAdmin(String name , String position){
-        Administrator admin = new Administrator();
-        Account existAccountName = accountDao.getAccountByName(name);
-        if(existAccountName == null){
-            throw new NotFoundException("account not found");
+        List<Account> nameList = accountDao.getAccountByName(name);
+        List<AdminSearchDto.AdminSearchData> positionList = administratorDao.getAdminByPosition(position);
+
+        if(nameList.isEmpty() && positionList.isEmpty()){
+            AdminSearchDto response = new AdminSearchDto();
+            response.setResponse(administratorDao.findAllAdmins());
+            return response;
         }
+        if(nameList.isEmpty()){
+            AdminSearchDto response = new AdminSearchDto();
+            response.setResponse(administratorDao.getAdminByPosition(position));
+
+            return response;
+        }
+        if(positionList.isEmpty()){
+            AdminSearchDto response = new AdminSearchDto();
+            response.setResponse(administratorDao.findAdminsByName(name));
+            return response;
+        }
+
         return administratorDao.findAdminsByNameAndPosition(name , position);
     }
 

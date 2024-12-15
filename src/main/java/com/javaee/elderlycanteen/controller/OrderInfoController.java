@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/orderInfos")
+@RequestMapping("/orderInfos")
 public class OrderInfoController {
 
     private final WeekMenuService weekMenuService;

@@ -6,11 +6,14 @@ import com.javaee.elderlycanteen.exception.InvalidInputException;
 import com.javaee.elderlycanteen.service.RepositoryService;
 import com.javaee.elderlycanteen.utils.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/repo")
@@ -55,6 +58,16 @@ public class RepositoryController {
     @GetMapping("/search/restock")
     public AllRestockResponseDto getRepo(){
         return repositoryService.getAllRestocks();
+    }
+
+    @PostMapping("/setStock")
+    public ResponseEntity<List<ReduceResponseDto>> setStock(@RequestParam(value = "date")
+                                         @DateTimeFormat(pattern = "yyyy-MM-dd")
+                                         Date date,
+                                                            @RequestParam(value = "stock")
+                                     Integer stock) throws ParseException {
+
+        return ResponseEntity.ok(repositoryService.replenishStock(date, stock));
     }
 
 }

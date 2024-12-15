@@ -1,17 +1,23 @@
 package com.javaee.elderlycanteen.dto.order;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderItem {
 
+    @JsonProperty("orderId")
     private Integer orderId;
-    
+
+    @JsonProperty("cusAddress")
     private String cusAddress;
 
     @JsonProperty("deliverOrDining")

@@ -33,6 +33,9 @@ public interface FinanceDao {
     @Delete("DELETE FROM Finance WHERE financeId = #{financeId}")
     Integer deleteFinance(int financeId);
 
+    @Select("SELECT * FROM Finance WHERE accountId = #{accountId} AND financeType = #{financeType}")
+    List<Finance> getFinanceByAccountIdAndFinanceType(Integer accountId, String financeType);
+
 
     //查询是否存在管理员
     @Select("SELECT COUNT(*) FROM Finance WHERE administratorId = #{administratorId}")
@@ -48,4 +51,5 @@ public interface FinanceDao {
                                     @Param("financeId") String financeId,
                                     @Param("accountId") String accountId,
                                     @Param("status") String status);
+
 }

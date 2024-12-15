@@ -1,9 +1,13 @@
 package com.javaee.elderlycanteen.dto.order;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class IdentityResponseDto {
 
     @JsonProperty("success")
@@ -16,6 +20,8 @@ public class IdentityResponseDto {
     private IdentityDto response;  // Nullable IdentityDto (can be null)
 
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class IdentityDto {
 
         @JsonProperty("isDeliver")

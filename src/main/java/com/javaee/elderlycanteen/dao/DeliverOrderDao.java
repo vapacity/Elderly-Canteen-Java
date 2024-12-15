@@ -1,6 +1,7 @@
 package com.javaee.elderlycanteen.dao;
 
 import com.javaee.elderlycanteen.entity.DeliverOrder;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -16,9 +17,6 @@ public interface DeliverOrderDao {
     @Select("SELECT * FROM DeliverOrder")
     List<DeliverOrder> getAllDeliverOrder();
 
-    @Select("SELECT * FROM DeliverOrder WHERE orderId = #{orderId}")
-    DeliverOrder getDeliverOrderById(@Param("orderId") String orderId);
-
     @Insert("INSERT INTO DeliverOrder(orderId, deliverPhone, customerPhone, cusAddress, deliverStatus, cartId) VALUES (#{orderId}, #{deliverPhone}, #{customerPhone}, #{cusAddress}, #{deliverStatus}, #{cartId})")
     @Options(useGeneratedKeys = true, keyProperty = "orderId")
     Integer insertDeliverOrder(DeliverOrder deliverOrder);
@@ -29,6 +27,9 @@ public interface DeliverOrderDao {
     @Delete("DELETE FROM DeliverOrder WHERE orderId = #{orderId}")
     Integer deleteDeliverOrder(@Param("orderId") String orderId);
 
-    // Add your own methods here.
+    @Select("SELECT * FROM DeliverOrder WHERE orderId = #{orderId}")
+    DeliverOrder getDeliverOrderByOrderId(@Param("orderId") Integer orderId);
 
+    @Update("UPDATE DeliverOrder SET deliverStatus = #{deliverStatus} WHERE orderId = #{orderId}")
+    Integer updateDeliverOrderStatus(@Param("orderId")Integer orderId, @Param("deliverStatus") String deliverStatus);
 }

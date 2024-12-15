@@ -16,8 +16,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import static com.javaee.elderlycanteen.utils.DateUtils.getCurrentDate;
 
 @Service
 @Transactional
@@ -30,10 +34,13 @@ public class CartService {
     private final FinanceService financeService;
     private final WeekMenuService weekMenuService;
     private final OrderInfoService orderInfoService;
+    private final SystemLogsService systemLogsService;
 
 
     @Autowired
-    public CartService(AccountDao accountDao, CartDao cartDao,CartItemDao cartItemDao, FinanceService financeService, WeekMenuService weekMenuService,OrderInfoService orderInfoService) {
+    public CartService(AccountDao accountDao, CartDao cartDao,CartItemDao cartItemDao,
+                       FinanceService financeService, WeekMenuService weekMenuService,
+                       OrderInfoService orderInfoService, SystemLogsService systemLogsService) {
         this.accountDao = accountDao;
         this.cartDao = cartDao;
         this.cartItemDao = cartItemDao;
@@ -41,35 +48,75 @@ public class CartService {
         this.financeService = financeService;
         this.weekMenuService = weekMenuService;
         this.orderInfoService = orderInfoService;
+        this.systemLogsService = systemLogsService;
 
     }
 
-    // 新增购物车
-    public Integer addCart(Cart cart) {
-        Integer ret = this.cartDao.insert(cart);
-        if(ret != 1) {
-            throw new ServiceException("Fail to create cart!");
+    public CartResponseDto createCart(Integer accountId) throws ParseException {
+        Date date = getCurrentDate();
+        // 查找创建时间为今天的购物车
+        List<Cart> existedCarts = this.cartDao.getCartsByAccountIdAndCreatedTime(accountId, date);
+        // 查看所有用户今天已存在的购物车
+        for (Cart cart : existedCarts) {
+            List<OrderInfo> orderInfos = this.orderInfoService.getOrderInfoByCartId(cart.getCartId());
+            if(orderInfos.isEmpty()){
+                // 返回今天创建的购物车
+                CartResponseDto.CartResponse cartResponse = new CartResponseDto.CartResponse(cart.getCartId(),cart.getCreatedTime(),cart.getUpdatedTime());
+                CartResponseDto cartResponseDto = new CartResponseDto(cartResponse,"cart already existed!",Boolean.TRUE);
+
+                return cartResponseDto;
+            }
         }
-        return ret;
+
+        // 未找到已存在的购物车，创建新购物车
+        Cart cart = new Cart();
+
+        cart.setAccountId(accountId);
+        cart.setCreatedTime(date);
+        cart.setUpdatedTime(date);
+
+        this.cartDao.insert(cart);
+
+        CartResponseDto.CartResponse cartResponse = new CartResponseDto.CartResponse(cart.getCartId(),cart.getCreatedTime(),cart.getUpdatedTime());
+        CartResponseDto cartResponseDto = new CartResponseDto(cartResponse,"cart created successfully!",Boolean.TRUE);
+
+        return cartResponseDto;
     }
 
-    //查找全部购物车
-    public List<Cart> getAllCart() {
-        List<Cart> carts = this.cartDao.findAll();
-        if(carts == null) {
-            throw new ServiceException("No carts found!");
+    public CartResponseDto deleteCart(Integer accountId) {
+        // 查找与accountId的所有购物车
+        List<Cart> carts = this.cartDao.getCartsByAccountId(accountId);
+        if(!carts.isEmpty()){
+            for (Cart cart : carts) {
+                List<OrderInfo> orderInfos = this.orderInfoService.getOrderInfoByCartId(cart.getCartId());
+                if(orderInfos.isEmpty()){
+                    // 如果购物车不在订单中，则删除该购物车
+                    this.cartDao.deleteCartByCartId(cart.getCartId());
+                    // 返回成功消息
+                    CartResponseDto.CartResponse cartResponse = new CartResponseDto.CartResponse(cart.getCartId(),cart.getCreatedTime(),cart.getUpdatedTime());
+                    CartResponseDto responseDto = new CartResponseDto(cartResponse,"cart deleted successfully!",Boolean.TRUE);
+
+                    return responseDto;
+                }
+            }
+            // 如果所有购物车都关联了订单，则返回错误信息
+            CartResponseDto responseDto = new CartResponseDto(new CartResponseDto.CartResponse(),"all carts have been associated with orders!",Boolean.FALSE);
+
+            return responseDto;
+        }else{
+            // 没有找到购物车，返回错误信息
+            CartResponseDto responseDto = new CartResponseDto(new CartResponseDto.CartResponse(),"No shopping cart associated with the user was found!",Boolean.FALSE);
+
+            return responseDto;
         }
-        return carts;
     }
 
-
-    //删除购物车
-    public Integer deleteCart(Integer id) {
-        Integer ret = this.cartDao.deleteById(id);
-        if(ret != 1) {
-            throw new ServiceException("Fail to delete cart!");
+    public Cart getCartByCartId(Integer cartId) {
+        Cart cart = this.cartDao.getCartByCartId(cartId);
+        if(cart == null) {
+            throw new ServiceException("No cart found!");
         }
-        return ret;
+        return cart;
     }
 
     public CartItemResponseDto ensureCart(EnsureCartRequestDto Dto,Integer accountId) throws ParseException {
@@ -100,9 +147,7 @@ public class CartService {
         DeductBalanceResponseDto deductBalanceResponseDto = this.financeService.DeductBalance(accountId,totalPrice);
         // 扣除余额失败
         if(deductBalanceResponseDto.success == false) {
-            CartItemResponseDto responseDto = new CartItemResponseDto();
-            responseDto.setSuccess(Boolean.FALSE);
-            responseDto.setMsg(deductBalanceResponseDto.msg);
+            CartItemResponseDto responseDto = new CartItemResponseDto(Boolean.FALSE,deductBalanceResponseDto.msg);
             return responseDto;
         }
 
@@ -113,9 +158,8 @@ public class CartService {
                 Optional.ofNullable(Dto.getNewAddress()), Optional.ofNullable(Dto.getRemark()));
 
         if(orderInfoDto.getSuccess()==Boolean.FALSE) {
-            CartItemResponseDto responseDto = new CartItemResponseDto();
-            responseDto.setSuccess(Boolean.FALSE);
-            responseDto.setMsg(orderInfoDto.getMsg());
+            CartItemResponseDto responseDto = new CartItemResponseDto(Boolean.FALSE,orderInfoDto.getMsg());
+            return responseDto;
         }
 
         // 更新默认地址
@@ -128,15 +172,56 @@ public class CartService {
         }
 
         // 返回更新成功信息
-        CartItemResponseDto responseDto = new CartItemResponseDto();
-        responseDto.setMsg("Order process successfully!");
-        responseDto.setSuccess(Boolean.TRUE);
+        CartItemResponseDto responseDto = new CartItemResponseDto(Boolean.TRUE,"Order process successfully!");
         return responseDto;
     }
 
     public ClearCartResponseDto clearCart(NormalRequestDto Dto) {
-        ClearCartResponseDto clearCartResponseDto = new ClearCartResponseDto();
-        return clearCartResponseDto;
+        // 检查购物车是否存在
+        this.getCartByCartId(Dto.getCartId());
+
+        // 检查是否关联订单
+        List<OrderInfo> orderInfos = this.orderInfoService.getOrderInfoByCartId(Dto.getCartId());
+        if(!orderInfos.isEmpty()) {
+            throw new ServiceException("Cart is associated with order!");
+        }
+
+        //删除购物车的购物车项
+        this.cartItemDao.deleteCartItemByCartId(Dto.getCartId());
+
+        ClearCartResponseDto responseDto = new ClearCartResponseDto("clear cart successfully!",Boolean.TRUE);
+
+        return responseDto;
+    }
+
+    public Boolean DeleteUnassociatedCarts() throws ParseException {
+
+        Date date = getCurrentDate();
+
+        // 查找所有创建日期不为今天的购物车
+        List<Cart> carts = this.cartDao.getUnassociatedCarts(date);
+        List<Cart> cartsToDelete = new ArrayList<Cart>();
+
+        for (Cart cart : carts) {
+            // 检查每个购物车是否未关联订单
+            List<OrderInfo> orderInfos = this.orderInfoService.getOrderInfoByCartId(cart.getCartId());
+            if(orderInfos.isEmpty()) {
+                cartsToDelete.add(cart);
+            }
+        }
+
+        // 删除符合条件的购物车
+        for (Cart cart : cartsToDelete) {
+            // 删除该购物车的所有购物车项
+            this.cartItemDao.deleteCartItemByCartId(cart.getCartId());
+            // 删除购物车本身
+            this.cartDao.deleteCartByCartId(cart.getCartId());
+        }
+
+        // 添加系统日志
+        this.systemLogsService.addSystemLog("Safe","The expired shopping cart has been removed!");
+
+        return Boolean.TRUE;
     }
 
 }

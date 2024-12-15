@@ -47,8 +47,8 @@ public interface WeekMenuDao {
     @Select("SELECT stock FROM WeekMenu WHERE dishId = #{dishId} AND week = #{week}")
     Integer findStockByDishIdAndWeek(@Param("dishId") Integer dishId, @Param("week") Date week);
 
-    @Select("SELECT * FROM WeekMenu WHERE week = #{week}")
-    List<WeekMenu> findWeekMenuByWeek(@Param("week") Date week);
+    @Select("SELECT * FROM WeekMenu WHERE week = #{week} AND day = #{day}")
+    List<WeekMenu> findWeekMenuByWeek(@Param("week") Date week, @Param("day") String day);
 
     @Update("UPDATE WeekMenu SET stock=#{stock} WHERE dishId = #{dishId} AND week = #{week}")
     Integer updateWeekMenuStock(@Param("stock") Integer stock, @Param("dishId") Integer dishId, @Param("week") Date week);
@@ -58,5 +58,4 @@ public interface WeekMenuDao {
 
     @Select("SELECT * FROM WeekMenu WHERE dishId = #{dishId} AND week = #{week} AND day = #{day}")
     WeekMenu findWeekMenuByDishIdAndWeekAndDay(@Param("dishId") Integer dishId, @Param("week") Date week, @Param("day") String day);
-
 }

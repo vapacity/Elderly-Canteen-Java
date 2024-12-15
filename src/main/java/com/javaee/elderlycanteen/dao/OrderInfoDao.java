@@ -10,7 +10,7 @@ import java.util.List;
 public interface OrderInfoDao {
 
     // 基于主码id查询
-    @Select("SELECT * FROM order_info WHERE orderId = #{orderId}")
+    @Select("SELECT * FROM OrderInfo WHERE orderId = #{orderId}")
     OrderInfo getOrderInfoById(Integer orderId);
 
     // 查询所有数据
@@ -35,4 +35,10 @@ public interface OrderInfoDao {
     //根据cartId查找OrderInfo
     @Select("SELECT * FROM OrderInfo WHERE cartId = #{cartId}")
     List<OrderInfo> getOrderInfoByCartId(Integer cartId);
+
+    @Select("SELECT * FROM OrderInfo WHERE financeId = #{financeId}")
+    List<OrderInfo> getOrderInfoByFinanceId(Integer financeId);
+
+    @Update("UPDATE OrderInfo SET status = #{status} WHERE ORDERiD = #{orderId}")
+    Integer updateOrderStatus(@Param("orderId") Integer orderId, @Param("status") String status);
 }

@@ -15,20 +15,20 @@ import java.util.List;
 
 @Mapper
 public interface DeliverVDao {
-    @Select("SELECT * FROM Deliver")
+    @Select("SELECT * FROM DeliverV")
     List<DeliverV> getAllDeliverV();
 
-    @Select("SELECT * FROM Deliver WHERE deliverId = #{deliverId}")
-    DeliverV getDeliverVById(@Param("deliverId") Integer deliverId);
+    @Select("SELECT * FROM DeliverV WHERE orderId = #{orderId}")
+    DeliverV getDeliverVByOrderId(@Param("orderId") Integer orderId);
 
-    @Insert("INSERT INTO Deliver (deliverId, deliverAddress, deliverTime, deliverStatus, deliverFee, deliverTotal, deliverUserId) VALUES (#{deliverId}, #{deliverAddress}, #{deliverTime}, #{deliverStatus}, #{deliverFee}, #{deliverTotal}, #{deliverUserId})")
+    @Insert("INSERT INTO DeliverV (deliverId, deliverAddress, deliverTime, deliverStatus, deliverFee, deliverTotal, deliverUserId) VALUES (#{deliverId}, #{deliverAddress}, #{deliverTime}, #{deliverStatus}, #{deliverFee}, #{deliverTotal}, #{deliverUserId})")
     @Options(useGeneratedKeys = true, keyProperty = "deliverId")
     Integer insertDeliverV(DeliverV deliverV);
 
-    @Update("UPDATE Deliver SET deliverAddress = #{deliverAddress}, deliverTime = #{deliverTime}, deliverStatus = #{deliverStatus}, deliverFee = #{deliverFee}, deliverTotal = #{deliverTotal}, deliverUserId = #{deliverUserId} WHERE deliverId = #{deliverId}")
+    @Update("UPDATE DeliverV SET deliverAddress = #{deliverAddress}, deliverTime = #{deliverTime}, deliverStatus = #{deliverStatus}, deliverFee = #{deliverFee}, deliverTotal = #{deliverTotal}, deliverUserId = #{deliverUserId} WHERE deliverId = #{deliverId}")
     Integer updateDeliverV(DeliverV deliverV);
 
-    @Delete("DELETE FROM Deliver WHERE deliverId = #{deliverId}")
+    @Delete("DELETE FROM DeliverV WHERE deliverId = #{deliverId}")
     Integer deleteDeliverV(@Param("deliverId") Integer deliverId);
 
     // 以下是示例代码，请根据需要自行编写

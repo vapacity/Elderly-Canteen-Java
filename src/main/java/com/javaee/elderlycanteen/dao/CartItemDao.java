@@ -37,4 +37,7 @@ public interface CartItemDao {
 
     @Delete("DELETE FROM CartItem WHERE cartId = #{cartId} AND dishId = #{dishId} AND week = #{week}")
     Integer deleteCartItemByPrimaryKey(@Param("cartId")Integer cartId, @Param("dishId")Integer dishId, @Param("week") Date week);
+
+    @Delete("DELETE FROM CartItem WHERE cartId = #{cartId}")
+    Integer deleteCartItemByCartId(@Param("cartId") Integer cartId);
 }

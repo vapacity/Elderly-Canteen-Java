@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.javaee.elderlycanteen.utils.DateUtils.getCurrentDate;
+import static com.javaee.elderlycanteen.utils.DateUtils.getDayOfWeek;
 
 @Service
 public class WeekMenuService {
@@ -84,7 +85,8 @@ public class WeekMenuService {
 
     public MenuResponseDto getTodayMenu() throws ParseException {
         Date date = getCurrentDate();
-        List<WeekMenu> weekMenus = this.weekMenuDao.findWeekMenuByWeek(date);
+        String day = getDayOfWeek(date);
+        List<WeekMenu> weekMenus = this.weekMenuDao.findWeekMenuByWeek(date,day);
         List<Menu> menus = new ArrayList<>();
         for(WeekMenu weekMenu : weekMenus){
             Dish dish = this.dishDao.getDishById(weekMenu.getDishId());
@@ -104,7 +106,7 @@ public class WeekMenuService {
         }
         MenuResponseDto responseDto = new MenuResponseDto();
         responseDto.setMenu(menus);
-        if(menus.size() > 0){
+        if(!menus.isEmpty()){
             responseDto.setMessage("today's menu");
             responseDto.setSuccess(true);
         }else{
@@ -113,5 +115,4 @@ public class WeekMenuService {
         }
         return responseDto;
     }
-
 }

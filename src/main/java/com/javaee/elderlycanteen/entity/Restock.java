@@ -16,5 +16,5 @@ public class Restock {
     private Integer ingredientId;
     private Integer administratorId;
     private Integer quantity;
-    private BigDecimal price;
+    private Double price;
 }

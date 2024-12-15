@@ -5,6 +5,7 @@ import com.javaee.elderlycanteen.dto.OTP.GetOTPResponseDto;
 import com.javaee.elderlycanteen.dto.account.AccountDto;
 import com.javaee.elderlycanteen.dto.authentication.AuthenticationRequestDto;
 import com.javaee.elderlycanteen.dto.authentication.AuthenticationResponseDto;
+import com.javaee.elderlycanteen.dto.login.LoginRequestDto;
 import com.javaee.elderlycanteen.dto.personInfo.*;
 import com.javaee.elderlycanteen.entity.Account;
 import com.javaee.elderlycanteen.entity.TokenInfo;
@@ -42,7 +43,7 @@ public class AccountController {
      * @return 包含 JWT token 的响应
      */
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequestIdDto loginRequestDto) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequestDto loginRequestDto) {
         Map<String, Object> response = new HashMap<>();
         try {
             // 验证用户身份

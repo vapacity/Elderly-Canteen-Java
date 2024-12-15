@@ -1,11 +1,15 @@
 package com.javaee.elderlycanteen.controller;
 
-import com.javaee.elderlycanteen.entity.Administrator;
+import com.javaee.elderlycanteen.dto.admin.*;
+import com.javaee.elderlycanteen.entity.TokenInfo;
+import com.javaee.elderlycanteen.exception.NotFoundException;
 import com.javaee.elderlycanteen.service.AdministratorService;
+import com.javaee.elderlycanteen.utils.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -19,38 +23,41 @@ public class AdministratorController {
         this.administratorService = administratorService;
     }
 
-    @GetMapping("/search/{accountId}")
-    public ResponseEntity<Administrator> getAdminById(@PathVariable String accountId) {
-        Administrator admin = administratorService.getAdminById(accountId);
-        return admin != null ? ResponseEntity.ok(admin) : ResponseEntity.ok().build();
+    @GetMapping("/{accountId}")
+    public AdminResponseDto getAdminById (Integer accountId){
+        return administratorService.getAdminById(accountId);
     }
 
-    @GetMapping("/search/{email}/{position}")
-    public ResponseEntity<List<Administrator>> searchAdmin(@PathVariable(required = false) String email,
-                                                           @PathVariable(required = false) String position) {
-        List<Administrator> admins = administratorService.searchAdmin(email, position);
-        return ResponseEntity.ok(admins);
+    @PutMapping("/{accountId}")
+    public AdminResponseDto updateAdmin(Integer accountId, AdminInfoChangeDto request){
+        return administratorService.updateAdmin(accountId, request);
     }
 
-    @PutMapping("/update/{accountId}/{email}/{position}")
-    public ResponseEntity<Integer> updateAdmin(@PathVariable String accountId,
-                                               @PathVariable String email,
-                                               @PathVariable String position) {
-        Integer result = administratorService.updateAdmin(accountId, email, position);
-        return result > 0 ? ResponseEntity.ok(result) : ResponseEntity.badRequest().build();
+    @PostMapping("/add")
+    public AdminResponseDto addAdmin(AdminRegisterDto admin) throws ParseException {
+        return administratorService.addAdmin(admin);
     }
 
-    @PostMapping("/add/{accountId}/{email}/{position}")
-    public ResponseEntity<Integer> addAdmin(@PathVariable String accountId,
-                                            @PathVariable String email,
-                                            @PathVariable String position) {
-        Integer result = administratorService.addAdmin(accountId, email, position);
-        return result > 0 ? ResponseEntity.ok(result) : ResponseEntity.badRequest().build();
+    @DeleteMapping("/{accountId}")
+    public ResponseEntity<Void> deleteAdmin(Integer accountId){
+        return administratorService.deleteAdmin(accountId);
     }
 
-    @DeleteMapping("/delete/{accountId}")
-    public ResponseEntity<Integer> deleteAdmin(@PathVariable String accountId) {
-        Integer result = administratorService.deleteAdmin(accountId);
-        return result > 0 ? ResponseEntity.ok(result) : ResponseEntity.badRequest().build();
+    @GetMapping("/search")
+    public AdminSearchDto searchAdmin(String name , String position){
+        return administratorService.searchAdmin(name, position);
     }
+
+    @GetMapping("/getAdminInfo")
+    public AdminInfoGetDto getAdminInfo(@RequestHeader(name="Authorization", required = false) String token){
+        // 获取accountId
+        if( token == null ){
+            throw new NotFoundException("token is null");
+        }
+        token = token.substring(7);
+        TokenInfo tokenInfo = JWTUtils.getTokenInfo(token);
+        Integer accountId = tokenInfo.getAccountId();
+        return administratorService.getAdminInfo(accountId);
+    }
+
 }

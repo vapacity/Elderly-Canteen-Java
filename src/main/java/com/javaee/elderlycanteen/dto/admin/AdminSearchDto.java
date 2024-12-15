@@ -1,16 +1,19 @@
 package com.javaee.elderlycanteen.dto.admin;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class AdminSearchDto {
-    @Data
-    public static class AdminSearchData{
+
         @JsonProperty("name")
         private String name;
 
         @JsonProperty("accountId")
-        private String accountId;
+        private Integer accountId;
 
         @JsonProperty("phoneNum")
         private String phoneNum;
@@ -21,5 +24,5 @@ public class AdminSearchDto {
         @JsonProperty("gender")
         private String gender;
 
-    }
+
 }

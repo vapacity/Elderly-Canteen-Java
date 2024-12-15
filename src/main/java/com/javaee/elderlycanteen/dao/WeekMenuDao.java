@@ -20,17 +20,18 @@ public interface WeekMenuDao {
 
     // 插入菜单对象
     @Insert("INSERT INTO WeekMenu(dishId,week, stock, sales, disPrice, day) " +
-            "VALUES(#{dishId},#{week}, #{stock}, #{sales}, #{disPrice}, #{day})")
+            "VALUES(#{dishId}, #{week}, #{stock}, #{sales}, #{disPrice}, #{day})")
+
+
     Integer insert(WeekMenu weekMenu);
 
     // 更新菜单对象
     @Update("UPDATE WeekMenu SET " +
-            "week = #{weekMenu.getWeek()}, " +
-            "stock = #{weekMenu.getStock()}, " +
-            "sales = #{weekMenu.getSales()}, " +
-            "disPrice = #{weekMenu.getDisPrice()}, " +
-            "day = #{weekMenu.getDay()} " +
-            "WHERE dishId = #{weekMenu.getDishId()}")
+            "stock = #{stock}, " +
+            "sales = #{sales}, " +
+            "disPrice = #{disPrice}, " +
+            "day = #{day} " +
+            "WHERE dishId = #{dishId} and week = #{week}")
     Integer update(WeekMenu weekMenu);
 
     // 根据 dishId 删除菜单对象
@@ -57,4 +58,7 @@ public interface WeekMenuDao {
 
     @Select("SELECT * FROM WeekMenu WHERE dishId = #{dishId} AND week = #{week} AND day = #{day}")
     WeekMenu findWeekMenuByDishIdAndWeekAndDay(@Param("dishId") Integer dishId, @Param("week") Date week, @Param("day") String day);
+
+    @Delete("Delete from WeekMenu WHERE week = #{date} AND dishId = #{requestDishId}")
+    void deleteByWeekAndDishId(Date date, Integer requestDishId);
 }

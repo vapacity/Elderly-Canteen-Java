@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/accounts")
+@RequestMapping("api/accounts")
 public class AccountController {
 
     private final AccountService accountService;
@@ -110,7 +110,7 @@ public class AccountController {
     @PostMapping("/alterPersonInfo")
     public PersonInfoResponseDto alterPersonInfo(@RequestHeader(name="Authorization", required = false) String token,
                                                  @RequestParam(value="avatar", required = false)MultipartFile avatar,
-                                                 PersonInfoRequestDto personInfo ) throws ParseException {
+                                                 @RequestBody PersonInfoRequestDto personInfo ) throws ParseException {
         // 获取accountId
         if( token == null ){
             throw new NotFoundException("token is null");

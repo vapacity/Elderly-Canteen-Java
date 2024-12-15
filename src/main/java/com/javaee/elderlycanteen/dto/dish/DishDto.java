@@ -22,7 +22,7 @@ public class DishDto {
     @JsonProperty("cateId")
     private Integer cateId;
 
-    @JsonProperty("cateName")
+    @JsonProperty("category")
     private String cateName;
 
     @JsonProperty("imageUrl")

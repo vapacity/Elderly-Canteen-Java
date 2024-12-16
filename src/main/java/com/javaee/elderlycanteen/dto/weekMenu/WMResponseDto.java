@@ -1,9 +1,11 @@
 package com.javaee.elderlycanteen.dto.weekMenu;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class WMResponseDto {
 
     @JsonProperty("dish")
@@ -16,6 +18,7 @@ public class WMResponseDto {
     private Boolean success;
 
     @Data
+    @AllArgsConstructor
     public static class DishInfo {
         @JsonProperty("category")
         private String category;

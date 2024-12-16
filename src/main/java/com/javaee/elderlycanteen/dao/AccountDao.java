@@ -19,7 +19,7 @@ public interface AccountDao {
     Account login(@Param("phoneNum") String phoneNum, @Param("password") String password);
 
     @Select("SELECT * FROM Account WHERE name = #{name}  ")
-    Account getAccountByName(@Param("name") String name);
+    List<Account> getAccountByName(@Param("name") String name);
 
     @Select("SELECT * FROM Account WHERE accountId = #{accountId}")
     Account getAccountById(@Param("accountId") Integer accountId);
@@ -35,7 +35,7 @@ public interface AccountDao {
     int deleteUserById(int id);
 
     // 修改认证信息
-   @Update("UPDATE Account SET identity = #{ indentity } , name = #{name}, birthDate = #{birthDate} ,idCard = #{idCard} WHERE accountId = #{accountId}")
+    @Update("UPDATE Account SET identity = #{ indentity } , name = #{name}, birthDate = #{birthDate} ,idCard = #{idCard} WHERE accountId = #{accountId}")
     Integer updatePersonIdentity(@Param("indentity") String identity , @Param("name") String name, @Param("birthDate") Date birthDate , @Param("idCard") String idCard, @Param("accountId") Integer accountId);
 
     //修改密码
@@ -52,7 +52,7 @@ public interface AccountDao {
 
     //修改个人信息
     @Update("UPDATE Account SET portrait = #{portrait},gender = #{gender} , accountName = #{accountName},phoneNum = #{phoneNum},address = #{address},birthDate = #{birthDate}, name = #{name} WHERE accountId = #{accountId} ")
-    Integer updatePersonInfo(@Param("portrait") String portrait,@Param("gender") String gender,@Param("accountName") String accountName , @Param("phoneNum") String phoneNum , @Param("address") String address ,@Param("birthDate") Date birthDate ,@Param("name") String name);
+    Integer updatePersonInfo(@Param("portrait") String portrait,@Param("gender") String gender,@Param("accountName") String accountName , @Param("phoneNum") String phoneNum , @Param("address") String address ,@Param("birthDate") Date birthDate ,@Param("name") String name,@Param("accountId") Integer accountId);
 
     //查询是否存在这个身份证号
     @Select("SELECT COUNT(*) > 0 FROM Account WHERE idCard = #{idCard}")

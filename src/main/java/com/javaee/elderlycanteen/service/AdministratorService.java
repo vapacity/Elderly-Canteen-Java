@@ -116,10 +116,17 @@ public class AdministratorService {
         account.setAddress(admin.getAddress());
         account.setPhoneNum(admin.getPhoneNum());
         account.setGender(admin.getGender());
+        account.setPassword("1");
+        account.setAccountName("管理员");
+        account.setIdentity("admin");
+        account.setMoney(100.00);
+        account.setVerifyCode(111);
+        account.setPortrait("http://elderly-canteen.oss-cn-hangzhou.aliyuncs.com/16800023-portrait.jpg?Expires=1756828650&OSSAccessKeyId=LTAI5tK9KaDpnWNHxJU8hD67&Signature=inADCJChdV5U39TdwJAE7%2B7b2N8%3D");
         accountDao.addAccount(account);
 
         //创建新管理员
         Administrator newAdmin = new Administrator();
+        newAdmin.setAccountId(account.getAccountId());
         newAdmin.setEmail(admin.getEmail());
         newAdmin.setAccountId(account.getAccountId());
         newAdmin.setPosition(admin.getPosition());
@@ -172,11 +179,26 @@ public class AdministratorService {
     }
 
     public AdminSearchDto searchAdmin(String name , String position){
-        Administrator admin = new Administrator();
-        Account existAccountName = accountDao.getAccountByName(name);
-        if(existAccountName == null){
-            throw new NotFoundException("account not found");
+        List<Account> nameList = accountDao.getAccountByName(name);
+        List<AdminSearchDto.AdminSearchData> positionList = administratorDao.getAdminByPosition(position);
+
+        if(nameList.isEmpty() && positionList.isEmpty()){
+            AdminSearchDto response = new AdminSearchDto();
+            response.setResponse(administratorDao.findAllAdmins());
+            return response;
         }
+        if(nameList.isEmpty()){
+            AdminSearchDto response = new AdminSearchDto();
+            response.setResponse(administratorDao.getAdminByPosition(position));
+
+            return response;
+        }
+        if(positionList.isEmpty()){
+            AdminSearchDto response = new AdminSearchDto();
+            response.setResponse(administratorDao.findAdminsByName(name));
+            return response;
+        }
+
         return administratorDao.findAdminsByNameAndPosition(name , position);
     }
 

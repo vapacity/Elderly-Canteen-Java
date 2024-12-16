@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/donations")
+@RequestMapping("api/donations")
 public class DonationController {
 
     private final DonationService donationService;

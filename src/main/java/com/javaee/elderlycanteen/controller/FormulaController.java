@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/formulas")
+@RequestMapping("api/formulas")
 public class FormulaController {
 
     private final FormulaService formulaService;

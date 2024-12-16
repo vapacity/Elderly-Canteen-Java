@@ -1,6 +1,10 @@
 package com.javaee.elderlycanteen.dto.admin;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.javaee.elderlycanteen.config.DateDeserializer;
+import com.javaee.elderlycanteen.config.DateSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,6 +31,8 @@ public class AdminRegisterDto {
     private String idCard;
 
     @JsonProperty("birthDate")
+    @JsonSerialize(using = DateSerializer.class)
+    @JsonDeserialize(using = DateDeserializer.class)
     private Date birthDate;
 
     @JsonProperty("address")

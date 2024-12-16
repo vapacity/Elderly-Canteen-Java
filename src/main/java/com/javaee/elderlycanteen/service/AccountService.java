@@ -85,10 +85,6 @@ public class AccountService {
         if(account == null) {
             throw new NotFoundException("account not found");
         }
-        Senior senior = seniorDao.selectByAccountId(accountId);
-        if(senior == null) {
-            throw new NotFoundException("senior not found");
-        }
 //        System.out.println(account.getAccountName()+"/"+account.getIdCard()+"/"+account.getGender());
         PersonInfoResponseDto result = new PersonInfoResponseDto();
 
@@ -104,6 +100,11 @@ public class AccountService {
         result.getResponse().setMoney(account.getMoney());
         result.getResponse().setPhoneNum(account.getPhoneNum());
         result.getResponse().setIdentity(account.getIdentity());
+
+        Senior senior = seniorDao.selectByAccountId(accountId);
+        if(senior == null) {
+            return result;
+        }
         result.getResponse().setSubsidy(senior.getSubsidy());
         return result;
     }
@@ -129,7 +130,7 @@ public class AccountService {
     }
 
     //修改个人信息
-    public PersonInfoResponseDto alterPersonInfo (PersonInfoRequestDto personInfo, Integer accountId , MultipartFile avatar) throws ParseException {
+    public PersonInfoResponseDto alterPersonInfo (PersonInfoRequestDto personInfo, Integer accountId , String fileName) throws ParseException {
         Account account = accountDao.getAccountById(accountId);
         PersonInfoResponseDto result = new PersonInfoResponseDto();
         if(account == null) {
@@ -153,8 +154,7 @@ public class AccountService {
         }
 
         // 更新头像
-        if (avatar != null) {
-            String fileName = avatar.getOriginalFilename();
+        if (fileName != null) {
             String imageUrl = endpoint +"/"+bucketName+"/"+fileName;
             account.setPortrait(imageUrl);
         }
@@ -176,7 +176,7 @@ public class AccountService {
         if (personInfo.getName() != null && !personInfo.getName().isEmpty()) {
             account.setName(personInfo.getName());
         }
-        accountDao.updatePersonInfo(account.getPortrait(),account.getGender(),account.getAccountName(),account.getPhoneNum(),account.getAddress(),account.getBirthDate(),account.getName());
+        accountDao.updatePersonInfo(account.getPortrait(),account.getGender(),account.getAccountName(),account.getPhoneNum(),account.getAddress(),account.getBirthDate(),account.getName(),account.getAccountId());
         result.setAlterSuccess(true);
         result.setMsg("成功修改个人信息");
         return result;

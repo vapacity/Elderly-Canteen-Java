@@ -1,11 +1,13 @@
 package com.javaee.elderlycanteen.dto.personInfo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
+@AllArgsConstructor
 public class PersonInfoRequestDto {
     @JsonProperty("accountName")
     private String accountName;

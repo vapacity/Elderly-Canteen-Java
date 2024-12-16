@@ -17,7 +17,7 @@ public class Employee {
     private String phoneNum;
     private String address;
     private String employeePosition;
-    private BigDecimal salary;
+    private Double salary;
     private String idCard;
     private Boolean isPaidThisMonth;
 }

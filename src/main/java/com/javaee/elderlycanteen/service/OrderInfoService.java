@@ -75,11 +75,9 @@ public class OrderInfoService {
     //验证cartId是否在OrderInfo中，若存在则报错
     public List<OrderInfo> getOrderInfoByCartId(Integer cartId){
         List<OrderInfo> orderInfos = this.orderInfoDao.getOrderInfoByCartId(cartId);
-        if(!orderInfos.isEmpty()) {
-            return null;
-        }
         return orderInfos;
     }
+
 
     public Double calculateTotalPrice(List<CartItem> cartItems) throws ParseException {
         Double totalPrice = 0.0;

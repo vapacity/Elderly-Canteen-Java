@@ -19,12 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-<<<<<<< Updated upstream
-@RequestMapping("/cartItems")
-=======
-@RequestMapping("api/cartItems")
 @Transactional
->>>>>>> Stashed changes
+@RequestMapping("api/cartItems")
 public class CartItemController {
 
     private final CartItemService cartItemService;

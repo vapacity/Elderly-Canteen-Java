@@ -96,7 +96,11 @@
             <artifactId>minio</artifactId>
             <version>8.2.1</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.9</version> <!-- 请根据需要的版本调整 -->
+        </dependency>
     </dependencies>
 
     <build>

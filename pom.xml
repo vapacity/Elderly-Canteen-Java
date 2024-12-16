@@ -96,6 +96,7 @@
             <artifactId>minio</artifactId>
             <version>8.2.1</version>
         </dependency>
+
     </dependencies>
 
     <build>

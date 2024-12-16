@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>音频转文字</title>
+</head>
+<body>
+<h1>音频转文字</h1>
+
+<!-- 文件上传表单 -->
+<form id="audioForm">
+    <label for="audio">选择音频文件:</label>
+    <input type="file" id="audio" name="audio" accept="audio/*" required>
+    <button type="submit">上传并转写</button>
+</form>
+
+<!-- 显示转写结果 -->
+<h3>转写结果:</h3>
+<pre id="result"></pre>
+
+<script>
+    // 获取表单和结果元素
+    const form = document.getElementById('audioForm');
+    const resultContainer = document.getElementById('result');
+
+    // 监听表单提交
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();  // 阻止表单默认提交行为
+
+        const formData = new FormData();
+        const audioFile = document.getElementById('audio').files[0];
+        formData.append('audio', audioFile);
+        formData.append('cartId',24)
+        // 使用 Fetch API 发送 POST 请求
+        fetch('http://localhost:8080/api/audio/upload', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response =>
+                console.log(response.status) &&
+                response.json())
+            .then(data => {
+                // 显示转写结果
+                if (data && data.transcription) {
+                    resultContainer.textContent = '转写结果: ' + data.transcription;
+                } else {
+                    resultContainer.textContent = '没有转写结果';
+                }
+            })
+            .catch(error => {
+                resultContainer.textContent = '上传失败: ' + error.message;
+            });
+    });
+</script>
+</body>
+</html>

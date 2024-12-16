@@ -2,6 +2,8 @@ package com.javaee.elderlycanteen.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.javaee.elderlycanteen.serializer.DateDeserializer;
+import com.javaee.elderlycanteen.serializer.DateSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;

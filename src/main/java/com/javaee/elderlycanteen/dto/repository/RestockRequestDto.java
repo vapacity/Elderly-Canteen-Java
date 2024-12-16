@@ -1,15 +1,12 @@
 package com.javaee.elderlycanteen.dto.repository;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.javaee.elderlycanteen.config.DateDeserializer;
-import com.javaee.elderlycanteen.config.DateSerializer;
+import com.javaee.elderlycanteen.serializer.DateDeserializer;
+import com.javaee.elderlycanteen.serializer.DateSerializer;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 @Data

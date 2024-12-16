@@ -113,5 +113,8 @@ public class CartItemController {
             throw new ServiceException(e.getMessage());
         }
     }
-
+    @PostMapping("/addCartItem")
+    public CartItemResponseDto addCartItem(String commend,Integer cartId) throws ParseException {
+        return cartItemService.addCartItemByAudio(commend,cartId);
+    }
 }

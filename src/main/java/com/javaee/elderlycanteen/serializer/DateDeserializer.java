@@ -1,4 +1,4 @@
-package com.javaee.elderlycanteen.config;
+package com.javaee.elderlycanteen.serializer;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;

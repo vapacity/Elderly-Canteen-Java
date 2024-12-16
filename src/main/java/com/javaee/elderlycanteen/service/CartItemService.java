@@ -1,5 +1,7 @@
 package com.javaee.elderlycanteen.service;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.javaee.elderlycanteen.dao.CartDao;
 import com.javaee.elderlycanteen.dao.CartItemDao;
 import com.javaee.elderlycanteen.dao.DishDao;
@@ -18,12 +20,16 @@ import com.javaee.elderlycanteen.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import java.util.*;
+import com.google.gson.Gson;
 import static com.javaee.elderlycanteen.utils.DateUtils.getCurrentDate;
 import static com.javaee.elderlycanteen.utils.DateUtils.getDayOfWeek;
 
@@ -221,6 +227,74 @@ public class CartItemService {
         CartItemsDto cartItemsDto = new CartItemsDto(menus,"get CartItems successfully!",Boolean.TRUE);
 
         return cartItemsDto;
+    }
+
+    public CartItemResponseDto addCartItemByAudio(String commend, Integer cartId) throws ParseException {
+        // TODO: 2021/12/20 增加语音识别功能
+
+        Map<Integer, String> menuItems = new HashMap<>();
+        List<WeekMenu> weekMenus = weekMenuDao.findWeekMenuByWeek(getCurrentDate(),getDayOfWeek(getCurrentDate()));
+        if(weekMenus!=null){
+            for(WeekMenu weekMenu:weekMenus){
+                Integer dishId = weekMenu.getDishId();
+                String dishName = dishDao.getDishById(dishId).getDishName();
+                menuItems.put(dishId,dishName);
+            }
+        }
+        System.out.println(menuItems);
+        try {
+            URL url = new URL("http://127.0.0.1:5000/process_order");
+
+            // 创建 HTTP 连接
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setDoOutput(true);
+            connection.setRequestProperty("Content-Type", "application/json");
+
+            // 使用 Gson 将 Map 转换为 JSON 字符串
+            Gson gson = new Gson();
+            String menuJson = gson.toJson(menuItems); // 将 Map 转换为 JSON 字符串
+
+            // 构造请求数据
+            JsonObject data = new JsonObject();
+            data.addProperty("menu_items_json", menuJson);  // 使用 JSON 字符串
+            data.addProperty("order_text", commend);
+
+            // 发送请求数据
+            try (OutputStream os = connection.getOutputStream()) {
+                byte[] input = data.toString().getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            // 获取响应
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            // 解析 JSON 响应
+            JsonObject responseJson = JsonParser.parseString(response.toString()).getAsJsonObject();
+
+            // 遍历响应的菜品和数量
+            for (String dishIdStr : responseJson.keySet()) {
+                int dishId = Integer.parseInt(dishIdStr); // 将 String 转换为 int
+                int quantity = responseJson.get(dishIdStr).getAsInt(); // 获取数量
+
+                // 调用 func 函数
+                this.updateCartItem(new CartItemRequestDto(cartId, dishId, quantity));
+            }
+
+            // 返回解析后的结果
+            // 你可以根据实际需求处理 Flask 返回的结果并返回一个具体的 DTO。
+            return new CartItemResponseDto(Boolean.TRUE,"add successfully!");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

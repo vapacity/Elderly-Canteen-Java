@@ -31,7 +31,7 @@ public class RegisterResponseDto {
         private String accountName;
 
         @JsonProperty("accountId")
-        private String accountId;
+        private Integer accountId;
     }
 }
 

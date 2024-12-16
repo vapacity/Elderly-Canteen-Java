@@ -23,11 +23,10 @@ public interface DeliverReviewDao {
     @Insert("INSERT INTO DeliverReview (orderId, dStars, dReviewText) VALUES (#{orderId}, #{dStars}, #{dReviewText})")
     Integer insertDeliverReview(DeliverReview deliverReview);
 
-    @Update("UPDATE DeliverReview SET dSatrs = #{dSatrs}, dReviewText = #{dReviewText} WHERE orderId = #{orderId}")
+    @Update("UPDATE DeliverReview SET dStars = #{dStars}, dReviewText = #{dReviewText} WHERE orderId = #{orderId}")
     Integer updateDeliverReview(DeliverReview deliverReview);
 
     @Delete("DELETE FROM DeliverReview WHERE deliverOrderId = #{deliverOrderId}")
     Integer deleteDeliverReview(@Param("deliverOrderId") String deliverOrderId);
-
 
 }

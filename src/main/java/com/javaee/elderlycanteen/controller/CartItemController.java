@@ -10,6 +10,7 @@ import com.javaee.elderlycanteen.utils.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -18,7 +19,12 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+<<<<<<< Updated upstream
 @RequestMapping("/cartItems")
+=======
+@RequestMapping("api/cartItems")
+@Transactional
+>>>>>>> Stashed changes
 public class CartItemController {
 
     private final CartItemService cartItemService;

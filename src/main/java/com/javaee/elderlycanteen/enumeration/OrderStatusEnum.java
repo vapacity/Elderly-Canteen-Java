@@ -1,11 +1,11 @@
 package com.javaee.elderlycanteen.enumeration;
 
 public enum OrderStatusEnum {
-    TOBECONFIRMED("To be confirmed"),   // 待审核
-    PENDING("Pending"),  // 已通过
-    DINING("Dining"),
-    CONFIRMED("Confirmed"),
-    REVIEWED("Reviewed"); // 已拒绝
+    ORDER_TOBECONFIRMED("To be confirmed"),   // 待审核
+    ORDER_PENDING("Pending"),  // 已通过
+    ORDER_DINING("Dining"),
+    ORDER_CONFIRMED("Confirmed"),
+    ORDER_REVIEWED("Reviewed"); // 已拒绝
 
     private String description;  // 英文描述
 

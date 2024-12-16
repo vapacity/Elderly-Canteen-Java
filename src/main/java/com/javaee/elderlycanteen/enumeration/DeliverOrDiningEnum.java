@@ -1,8 +1,8 @@
 package com.javaee.elderlycanteen.enumeration;
 
 public enum DeliverOrDiningEnum {
-    DELIVER("D"),   // 待审核
-    DINING("I");
+    DELIVERORDINING_DELIVER("D"),   // 待审核
+    DELIVERORDINING_DINING("I");
 
     private String description;  // 英文描述
 

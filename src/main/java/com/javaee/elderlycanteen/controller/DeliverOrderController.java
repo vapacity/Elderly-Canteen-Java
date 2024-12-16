@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.javaee.elderlycanteen.enumeration.DeliverOrderStatusEnum.DELIVERED;
-import static com.javaee.elderlycanteen.enumeration.DeliverOrderStatusEnum.RECEIVED;
+import static com.javaee.elderlycanteen.enumeration.DeliverOrderStatusEnum.DELIVER_DELIVERED;
+import static com.javaee.elderlycanteen.enumeration.DeliverOrderStatusEnum.DELIVER_RECEIVED;
 
 @RestController
-@RequestMapping("/deliverOrders")
+@RequestMapping("/api/deliverOrders")
 @Transactional
 public class DeliverOrderController {
 
@@ -114,7 +114,7 @@ public class DeliverOrderController {
                 throw new InvalidInputException("account is unauthorized!");
             }
 
-            AccessOrderResponseDto responseDto = this.deliverOrderService.getOrderByDeliverStatus(accountId,DELIVERED.getDescription());
+            AccessOrderResponseDto responseDto = this.deliverOrderService.getOrderByDeliverStatus(accountId,DELIVER_DELIVERED.getDescription());
             if (responseDto.getSuccess()==Boolean.FALSE) {
                 throw new ServiceException(responseDto.getMsg());
             }
@@ -142,7 +142,7 @@ public class DeliverOrderController {
                 throw new InvalidInputException("account is unauthorized!");
             }
 
-            AccessOrderResponseDto responseDto = this.deliverOrderService.getOrderByDeliverStatus(accountId, RECEIVED.getDescription());
+            AccessOrderResponseDto responseDto = this.deliverOrderService.getOrderByDeliverStatus(accountId, DELIVER_RECEIVED.getDescription());
             if (responseDto.getSuccess()==Boolean.FALSE) {
                 throw new ServiceException(responseDto.getMsg());
             }

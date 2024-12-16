@@ -144,9 +144,11 @@ public class CartItemService {
     }
 
     public CartItemResponseDto deleteCartItem(DeleteRequestDto Dto, Integer accountId) throws ParseException {
+        System.out.println("Start delete cart item!!!!!!");
         //验证cartId是否存在且属于accountId
         Cart cart = this.cartDao.getCartByCartIdAndAccountId(Dto.getCartId(),accountId);
         if(cart == null) {
+            System.out.println("Cart not exist or Account does not match Cart!");
             throw new InvalidInputException("Cart not exist or Account does not match Cart!");
         }
         System.out.println(cart);
@@ -154,15 +156,17 @@ public class CartItemService {
         //验证dishId是否在购物车中
         Date date = getCurrentDate();
 
-        CartItem cartItem = this.cartItemDao.getCartItemByPrimaryKey(Dto.getCartId(),Dto.getCartId(),date);
+        CartItem cartItem = this.cartItemDao.getCartItemByPrimaryKey(Dto.getCartId(),Dto.getDishId(),date);
         if(cartItem == null) {
+            System.out.println("Cart item not exist!");
             throw new InvalidInputException("Cart item not exist!");
         }
         System.out.println(cartItem);
 
         //删除购物车项
-        this.deleteCartItemByPrimaryKey(Dto.getCartId(),Dto.getCartId(),date);
+        this.deleteCartItemByPrimaryKey(Dto.getCartId(),Dto.getDishId(),date);
         System.out.println("delete CartItem successfully!");
+        System.out.println("stock after delete: "+cartItem.getQuantity());
 
         // 更新购物车更新时间
         this.updateCartUpdatedTime(Dto.getCartId(),date);

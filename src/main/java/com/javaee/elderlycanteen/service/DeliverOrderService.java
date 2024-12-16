@@ -48,7 +48,7 @@ public class DeliverOrderService {
     public AccessOrderResponseDto getAcceptableOrder(){
 
         // 查找所有待接单的DeliverOrder
-        List<DeliverOrder> deliverOrders = this.deliverOrderDao.getDeliverOrderByDeliverStatus(PENDING.getDescription());
+        List<DeliverOrder> deliverOrders = this.deliverOrderDao.getDeliverOrderByDeliverStatus(DELIVER_PENDING.getDescription());
         if(deliverOrders.isEmpty()){
             return new AccessOrderResponseDto(
                     "no pending order",
@@ -148,7 +148,7 @@ public class DeliverOrderService {
             );
         }
 
-        this.deliverOrderDao.updateDeliverDeliverStatus(orderId, DELIVERED.getDescription());
+        this.deliverOrderDao.updateDeliverDeliverStatus(orderId, DELIVER_DELIVERED.getDescription());
         this.deliverOrderDao.updateDeliverDeliverPhone(orderId,deliverAccount.getPhoneNum());
         this.volunteerDao.updateVolunterrAvailable(accountId,'N');
 
@@ -160,15 +160,19 @@ public class DeliverOrderService {
 
     public NormalResponseDto confirmDelivered(Integer orderId, Integer accountId){
         // 查找订单是否已经被接单
+        System.out.println("confirm delivered start!!!!!!!!!!!!!!");
+        System.out.println(orderId);
         DeliverOrder deliverOrder = this.deliverOrderDao.getDeliverOrderByOrderId(orderId);
+        System.out.println(deliverOrder);
         DeliverV deliverV = this.deliverVDao.getDeliverVByOrderId(orderId);
-        if(!deliverOrder.getDeliverStatus().equals(DELIVERED.getDescription())){
+        System.out.println(deliverV);
+        if(!deliverOrder.getDeliverStatus().equals(DELIVER_DELIVERED.getDescription())){
             return new NormalResponseDto(
                     Boolean.FALSE,
                     "order not delivered"
             );
         }
-        this.deliverOrderDao.updateDeliverDeliverStatus(orderId, RECEIVED.getDescription());
+        this.deliverOrderDao.updateDeliverDeliverStatus(orderId, DELIVER_RECEIVED.getDescription());
 
         // 修改配送员信息
         Volunteer volunteer = this.volunteerDao.getByAccountId(accountId);

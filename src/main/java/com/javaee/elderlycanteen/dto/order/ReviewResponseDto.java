@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Optional;
 
 @Data
 @AllArgsConstructor
@@ -32,10 +31,10 @@ public class ReviewResponseDto {
         private String cReviewText;
 
         @JsonProperty("dStarts")
-        private Optional<Double> dStars;
+        private Double dStars;
 
         @JsonProperty("dReviewText")
-        private Optional<String> dReviewText;
+        private String dReviewText;
     }
 }
 

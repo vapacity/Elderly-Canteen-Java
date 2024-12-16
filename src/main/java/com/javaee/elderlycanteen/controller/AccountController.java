@@ -7,6 +7,8 @@ import com.javaee.elderlycanteen.dto.authentication.AuthenticationRequestDto;
 import com.javaee.elderlycanteen.dto.authentication.AuthenticationResponseDto;
 import com.javaee.elderlycanteen.dto.login.LoginRequestDto;
 import com.javaee.elderlycanteen.dto.personInfo.*;
+import com.javaee.elderlycanteen.dto.register.RegisterRequestDto;
+import com.javaee.elderlycanteen.dto.register.RegisterResponseDto;
 import com.javaee.elderlycanteen.entity.Account;
 import com.javaee.elderlycanteen.entity.TokenInfo;
 import com.javaee.elderlycanteen.exception.NotFoundException;
@@ -82,24 +84,26 @@ public class AccountController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<Integer> register(@RequestBody AccountDto accountDto) {
-        Account account = new Account();
+    public RegisterResponseDto register(@RequestParam(value = "accountName", required = false) String accountName,
+                                        @RequestParam(value = "password", required = false) String password,
+                                        @RequestParam(value = "phoneNum", required = false) String phoneNum,
+                                        @RequestParam(value = "gender", required = false) String gender,
+                                        @RequestParam(value = "birthDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date birthDate,
+                                        @Parameter(name = "上传的图片",required = true)
+                                        @RequestParam(value = "avatar",required = false) MultipartFile avatar) throws Exception {
+        //把图片转换成url路径并上传到桶
+        String fileName = avatar.getOriginalFilename();
+        minioService.uploadFile(fileName,avatar);
+        //把信息封装到RegisterRequestDto
+        RegisterRequestDto registerRequest = new RegisterRequestDto();
+        registerRequest.setUserName(accountName);
+        registerRequest.setPhone(phoneNum);
+        registerRequest.setPassword(password);
+        registerRequest.setGender(gender);
+        registerRequest.setBirthDate(birthDate);
+        //传入Service层
+        return accountService.register(registerRequest ,  fileName);
 
-        account.setAccountName(accountDto.getAccountName());
-        account.setPassword(accountDto.getPassword());
-        account.setIdentity(accountDto.getIdentity());
-        account.setPhoneNum(accountDto.getPhoneNum());
-        account.setAddress(accountDto.getAddress());
-        account.setPortrait(accountDto.getPortrait());
-        account.setGender(accountDto.getGender());
-        account.setMoney(accountDto.getMoney());
-        account.setVerifyCode(accountDto.getVerifyCode());
-        account.setBirthDate(accountDto.getBirthDate());
-        account.setName(accountDto.getName());
-        account.setIdCard(accountDto.getIdCard());
-
-        Integer accountId = accountService.addAccount(account);
-        return ResponseEntity.ok(accountId);
     }
 
     @GetMapping("/getPersonInfo")

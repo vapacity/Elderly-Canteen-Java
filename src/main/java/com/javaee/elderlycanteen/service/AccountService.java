@@ -10,6 +10,8 @@ import com.javaee.elderlycanteen.dto.login.LoginRequestIdDto;
 import com.javaee.elderlycanteen.dto.personInfo.PersonInfoRequestDto;
 import com.javaee.elderlycanteen.dto.personInfo.PersonInfoResponseDto;
 import com.javaee.elderlycanteen.dto.personInfo.PhoneResponseDto;
+import com.javaee.elderlycanteen.dto.register.RegisterRequestDto;
+import com.javaee.elderlycanteen.dto.register.RegisterResponseDto;
 import com.javaee.elderlycanteen.dto.volServe.AccessOrderResponseDto;
 import com.javaee.elderlycanteen.entity.Account;
 import com.javaee.elderlycanteen.dto.login.LoginRequestDto;
@@ -19,6 +21,7 @@ import com.javaee.elderlycanteen.utils.DateUtils;
 
 import com.javaee.elderlycanteen.exception.ServiceException;
 
+import com.javaee.elderlycanteen.utils.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -73,6 +76,60 @@ public class AccountService {
         return accountDao.insertAccount(account);
     }
 
+    //用户注册
+    public RegisterResponseDto register(RegisterRequestDto registerRequest, String fileName){
+        //先查看用户是否已经被注册
+        Account existAccount = accountDao.findByPhoneNum(registerRequest.getPhone());
+        if(existAccount!= null) {
+            throw new ServiceException("该手机号已被注册！");
+        }
+
+        //创建新账户
+        Account account = new Account();
+        account.setPhoneNum(registerRequest.getPhone());
+        account.setPassword(registerRequest.getPassword());
+        account.setVerifyCode(1234);
+        account.setAccountName(registerRequest.getUserName());
+        account.setGender(registerRequest.getGender());
+        account.setIdentity("User");
+        account.setBirthDate(registerRequest.getBirthDate());
+        account.setMoney(0.0);
+        account.setAddress("");
+        account.setIdCard("");
+        account.setName(registerRequest.getUserName());
+
+
+        //创建头像url
+        String portraitUrl = "https://" + endpoint + "/" + bucketName + "/" + fileName;
+        account.setPortrait(portraitUrl);
+
+        //插入新账户
+        Integer accountId = accountDao.addAccount(account);
+        if(accountId == null) {
+            throw new RuntimeException("注册失败！");
+        }
+
+        //生成token
+        // 创建 JWT payload
+        Map<String, String> payload = new HashMap<>();
+        payload.put("accountId", account.getAccountId().toString());
+        payload.put("accountName", account.getAccountName());
+        payload.put("identity", account.getIdentity());
+
+        // 生成 JWT token
+        String token = JWTUtils.getToken(payload);
+
+        //返回注册成功信息
+        RegisterResponseDto result = new RegisterResponseDto();
+        result.setSuccess(true);
+        result.setMsg("register successfully!");
+        result.setResponse(new RegisterResponseDto.RegisterResponse());
+        result.getResponse().setToken(token);
+        result.getResponse().setAccountId(account.getAccountId());
+        result.getResponse().setIdentity(account.getIdentity());
+        result.getResponse().setAccountName(account.getAccountName());
+        return result;
+    }
 
     public Integer deleteAccount(Integer accountId) {
         return accountDao.deleteUserById(accountId);

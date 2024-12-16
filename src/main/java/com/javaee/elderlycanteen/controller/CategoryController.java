@@ -5,10 +5,12 @@ import com.javaee.elderlycanteen.dto.category.CateRequestDto;
 import com.javaee.elderlycanteen.dto.category.CateResponseDto;
 import com.javaee.elderlycanteen.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/category")
+@Transactional
 public class CategoryController {
 
     private final CategoryService categoryService;

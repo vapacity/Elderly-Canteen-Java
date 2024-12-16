@@ -155,7 +155,7 @@ public class CartService {
         OrderInfoDto orderInfoDto = this.orderInfoService.createOrder(Dto.getCartId(),accountId,
                 deductBalanceResponseDto.financeId,
                 Dto.getDeliverOrDining(),cartItems,
-                Optional.ofNullable(Dto.getNewAddress()), Optional.ofNullable(Dto.getRemark()));
+                Dto.getNewAddress(), Dto.getRemark());
 
         if(orderInfoDto.getSuccess()==Boolean.FALSE) {
             CartItemResponseDto responseDto = new CartItemResponseDto(Boolean.FALSE,orderInfoDto.getMsg());

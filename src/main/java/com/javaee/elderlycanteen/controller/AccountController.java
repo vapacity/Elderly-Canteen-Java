@@ -113,7 +113,7 @@ public class AccountController {
     @PostMapping("/alterPersonInfo")
     public PersonInfoResponseDto alterPersonInfo(@RequestHeader(name="Authorization", required = false) String token,
                                                  @RequestParam(value="avatar", required = false)MultipartFile avatar,
-                                                 PersonInfoRequestDto personInfo ) throws Exception {
+                                                 @RequestBody PersonInfoRequestDto personInfo ) throws Exception {
 
         // 获取accountId
         if( token == null ){

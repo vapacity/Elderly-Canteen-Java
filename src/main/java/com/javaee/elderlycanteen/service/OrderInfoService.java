@@ -483,16 +483,18 @@ public class OrderInfoService {
 
     public IdentityResponseDto getIdentityInOrder(Integer orderId, Integer accountId) {
         OrderInfo orderInfo = this.orderInfoDao.getOrderInfoById(orderId);
+        System.out.println("get orderInfo: "+orderInfo);
         if (orderInfo==null){
             return new IdentityResponseDto(Boolean.FALSE,"order not found!",null);
         }
+        System.out.println(orderInfo);
 
         Cart cart = this.cartDao.getCartByCartId(orderInfo.getCartId());
         if(cart==null){
             return new IdentityResponseDto(Boolean.FALSE,"cart not found!",null);
         }
-        if(orderInfo.getDeliverOrDining()=="I"){
-            if(cart.getAccountId()==accountId){
+        if(Objects.equals(orderInfo.getDeliverOrDining(), "I")){
+            if(Objects.equals(cart.getAccountId(), accountId)){
                 return new IdentityResponseDto(Boolean.TRUE,"placed order",
                         new IdentityResponseDto.IdentityDto(Boolean.FALSE,Boolean.TRUE));
             }else{

@@ -115,8 +115,11 @@ public class DeliverOrderService {
 
     public NormalResponseDto acceptOrder(Integer orderId, Integer accountId){
         // 查找志愿者信息
+        System.out.println("accept order start!!!!!!!!!");
         Volunteer volunteer = this.volunteerDao.getByAccountId(accountId);
+
         if(volunteer == null) {
+            System.out.println("volunteer is null!!!!!!!!!!");
             return new NormalResponseDto(
                     Boolean.FALSE,
                     "account is not a volunteer"
@@ -132,8 +135,10 @@ public class DeliverOrderService {
 
         // 找到外卖订单
         DeliverOrder deliverOrder = this.deliverOrderDao.getDeliverOrderByOrderId(orderId);
+        System.out.println(deliverOrder);
         // 找到送餐者信息
         Account deliverAccount = this.accountDao.getAccountById(accountId);
+        System.out.println(deliverAccount);
 
         DeliverV deliverV = DeliverV.builder()
                 .orderId(orderId)

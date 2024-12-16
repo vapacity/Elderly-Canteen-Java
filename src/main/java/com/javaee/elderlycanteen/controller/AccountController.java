@@ -25,13 +25,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
-import java.util.ArrayList;
+import java.util.*;
 
 import com.javaee.elderlycanteen.dto.login.LoginRequestIdDto;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("accounts")
@@ -148,15 +144,9 @@ public class AccountController {
     }
 
     @GetMapping("/getAllAccount")
-    public AccountDto getAllAccount(@RequestHeader(name = "Authorization", required = false) String token) {
-        // 获取accountId
-        if (token == null) {
-            throw new NotFoundException("token is null");
-        }
-        token = token.substring(7);
-        TokenInfo tokenInfo = JWTUtils.getTokenInfo(token);
-        Integer accountId = tokenInfo.getAccountId();
-        return accountService.getAllAccount(accountId);
+    public List<AccountDto> getAllAccount() {
+
+        return accountService.getAllAccount();
     }
 
     @PostMapping("/nameAuthenticate")

@@ -166,23 +166,30 @@ public class AccountService {
         return result;
     }
 
-    public AccountDto getAllAccount(Integer accountId){
-        Account account = accountDao.getAccountById(accountId);
-        AccountDto accountDto = new AccountDto();
+    public List<AccountDto> getAllAccount(){
+        List<Account> accounts = accountDao.findAllUsers();
+        List<AccountDto> result = new ArrayList<AccountDto>();
+        for(Account account : accounts) {
+            AccountDto accountDto = new AccountDto();
+            accountDto.setAccountId(account.getAccountId());
+            accountDto.setAccountName(account.getAccountName());
+            accountDto.setBirthDate(account.getBirthDate());
+            accountDto.setGender(account.getGender());
+            accountDto.setName(account.getName());
+            accountDto.setIdCard(account.getIdCard());
+            accountDto.setPortrait(account.getPortrait());
+            accountDto.setAddress(account.getAddress());
+            accountDto.setMoney(account.getMoney());
+            accountDto.setPhoneNum(account.getPhoneNum());
+            accountDto.setIdentity(account.getIdentity());
+            accountDto.setVerifyCode(account.getVerifyCode());
+            accountDto.setIdCard(account.getIdCard());
+            result.add(accountDto);
 
-        // 将 Account 对象的值赋给 AccountDto 对象的对应字段
-        accountDto.setAccountId(account.getAccountId());
-        accountDto.setAccountName(account.getAccountName());
-        accountDto.setGender(account.getGender());
-        accountDto.setBirthDate(account.getBirthDate());
-        accountDto.setAddress(account.getAddress());
-        accountDto.setPhoneNum(account.getPhoneNum());
-        accountDto.setMoney(account.getMoney());
-        accountDto.setPortrait(account.getPortrait());
-        accountDto.setIdentity(account.getIdentity());
-        accountDto.setName(account.getName());
-        accountDto.setIdCard(account.getIdCard());
-        return accountDto;
+
+
+        }
+        return result;
 
     }
 

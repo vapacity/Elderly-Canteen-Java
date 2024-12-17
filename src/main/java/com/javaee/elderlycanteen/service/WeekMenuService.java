@@ -95,7 +95,7 @@ public class WeekMenuService {
             Dish dish = this.dishDao.getDishById(weekMenu.getDishId());
             if (dish != null) {
                 Menu menu = new Menu();
-
+                menu.setDiscountPrice(weekMenu.getDisPrice());
                 menu.setDishId(dish.getDishId());
                 menu.setCategory(dish.getCateId());
                 menu.setDishName(dish.getDishName());

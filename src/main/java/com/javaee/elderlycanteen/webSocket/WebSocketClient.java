@@ -63,7 +63,7 @@ public class WebSocketClient extends WebSocketListener {
         // 填充业务信息（如语言、域名等）
         business.addProperty("language", "en_us");
         business.addProperty("domain", "iat");
-        business.addProperty("accent", "mandarin");
+        //business.addProperty("accent", "mandarin");
 
         // 填充音频数据
         data.addProperty("status", status);  // 根据状态设置

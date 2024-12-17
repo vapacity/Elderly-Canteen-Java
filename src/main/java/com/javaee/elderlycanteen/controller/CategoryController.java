@@ -21,7 +21,7 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @CheckAccountIdentity(identity = "admin")
+//    @CheckAccountIdentity(identity = "admin")
     @GetMapping("/search")
     public AllCateResponseDto getCate(@RequestParam(required = false) String name) {
         return categoryService.searchCategories(name);

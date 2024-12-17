@@ -247,7 +247,7 @@ public class CartItemService {
         }
         System.out.println(menuItems);
         try {
-            URL url = new URL("http://127.0.0.1:5000/process_order");
+            URL url = new URL("http://8.154.46.242:5000/process_order");
 
             // 创建 HTTP 连接
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();

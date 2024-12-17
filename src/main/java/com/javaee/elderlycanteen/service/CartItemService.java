@@ -218,7 +218,7 @@ public class CartItemService {
                 menu.setDishId(dish.getDishId());
                 menu.setDishName(dish.getDishName());
                 menu.setDishPrice(dish.getPrice());
-                menu.setDiscountPrice(dish.getPrice());
+                menu.setDiscountPrice(weekMenu.getDisPrice());
                 menu.setImageUrl(dish.getImageUrl());
                 menu.setQuantity(cartItem.getQuantity());
 

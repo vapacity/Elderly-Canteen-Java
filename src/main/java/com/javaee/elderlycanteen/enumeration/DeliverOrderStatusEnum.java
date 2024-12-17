@@ -3,7 +3,8 @@ package com.javaee.elderlycanteen.enumeration;
 public enum DeliverOrderStatusEnum {
     DELIVER_PENDING("Pending"),   // 待审核
     DELIVER_DELIVERED("Delivered"),  // 已通过
-    DELIVER_RECEIVED("Received"); // 已拒绝
+    DELIVER_RECEIVED("Received"), // 已拒绝
+    DELIVER_REVIEWED("Reviewed");
 
     private String description;  // 英文描述
 

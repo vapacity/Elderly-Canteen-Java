@@ -20,4 +20,8 @@ public class AudioDecoder {
     public String getDecodedText() {
         return decodedText.toString();
     }
+
+    public void reset(){
+        decodedText = new StringBuilder();
+    }
 }

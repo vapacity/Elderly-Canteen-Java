@@ -8,6 +8,7 @@ import com.javaee.elderlycanteen.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import static com.javaee.elderlycanteen.enumeration.DeliverOrderStatusEnum.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -193,7 +194,16 @@ public class DeliverOrderService {
 
     public AccessOrderResponseDto getOrderByDeliverStatus(Integer accountId, String deliverStatus){
         // 查找所有deliverStatus为deliverStatus的DeliverOrder记录
+        System.out.println("get Order By Deliver Status!!!!!!!!!!!!!");
+        System.out.println(accountId+" "+deliverStatus);
         List<DeliverOrder> deliverOrders = this.deliverOrderDao.getDeliverOrderByDeliverStatus(deliverStatus);
+        if(Objects.equals(deliverStatus, DELIVER_RECEIVED.getDescription())){
+            System.out.println(DELIVER_REVIEWED.getDescription());
+            List<DeliverOrder> addDeliverOrders = this.deliverOrderDao.getDeliverOrderByDeliverStatus(DELIVER_REVIEWED.getDescription());
+            deliverOrders.addAll(addDeliverOrders);
+
+        }
+
         if(deliverOrders.isEmpty()){
             return new AccessOrderResponseDto(
                     deliverStatus+" order not found",

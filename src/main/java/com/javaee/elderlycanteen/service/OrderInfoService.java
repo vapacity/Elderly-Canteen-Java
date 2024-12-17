@@ -373,12 +373,12 @@ public class OrderInfoService {
                     Dto.getDStars(),
                     Dto.getDReviewText()
             ));
-            this.deliverOrderDao.updateDeliverDeliverStatus(Dto.getOrderId(), ORDER_REVIEWED.getDescription());
+            this.deliverOrderDao.updateDeliverDeliverStatus(Dto.getOrderId(), DELIVER_RECEIVED.getDescription());
         }else{
             existDeliverReview.setDReviewText(Dto.getDReviewText());
             existDeliverReview.setDStars(Dto.getDStars());
             this.deliverReviewDao.updateDeliverReview(existDeliverReview);
-            this.deliverOrderDao.updateDeliverDeliverStatus(Dto.getOrderId(), ORDER_REVIEWED.getDescription());
+            this.deliverOrderDao.updateDeliverDeliverStatus(Dto.getOrderId(), DELIVER_RECEIVED.getDescription());
         }
         return new NormalResponseDto(Boolean.TRUE,"deliver review successfully!");
     }
@@ -493,6 +493,9 @@ public class OrderInfoService {
         if(cart==null){
             return new IdentityResponseDto(Boolean.FALSE,"cart not found!",null);
         }
+
+        Boolean isOwner = Objects.equals(cart.getAccountId(), accountId);
+
         if(Objects.equals(orderInfo.getDeliverOrDining(), "I")){
             if(Objects.equals(cart.getAccountId(), accountId)){
                 return new IdentityResponseDto(Boolean.TRUE,"placed order",
@@ -506,12 +509,12 @@ public class OrderInfoService {
         DeliverOrder deliverOrder = this.deliverOrderDao.getDeliverOrderByOrderId(orderId);
         if(deliverOrder==null){
             return new IdentityResponseDto(Boolean.TRUE,"order not found!",
-                    new IdentityResponseDto.IdentityDto(Boolean.FALSE,Boolean.FALSE));
+                    new IdentityResponseDto.IdentityDto(Boolean.FALSE,isOwner));
         }
         if(deliverVol==null){
-            if(cart.getAccountId()==accountId){
+            if(Objects.equals(cart.getAccountId(), accountId)){
                 return new IdentityResponseDto(Boolean.TRUE,"placed order",
-                        new IdentityResponseDto.IdentityDto(Boolean.TRUE,Boolean.FALSE));
+                        new IdentityResponseDto.IdentityDto(Boolean.FALSE,Boolean.TRUE));
             }else{
                 return new IdentityResponseDto(Boolean.TRUE,"order not assigned to delivery man",
                         new IdentityResponseDto.IdentityDto(Boolean.FALSE,Boolean.FALSE));

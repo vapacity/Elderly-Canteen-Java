@@ -14,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.concurrent.TimeUnit;
+
 @Service
 public class AudioService {
 
@@ -47,8 +49,11 @@ public class AudioService {
 
         // 将音频数据通过 WebSocket 发送
         webSocketClient.sendAudioData(webSocket, audioBytes);
-        String result = decoder.getDecodedText();
 
+        TimeUnit.SECONDS.sleep(1);
+
+        String result = decoder.getDecodedText();
+        decoder.reset();
         cartItemService.addCartItemByAudio(result,cartId);
         // 获取并解析响应结果
         return result;

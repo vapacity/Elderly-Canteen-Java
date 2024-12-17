@@ -48,8 +48,9 @@ public interface RepositoryDao {
     @Update("UPDATE Repository SET remainAmount = #{amount} WHERE ingredientId = #{ingredientId} and expirationTime = #{expiry}")
     void updateRemainAmount(Integer ingredientId, Date expiry, Integer amount);
 
-    @Select("SELECT COUNT(*) FROM Repository WHERE ingredientId = #{ingredientId}")
+    @Select("SELECT SUM(remainAmount) FROM Repository WHERE ingredientId = #{ingredientId}")
     Integer getRemainAmountByIngredientId(Integer ingredientId);
+
 
     @Select("Select * From Repository Where ingredientId = #{ingredientId} ORDER BY expirationTime ASC")
     List<Repository> selectByIdOrderByExpiry(Integer ingredientId);

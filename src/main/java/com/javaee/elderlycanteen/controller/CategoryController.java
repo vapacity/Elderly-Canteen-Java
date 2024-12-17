@@ -1,5 +1,6 @@
 package com.javaee.elderlycanteen.controller;
 
+import com.javaee.elderlycanteen.annotation.CheckAccountIdentity;
 import com.javaee.elderlycanteen.dto.category.AllCateResponseDto;
 import com.javaee.elderlycanteen.dto.category.CateRequestDto;
 import com.javaee.elderlycanteen.dto.category.CateResponseDto;
@@ -20,6 +21,7 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
+    @CheckAccountIdentity(identity = "admin")
     @GetMapping("/search")
     public AllCateResponseDto getCate(@RequestParam(required = false) String name) {
         return categoryService.searchCategories(name);

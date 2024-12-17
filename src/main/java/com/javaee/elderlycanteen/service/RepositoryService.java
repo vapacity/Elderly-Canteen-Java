@@ -254,12 +254,13 @@ public class RepositoryService {
             for (Repository repo : repos) {
                 if (repo.getRemainAmount() >= totalRequiredQuantity) {
                     // 库存足够，直接减少
+                    Integer oldRemainAmount = repo.getRemainAmount();
                     Integer newRemainAmount = repo.getRemainAmount() - totalRequiredQuantity;
                     repo.setRemainAmount(newRemainAmount);
                     totalRequiredQuantity = 0;
 
                     systemLogsDao.insert(new SystemLogs(0,LOW.getLevel(),
-                            "Ingredient " + formula.getIngredientId() + " reduced from " + repo.getRemainAmount() + " to " + newRemainAmount,
+                            "Ingredient " + formula.getIngredientId() + " reduced from " + oldRemainAmount + " to " + newRemainAmount,
                             getCurrentDate()));
                 } else {
                     // 库存不足，减少剩余库存

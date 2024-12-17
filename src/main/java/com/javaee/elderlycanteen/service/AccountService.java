@@ -100,7 +100,7 @@ public class AccountService {
 
 
         //创建头像url
-        String portraitUrl = "https://" + endpoint + "/" + bucketName + "/" + fileName;
+        String portraitUrl = endpoint + "/" + bucketName + "/" + fileName;
         account.setPortrait(portraitUrl);
 
         //插入新账户

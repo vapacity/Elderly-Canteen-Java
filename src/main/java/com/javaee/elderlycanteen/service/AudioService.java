@@ -30,10 +30,6 @@ public class AudioService {
     private final CartItemService cartItemService;
     public AudioService(CartItemService cartItemService) {
         this.cartItemService = cartItemService;
-        System.out.println("HOST_URL:"+HOST_URL);
-        System.out.println("APP_ID:"+APP_ID);
-        System.out.println("API_SECRET:"+API_SECRET);
-        System.out.println("API_KEY:"+API_KEY);
         this.decoder = new AudioDecoder();
         this.webSocketClient = new WebSocketClient(decoder);
 

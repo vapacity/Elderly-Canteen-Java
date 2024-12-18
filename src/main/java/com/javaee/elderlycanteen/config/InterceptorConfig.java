@@ -13,7 +13,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
         registry.addInterceptor(new JWTInterceptors())
                 .addPathPatterns("/**")  // 拦截所有请求
                 .excludePathPatterns("/**")
-                .excludePathPatterns("/accounts/login")  // 排除登录接口
+                .excludePathPatterns("/accounts/**")  // 排除登录接口
                 .excludePathPatterns("/swagger-ui.html")  // 排除 Swagger UI 首页
                 .excludePathPatterns("/swagger-ui/**")  // 排除 Swagger UI 路径
                 .excludePathPatterns("/swagger-resources/**")  // 排除 Swagger 资源
@@ -21,5 +21,4 @@ public class InterceptorConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/webjars/**")  // 排除 Swagger JS、CSS 文件
                 .excludePathPatterns("/favicon.ico");  // 排除 favicon 请求
     }
-
 }

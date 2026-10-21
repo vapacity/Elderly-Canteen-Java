@@ -3,7 +3,6 @@ package com.javaee.elderlycanteen.utils;
 import com.auth0.jwt.exceptions.AlgorithmMismatchException;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javaee.elderlycanteen.utils.JWTUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -33,9 +32,8 @@ public class JWTInterceptors implements HandlerInterceptor {
         }
 
         try {
-            // 验证令牌
-            JWTUtils.verify(token);
-            DecodedJWT decodedJWT = JWTUtils.verify(token);
+            // 验证令牌（SEC-LAB-B1：兼容多算法校验）
+            JWTUtils.verifyFlexible(token);
             return true;  // 放行请求
 
         } catch (SignatureVerificationException e) {

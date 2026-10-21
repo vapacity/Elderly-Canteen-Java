@@ -1,7 +1,10 @@
 package com.javaee.elderlycanteen.controller;
 
 import com.javaee.elderlycanteen.annotation.CheckAccountIdentity;
+import com.javaee.elderlycanteen.dto.OTP.GetOTPRequestDto;
 import com.javaee.elderlycanteen.dto.OTP.GetOTPResponseDto;
+import com.javaee.elderlycanteen.dto.OTP.VerifyOTPRequestDto;
+import com.javaee.elderlycanteen.dto.OTP.VerifyOTPResponseDto;
 import com.javaee.elderlycanteen.dto.account.AccountDto;
 import com.javaee.elderlycanteen.dto.authentication.AuthenticationRequestDto;
 import com.javaee.elderlycanteen.dto.authentication.AuthenticationResponseDto;
@@ -14,6 +17,8 @@ import com.javaee.elderlycanteen.entity.TokenInfo;
 import com.javaee.elderlycanteen.exception.NotFoundException;
 import com.javaee.elderlycanteen.minio.MinioService;
 import com.javaee.elderlycanteen.service.AccountService;
+import com.javaee.elderlycanteen.service.OtpService;
+import com.javaee.elderlycanteen.service.RemoteAvatarService;
 import com.javaee.elderlycanteen.utils.JWTUtils;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +40,16 @@ public class AccountController {
 
     private final AccountService accountService;
     private final MinioService minioService;
+    private final RemoteAvatarService remoteAvatarService;
+    private final OtpService otpService;
 
     @Autowired
-    public AccountController(AccountService accountService, MinioService minioService) {
+    public AccountController(AccountService accountService, MinioService minioService,
+                             RemoteAvatarService remoteAvatarService, OtpService otpService) {
         this.accountService = accountService;
         this.minioService = minioService;
+        this.remoteAvatarService = remoteAvatarService;
+        this.otpService = otpService;
     }
 
 
@@ -229,5 +239,56 @@ public class AccountController {
         Integer accountId = tokenInfo.getAccountId();
 
         return accountService.creditAccount(accountId, money);
+    }
+
+    /**
+     * SEC-LAB-B1：公开 JWT 验签公钥，便于客户端/合作方校验 token。
+     */
+    @GetMapping("/publicKey")
+    public ResponseEntity<Map<String, String>> publicKey() {
+        return ResponseEntity.ok(Map.of("publicKey", JWTUtils.getPublicKeyPem()));
+    }
+
+    /**
+     * SEC-LAB-A2：从远程 URL 导入头像。
+     */
+    @PostMapping("/avatar/import")
+    public ResponseEntity<Map<String, String>> importAvatar(
+            @RequestHeader(name = "Authorization", required = false) String token,
+            @RequestBody Map<String, String> body) throws Exception {
+        if (token == null) {
+            throw new NotFoundException("token is null");
+        }
+        TokenInfo tokenInfo = JWTUtils.getTokenInfo(token.substring(7));
+        String fileUrl = remoteAvatarService.importAvatar(body.get("url"), tokenInfo.getAccountId());
+        return ResponseEntity.ok(Map.of("url", fileUrl));
+    }
+
+    /**
+     * SEC-LAB-B2：发送手机验证码。
+     */
+    @PostMapping("/otp/send")
+    public GetOTPResponseDto sendOtp(@RequestBody GetOTPRequestDto request) {
+        boolean sent = otpService.send(request.getPhoneNum());
+        GetOTPResponseDto response = new GetOTPResponseDto();
+        response.setSuccess(sent);
+        response.setMsg(sent ? "OTP sent" : "phone number not found");
+        return response;
+    }
+
+    /**
+     * SEC-LAB-B2：校验验证码并重置密码。
+     */
+    @PostMapping("/otp/verify")
+    public VerifyOTPResponseDto<Void> verifyOtp(@RequestBody VerifyOTPRequestDto request) {
+        boolean verified = otpService.verify(
+                request.getPhoneNum(),
+                request.getCode(),
+                request.getNewPhoneNum(),
+                request.getNewPassword());
+        VerifyOTPResponseDto<Void> response = new VerifyOTPResponseDto<>();
+        response.setSuccess(verified);
+        response.setMsg(verified ? "password reset successfully" : "invalid or expired code");
+        return response;
     }
 }

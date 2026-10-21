@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 @Service
@@ -49,6 +50,24 @@ public class MinioService {
             );
             String fileUrl = getFileUrl(fileName);
             return fileUrl;
+        }
+    }
+
+    /**
+     * SEC-LAB-A2：远程头像导入后按字节写入 MinIO。
+     */
+    public String uploadBytes(String fileName, byte[] data, String contentType) throws Exception {
+        MinioClient minioClient = getMinioClient();
+        try (InputStream inputStream = new ByteArrayInputStream(data)) {
+            minioClient.putObject(
+                    PutObjectArgs.builder()
+                            .bucket(bucketName)
+                            .object(fileName)
+                            .stream(inputStream, data.length, -1)
+                            .contentType(contentType)
+                            .build()
+            );
+            return getFileUrl(fileName);
         }
     }
 

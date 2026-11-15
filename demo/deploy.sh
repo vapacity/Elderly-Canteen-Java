@@ -14,6 +14,9 @@ ssh -o BatchMode=yes "$host" '
     umask 077
     printf "CANTEEN_DEMO_PASSWORD=%s\nCANTEEN_JWT_SECRET=%s\n" "$(openssl rand -hex 8)" "$(openssl rand -hex 32)" > /etc/canteen-demo.env
   fi
+  if ! grep -q "^CANTEEN_ADMIN_PASSWORD=" /etc/canteen-demo.env; then
+    printf "CANTEEN_ADMIN_PASSWORD=%s\n" "$(openssl rand -hex 16)" >> /etc/canteen-demo.env
+  fi
 '
 scp -q -o BatchMode=yes "$repo/target/ElderlyCanteen-0.0.1-SNAPSHOT.jar" "$host:/opt/canteen-demo/canteen.jar.new"
 scp -q -o BatchMode=yes "$archive" "$host:/opt/canteen-demo/frontend.tar.gz"

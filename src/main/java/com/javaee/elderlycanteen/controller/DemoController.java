@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.text.ParseException;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
 @Profile("demo")
@@ -72,15 +74,34 @@ public class DemoController {
     }
 
     @GetMapping("/HomePage/getWeekmenuAndWeekDiscount")
-    public Object weekMenu() throws ParseException {
-        LocalDate today = LocalDate.now(ZoneId.of("Asia/Shanghai"));
+    public Object weekMenu() {
+        LocalDate firstMonday = LocalDate.now(ZoneId.of("Asia/Shanghai"))
+                .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        List<List<String>> weeks = new ArrayList<>();
         List<Map<String, Object>> rows = new ArrayList<>();
-        for (Menu dish : menus.getTodayMenu().getMenu()) {
-            var row = new HashMap<>(legacyDish(dish));
-            row.put("week", today.toString());
-            rows.add(row);
+        for (int week = 0; week < 2; week++) {
+            List<String> dates = new ArrayList<>();
+            for (int day = 0; day < 7; day++) {
+                LocalDate date = firstMonday.plusWeeks(week).plusDays(day);
+                dates.add(date.toString());
+                for (Menu dish : menus.getMenuForDate(java.sql.Date.valueOf(date))) {
+                    var row = new HashMap<>(legacyDish(dish));
+                    row.put("week", date.toString());
+                    rows.add(row);
+                }
+            }
+            weeks.add(dates);
         }
-        return Map.of("response", rows);
+        return Map.of("response", rows, "weeks", weeks);
+    }
+
+    @GetMapping("/admin/weekly-menu")
+    public Object adminWeekMenu(@RequestHeader("Authorization") String token) {
+        Account account = accounts.getAccountById(accountId(token));
+        if (!"admin".equals(account.getIdentity())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+        return weekMenu();
     }
 
     @GetMapping("/HomePage/getReviews")

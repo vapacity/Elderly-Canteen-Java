@@ -42,6 +42,16 @@ public class DemoData {
                     WHERE NOT EXISTS (SELECT 1 FROM Account WHERE phoneNum = ?)
                     """, "测试账号 %02d".formatted(i), demoPassword, phone, i == 10 ? 1 : 120, phone);
             }
+            String adminPassword = System.getenv("CANTEEN_ADMIN_PASSWORD");
+            if (adminPassword != null && !adminPassword.isBlank()) {
+                db.update("""
+                    INSERT INTO Account (accountName,password,phoneNum,identity,money,address)
+                    SELECT '演示管理员', ?, '19900000012', 'admin', 0, ''
+                    WHERE NOT EXISTS (SELECT 1 FROM Account WHERE phoneNum = '19900000012')
+                    """, adminPassword);
+                db.update("UPDATE Account SET password = ? WHERE phoneNum = '19900000012' AND identity = 'admin'",
+                        adminPassword);
+            }
             LocalDate today = LocalDate.now(ZoneId.of("Asia/Shanghai"));
             for (Object[] dish : DISHES) {
                 db.update("MERGE INTO Dish (dishId,dishName,price,cateId,imageUrl) KEY(dishId) VALUES (?,?,?,?,?)",

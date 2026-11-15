@@ -5,6 +5,9 @@ mkdir -p data
 if [[ ! -s data/demo.env ]]; then
     (umask 077; printf 'CANTEEN_DEMO_PASSWORD=%s\nCANTEEN_JWT_SECRET=%s\n' "$(openssl rand -hex 8)" "$(openssl rand -hex 32)" > data/demo.env)
 fi
+if ! grep -q '^CANTEEN_ADMIN_PASSWORD=' data/demo.env; then
+    printf 'CANTEEN_ADMIN_PASSWORD=%s\n' "$(openssl rand -hex 16)" >> data/demo.env
+fi
 set -a
 source data/demo.env
 set +a

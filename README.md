@@ -1,3 +1,12 @@
+# 长者食堂演示版
+
+Java 后端位于仓库根目录，两个前端源码都在 `frontend/` 下。
+
+- `frontend/website`：网页、每周菜单、演示管理台
+- `frontend/mobile`：手机浏览器点餐
+
+本地启动、测试账号和服务器部署见 [演示说明](demo/README.md)。
+
 # 项目目录说明
 
 ```

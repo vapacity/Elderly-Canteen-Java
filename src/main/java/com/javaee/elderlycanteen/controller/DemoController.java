@@ -13,6 +13,7 @@ import com.javaee.elderlycanteen.utils.JWTUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -96,12 +97,18 @@ public class DemoController {
     }
 
     @GetMapping("/admin/weekly-menu")
-    public Object adminWeekMenu(@RequestHeader("Authorization") String token) {
-        Account account = accounts.getAccountById(accountId(token));
-        if (!"admin".equals(account.getIdentity())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+    public ResponseEntity<?> adminWeekMenu(@RequestHeader(value = "Authorization", required = false) String token) {
+        int id;
+        try {
+            id = accountId(Objects.toString(token, ""));
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        return weekMenu();
+        Account account = accounts.getAccountById(id);
+        if (!"admin".equals(account.getIdentity())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        return ResponseEntity.ok(weekMenu());
     }
 
     @GetMapping("/HomePage/getReviews")

@@ -127,11 +127,13 @@ public class CartService {
         }
 
         // 验证CartId是否在OrderInfo表中
-        this.orderInfoService.getOrderInfoByCartId(cart.getCartId());
+        if (!this.orderInfoService.getOrderInfoByCartId(cart.getCartId()).isEmpty()) {
+            throw new ServiceException("此购物车已提交");
+        }
 
         // 获取全部购物车项
         List<CartItem> cartItems = this.cartItemDao.getCartItemByCartId(Dto.getCartId());
-        if(cartItems == null){
+        if(cartItems == null || cartItems.isEmpty()){
             throw new ServiceException("cart item is null or cartId is wrong");
         }
         // 调用库存管理服务检查并减少库存
@@ -147,8 +149,7 @@ public class CartService {
         DeductBalanceResponseDto deductBalanceResponseDto = this.financeService.DeductBalance(accountId,totalPrice);
         // 扣除余额失败
         if(deductBalanceResponseDto.success == false) {
-            CartItemResponseDto responseDto = new CartItemResponseDto(Boolean.FALSE,deductBalanceResponseDto.msg);
-            return responseDto;
+            throw new ServiceException("余额不足");
         }
 
         //调用订单管理服务生成订单
@@ -158,14 +159,13 @@ public class CartService {
                 Dto.getNewAddress(), Dto.getRemark());
 
         if(orderInfoDto.getSuccess()==Boolean.FALSE) {
-            CartItemResponseDto responseDto = new CartItemResponseDto(Boolean.FALSE,orderInfoDto.getMsg());
-            return responseDto;
+            throw new ServiceException(orderInfoDto.getMsg());
         }
 
         // 更新默认地址
         Account account = this.accountDao.getAccountById(accountId);
         if(Dto.getSetDefaultAdd()==Boolean.TRUE) {
-            Integer ret = this.accountDao.updateAccountAddress(accountId,account.getAddress());
+            Integer ret = this.accountDao.updateAccountAddress(accountId,Dto.getNewAddress());
             if(ret != 1) {
                 throw new ServiceException("Fail to update account address!");
             }

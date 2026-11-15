@@ -23,7 +23,6 @@ public interface CartItemDao {
     List<CartItem> getCartItemByCartId(@Param("cartId") Integer cartId);
 
     @Insert("INSERT INTO CartItem (cartId, dishId, week, quantity) VALUES (#{cartId}, #{dishId}, #{week},#{quantity})")
-    @Options(useGeneratedKeys = true, keyProperty = "id")
     Integer addCartItem(CartItem cartItem);
 
     @Update("UPDATE CartItem SET quantity = #{quantity} WHERE cartId = #{cartId} AND dishId=#{dishId} AND week = #{week}")

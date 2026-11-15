@@ -1,0 +1,19 @@
+[Unit]
+Description=Elderly Canteen usability demo
+After=network.target
+
+[Service]
+User=canteen-demo
+Group=canteen-demo
+WorkingDirectory=/var/lib/canteen-demo
+StateDirectory=canteen-demo
+EnvironmentFile=/etc/canteen-demo.env
+ExecStart=/usr/bin/java -Xms64m -Xmx320m -Duser.timezone=Asia/Shanghai -jar /opt/canteen-demo/canteen.jar --spring.profiles.active=demo
+Restart=on-failure
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

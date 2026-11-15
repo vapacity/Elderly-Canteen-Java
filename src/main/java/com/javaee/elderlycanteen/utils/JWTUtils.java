@@ -17,7 +17,7 @@ public class JWTUtils {
     /**
      * 生成token  header.payload.singature
      */
-    private static final String SING = "Tongjijava09";
+    private static final String SING = System.getenv().getOrDefault("CANTEEN_JWT_SECRET", java.util.UUID.randomUUID().toString());
 
 
     public static String getToken(Map<String, String> map) {
@@ -51,7 +51,7 @@ public class JWTUtils {
         DecodedJWT verify = JWT.require(Algorithm.HMAC256(SING)).build().verify(token);
         String accountIdString = verify.getClaim("accountId").asString();
         Integer accountId = Integer.parseInt(accountIdString);
-        String accountName = verify.getClaim("accountname").asString();
+        String accountName = verify.getClaim("accountName").asString();
 
         String identity = verify.getClaim("identity").asString();
         tokenInfo.setAccountId(accountId);

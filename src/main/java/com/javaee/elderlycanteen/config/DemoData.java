@@ -14,6 +14,8 @@ import java.sql.Date;
 @Profile("demo")
 @Configuration
 public class DemoData {
+    private static final String SAMPLE_ADDRESS = "同济新村测试楼 101 室（虚构地址）";
+
     private static final Object[][] DISHES = {
         {1, "清炒小青菜", 6.0, 1, "greens", 5.0, 80},
         {2, "红烧鸡腿", 16.0, 2, "chicken", 13.0, 80},
@@ -35,12 +37,11 @@ public class DemoData {
                 db.update("MERGE INTO Category (cateId, cateName) KEY(cateId) VALUES (?, ?)", i + 1, categories[i]);
             }
             for (int i = 1; i <= 11; i++) {
-                String phone = "199000000%02d".formatted(i);
-                db.update("""
-                    INSERT INTO Account (accountName,password,phoneNum,identity,money,address)
-                    SELECT ?, ?, ?, 'User', ?, '同济新村测试楼 101 室（虚构地址）'
-                    WHERE NOT EXISTS (SELECT 1 FROM Account WHERE phoneNum = ?)
-                    """, "测试账号 %02d".formatted(i), demoPassword, phone, i == 10 ? 1 : 120, phone);
+                seedUser(db, i, demoPassword, i == 10 ? 1 : 120, SAMPLE_ADDRESS);
+            }
+            seedUser(db, 13, demoPassword, 120, "");
+            for (int i = 21; i <= 30; i++) {
+                seedUser(db, i, demoPassword, 120, SAMPLE_ADDRESS);
             }
             String adminPassword = System.getenv("CANTEEN_ADMIN_PASSWORD");
             if (adminPassword != null && !adminPassword.isBlank()) {
@@ -65,5 +66,14 @@ public class DemoData {
                 }
             }
         };
+    }
+
+    private static void seedUser(JdbcTemplate db, int number, String password, int balance, String address) {
+        String phone = "199000000%02d".formatted(number);
+        db.update("""
+            INSERT INTO Account (accountName,password,phoneNum,identity,money,address)
+            SELECT ?, ?, ?, 'User', ?, ?
+            WHERE NOT EXISTS (SELECT 1 FROM Account WHERE phoneNum = ?)
+            """, "测试账号 %02d".formatted(number), password, phone, balance, address, phone);
     }
 }
